@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Tous les details sur {{org.title}}</h2>
+
+   <div>
+     <img src="{{org.logo.n3}}" alt="logo de {{or.label}}" />
+    </div>
+
+
+    l'adresse du logo est : {{org.logo.n3}}
+
+
+
+    <div> {{org.description|safe}} </div>
+
+
+    <h3> Les membres </h3>
+    <div>
+    {% for ms in org.roles %}
+            <li>{{ ms.role.label }} :  {{ms.member.name}}
+             </li>
+     {% endfor %}
+     </div>
+
+     <br/>
+<br/>
+<br/>
+
+
+
+    <form action="/org/{{ org.id }}/" enctype="application/x-www-form-urlencoded" method="post">
+    	
+    {% csrf_token %}
+
+    <div> {{form.render|safe }} </div>
+
+    <input type="submit" value="Update" />
+    </form>
+   
+  
+
+{# <div> La version grid donne  <br/> <table> <caption>{{org.title}}</caption>	{{org.grid.render|safe}} </table> </div> #}
+
+
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+ <div> Il y a une erreur dans le formulaire des échanges
+</div>
+
+
+<div>
+    {% for f in fields %}
+            <li>Cela concerne le champ {{ f.name }} avec la valeur  {{f.value}}
+             </li>
+     {% endfor %}
+</div>
+
+ 
+{% endblock %}

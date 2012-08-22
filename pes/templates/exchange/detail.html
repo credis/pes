@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Tous les details sur {{ex.title}}</h2>
+
+    <div> {{ex.description|safe}} </div>
+
+
+    <h3> Les tags </h3>
+    <div>
+    {% for tag in ex.tags %}
+            <li>{{ tag.label }} 
+             </li>
+     {% endfor %}
+     </div>
+
+     <br/>
+<br/>
+<br/>
+
+
+
+    <form action="/exchange/{{ ex.id }}/" enctype="application/x-www-form-urlencoded" method="post">
+    	
+    {% csrf_token %}
+
+    <div> {{form.render|safe }} </div>
+
+    <input type="submit" value="Update" />
+    </form>
+   
+
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Exchanges</h2>
+    <ul>
+        {% for exchange in object_list %}
+            <li>{{ exchange.title }}  tous les details sur cet exchange sont
+           <a href="{{ exchange.get_absolute_url }}">{{ exchange.title}}</a>
+
+            </li>
+    
+            
+
+        {% endfor %}
+    </ul>
+{% endblock %}
+

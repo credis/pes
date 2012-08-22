@@ -1,0 +1,29 @@
+# django and tools
+django
+django-extensions
+django-admin-tools
+#psycopg2
+httplib2
+Werkzeug
+south
+django-easyconfig 
+feedparser
+django-push
+git+git://github.com/quinode/subhub.git
+pysolr
+Geohash
+geopy
+# git+git://github.com/rhec/pyelasticsearch.git
+git+git://github.com/toastdriven/pyelasticsearch.git
+
+
+# rdf stuffs
+rdflib
+rdfextras
+git+git://github.com/RDFLib/rdflib-jsonld.git
+git+git://github.com/RDFLib/rdflib-sparqlstore.git
+git+git://github.com/gjhiggins/RDFAlchemy.git
+git+git://github.com/FormAlchemy/formalchemy.git
+
+# core agregator
+git+git://github.com/quinode/django-rdfalchemy.git

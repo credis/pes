@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Tous les details sur {{tag.label}}</h2>
+    <ul>
+
+    </ul>
+
+
+    <div> {{form.render|safe }} </div>
+
+
+    <div> Les organisations qui utilisent ce tag sont : 
+    {% for org in tag.org_tagged %}
+            <li><a href="{{ org.get_absolute_url }}">{{ org.title }}</a>
+             </li>
+     {% endfor %}
+
+    </div>
+
+{% endblock %}
