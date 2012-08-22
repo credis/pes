@@ -62,4 +62,5 @@ class Tag(djRdf, myRdfSubject):
     # The call to addInWord could also go in the post save signal.
     def save(self, *args, **kwargs):
         super(Tag, self).save(*args, **kwargs)
-        self.addInWord()
+        if self.label:
+            self.addInWord()
