@@ -19,7 +19,7 @@ def allToSesameRep():
     Importation of rdf data from %s
     """ % ed.label
     # Contexts seem to be useless
-    ed.toSesameRep(settings.SESAME_REPOSITORY_NAME, ed.sparql(), None, None)
+    ed.toSesameRep(settings.SESAME_REPOSITORY_NAME, ed.sparql(), None, None, force=True)
 
 #
 
