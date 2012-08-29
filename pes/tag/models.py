@@ -12,7 +12,12 @@ from rdfalchemy.orm import mapper
 class Tag(djRdf, myRdfSubject):
     # rdf attributes
     # rdf_type = settings.NS.skosxl.Label   #  move to the pes_local class
-    label = rdfSingle(settings.NS.skosxl.literalForm)
+    name = rdfSingle(settings.NS.skosxl.literalForm)
+
+
+    @property
+    def label(self):
+        return self.name
 
     class Meta:
 
@@ -51,7 +56,7 @@ class Tag(djRdf, myRdfSubject):
     def addInWord(self):
         import pes
         words = set([])
-        ws = self.label.split(' ')
+        ws = self.name.split(' ')
         for w in ws:
             if len(w) >= 2:
                 words.add(w.lower())
@@ -60,7 +65,9 @@ class Tag(djRdf, myRdfSubject):
 
     # Idem save is overload to upgrade Word model in the same time.
     # The call to addInWord could also go in the post save signal.
+    # Ben non ca ne marche pas !!!!! le save est fait a un moment ou le triplet
+    # qui permet d'accéder à self.namel n'est pas encore dans le store RDF....
     def save(self, *args, **kwargs):
         super(Tag, self).save(*args, **kwargs)
-        if self.label:
+        if self.name:
             self.addInWord()

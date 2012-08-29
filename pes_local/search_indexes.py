@@ -38,7 +38,7 @@ class PESIndex(indexes.RealTimeSearchIndex):
     #     return [str(obj.modified)]
 
     def prepare_tags(self, obj):
-        return ["%s " % tag.label for tag in obj.tags]
+        return ["%s " % tag.name for tag in obj.tags]
 
     # Comme on s'en sert de facette. On n'a pas besoin de trop de détails
     def prepare_modified(sel, obj):
