@@ -1,1 +1,1 @@
-{{ object.label }}
+{{ object.name }}

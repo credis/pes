@@ -4,8 +4,8 @@
     <h2>Tags</h2>
     <ul>
         {% for tag in object_list %}
-            <li>{{ tag.label }}  tous les details sur ce tag sont
-           <a href="{{ tag.get_absolute_url }}">{{ tag.label}}</a>
+            <li>{{ tag.name }}  tous les details sur ce tag sont
+           <a href="{{ tag.get_absolute_url }}">{{ tag.name}}</a>
 
             </li>
     
