@@ -34,7 +34,8 @@ class Concept(djRdf, myRdfSubject):
     definition = rdfMultiple(settings.NS.skos.definition)
     example = rdfMultiple(settings.NS.skos.example)
 
-    def _get_prefLabel(self):
+    @property
+    def prefLabel(self):
         pref = self.prefLabels
         if len(pref) == 0:
             return None
@@ -47,13 +48,12 @@ class Concept(djRdf, myRdfSubject):
                 if literal.language == settings.RDF_DEFAULT_LANG:
                     return label
 
-    prefLabel = property(_get_prefLabel)
-
     @models.permalink
     def get_absolute_url(self):
         return ('pes.thess.views.detailConcept', [str(self.id)])
 
     class Meta:
+        abstract = True
         verbose_name = _(u'concept')
         verbose_name_plural = _(u'concepts')
 
@@ -70,7 +70,8 @@ class Scheme(myRdfSubject):
     # From the db, we can try to find it....
     # The normal case is when the scheme is defined in a context, so we should find
     # this context
-    def _get_context(self):
+    @property
+    def context(self):
         tr = list(self.db.triples((self, settings.NS.rdf.type, settings.NS.skos.ConceptScheme)))
         ctx = self.db.contexts
         if len(tr) == 0:
@@ -97,11 +98,9 @@ class Scheme(myRdfSubject):
             # This configuration is not handled yet....
             raise Exception(_(u'Scheme %s defined in many conctexts, not handled yes' % self))
 
-    context = property(_get_context)
-
-    def _get_concepts(self):
+    @property
+    def concepts(self):
         return list(self.db.subjects(settings.NS.skos.inScheme, self))
 
-    concepts = property(_get_concepts)
 
 
