@@ -3,6 +3,8 @@ from django.utils.translation import ugettext_lazy as _
 from django import forms
 from haystack.forms import SearchForm, HighlightedSearchForm, FacetedSearchForm
 from haystack.utils.geo import Point, D
+from pes.tag.forms import TagForm as BaseTagForm
+
 
 
 

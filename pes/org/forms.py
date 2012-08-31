@@ -1,14 +1,14 @@
 # -*- coding:utf-8 -*-
 from django.utils.translation import ugettext_lazy as _
 from djrdf.forms import djRdfForm, posint
-from pes_local.models import Organization, Tag
+from pes_local.models import  Tag
 from formalchemy import types
 from formalchemy.ext.rdf import  Field, RdfFieldRenderer, RdfSelectFieldRenderer
 
 
 
 class OrgForm(djRdfForm):
-    model = Organization
+    # model = Organization
 
     def _configure(self, fs):
         if fs.model.description != None:

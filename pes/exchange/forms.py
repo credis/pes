@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 from django.utils.translation import ugettext_lazy as _
 from djrdf.forms import djRdfForm
-from pes_local.models import Exchange, Tag
+from pes_local.models import  Tag
 from formalchemy.ext.rdf import  Field, RdfFieldRenderer, RdfSelectFieldRenderer
 
 
@@ -15,7 +15,7 @@ class TitleRdfFieldRenderer(RdfFieldRenderer):
 
 
 class ExchangeForm(djRdfForm):
-    model = Exchange
+    # model = Exchange
 
     def _configure(self, fs):
         if fs.model.description != None:
