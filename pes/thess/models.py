@@ -2,7 +2,7 @@
 # Create your models here.
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from rdfalchemy import rdfMultiple
+from rdfalchemy import rdfMultiple, rdfSingle
 from django.conf import settings
 from djrdf.models import myRdfSubject, djRdf
 import rdflib
@@ -43,7 +43,7 @@ class Concept(djRdf, myRdfSubject):
             return pref[0]
         else:
             for label in pref:
-                literal = self.bd.objects(label, settings.NS.skosxl.literalForm)[0]
+                literal = self.db.objects(label, settings.NS.skosxl.literalForm)[0]
                 assert(isinstance(literal, rdflib.term.Literal))
                 if literal.language == settings.RDF_DEFAULT_LANG:
                     return label
@@ -65,6 +65,8 @@ class Scheme(myRdfSubject):
 
     # An attribute label is already added with the help of myRdfSubject class
     hasTopConcept = rdfMultiple(settings.NS.skos.hasTopConcept, range_type=settings.NS.skos.Concept)
+    name = rdfSingle(settings.NS.rdfs.label)
+
 
     # I guess, we have no information about the context of the scheme subject....
     # From the db, we can try to find it....
