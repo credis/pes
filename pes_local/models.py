@@ -7,6 +7,7 @@ from pes.org.models import Organization as BaseOrganization
 from pes.org.models import Contact
 from pes.org.models import Person as BasePerson
 from pes.tag.models import Tag as BaseTag
+from pes.thess.models import Concept as BaseConcept
 from rdfalchemy.orm import mapper
 import pes.geo.models    # Mandatory to build the RDFAlchemy mapper
 
@@ -64,6 +65,10 @@ class Person(BasePerson):
 
 class Tag(BaseTag):
     rdf_type = settings.NS.skosxl.Label
+
+
+class Concept(BaseConcept):
+    rdf_type = settings.NS.skos.Concept
 
 
 # This MANDATORY to link attributes trought the rdfSubject instances
