@@ -5,6 +5,7 @@ from pes_local.models import Tag
 from pes.tag.forms import *
 from django.shortcuts import render_to_response
 from django.http import Http404
+from django.template import RequestContext
 
 
 def detailTag(request, tag_id):
@@ -14,4 +15,4 @@ def detailTag(request, tag_id):
         raise Http404
     form = TagForm().form(tag)
     # return HttpResponse("Hello, world. You're at the PES Tag detail %s." % tag.label)
-    return render_to_response('tag/detail.html', {'tag': tag, 'form': form})
+    return render_to_response('tag/detail.html', {'tag': tag, 'form': form}, RequestContext(request))
