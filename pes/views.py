@@ -5,13 +5,14 @@ from pes.org.models import *
 from django.shortcuts import render_to_response
 from django.http import HttpResponse
 from haystack.query import SearchQuerySet
+from django.template import RequestContext
 
 
 # Should use a template....
 def index(request):
     context = {}
     context['intro'] = u""" %s Welcome """ % settings.PROJECT_NAME.upper()
-    return render_to_response('home.html', context)
+    return render_to_response('home.html', context, RequestContext(request))
 
 
 

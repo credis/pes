@@ -31,6 +31,8 @@ except ImportError, exp:
     raise ImproperlyConfigured("No db_settings.py file was found")
 
 
+SITE_TITLE = 'PES'
+
 
 
 INSTALLED_APPS += (
