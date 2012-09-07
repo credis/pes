@@ -7,11 +7,14 @@ import logging
 log = logging.getLogger('djrdf')
 
 
-def fromUrlToEntry(url):
-    for eS in EntrySite.objects.all():
-        if url.startswith(eS.home):
-            return eS
-    return None
+
+# TODO Utiliser managers filter ... et outils  Django
+# c'est pas tres beau
+# def fromUrlToEntry(url):
+#     for eS in EntrySite.objects.all():
+#         if url.startswith(eS.home):
+#             return eS
+#     return None
 
 
 
@@ -19,11 +22,25 @@ def listener(notification, **kwargs):
     ''' Process new content being provided from SuperFeedr
     '''
     log.debug("enter listener args %s" % kwargs)
+    # retrieve the hub and thus the EntrySite
+    hub, eS = None, None
+    if 'links' in notification.feed:
+        for link in notification.feed.links:
+            if link.rel == 'hub':
+                # Hub detected!
+                hub = link.href
+    try:
+        if hub:
+            eS = EntrySite.objects.get(hub=hub)
+    except Exception, e:
+        log.warning(u'%s' % e)
+
+
+    print "ok for Es %s and hub %s" % (eS, hub)
     # log.debug("notification %s " % notification)
     for entry in notification.entries:
         # do something with entry here
         # entry.link donne le topic
-        eS = fromUrlToEntry(entry.link)
         if eS:
             uri = str(entry.summary)
             log.debug("Found an EntrySite %s and uri %s" % (eS, uri))
