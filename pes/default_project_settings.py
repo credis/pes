@@ -90,6 +90,7 @@ INSTALLED_APPS = (
     'django_push.subscriber',
     'subhub',
     'haystack',
+    'haystack_fr',
     'djrdf.import_rdf',
     'pes',
     'django_extensions',

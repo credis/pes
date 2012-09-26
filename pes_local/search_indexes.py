@@ -159,7 +159,7 @@ class ExchangeIndex(PESIndex, indexes.Indexable):
 
 
 
-class WordIndex(indexes.SearchIndex, indexes.Indexable):
+class WordIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=False)
     content_auto = indexes.EdgeNgramField(model_attr='name')
 
