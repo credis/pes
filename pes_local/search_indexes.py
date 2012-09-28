@@ -15,6 +15,13 @@ ess_data = rdflib.Graph()
 ess_data.parse('config/rdf/exchange-methods.ttl', format='n3')
 
 
+if getattr(settings, 'HAYSTACK_REALTIME', False):
+    Indexes = indexes.RealTimeSearchIndex
+else:
+    Indexes = indexes.SearchIndex
+
+
+
 # A rajouter enventuellement pour simplifier un peu la tache de backend
 # import re
 
@@ -25,7 +32,7 @@ ess_data.parse('config/rdf/exchange-methods.ttl', format='n3')
 
 
 # The main class
-class PESIndex(indexes.RealTimeSearchIndex):
+class PESIndex(Indexes):
     text = indexes.CharField(document=True, use_template=True)
     tags = indexes.MultiValueField(boost=1.2)
     category = indexes.MultiValueField(faceted=True)
@@ -159,7 +166,7 @@ class ExchangeIndex(PESIndex, indexes.Indexable):
 
 
 
-class WordIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
+class WordIndex(Indexes, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=False)
     content_auto = indexes.EdgeNgramField(model_attr='name')
 
