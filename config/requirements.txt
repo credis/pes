@@ -2,7 +2,7 @@
 django
 django-extensions
 django-admin-tools
-#psycopg2
+psycopg2
 httplib2
 Werkzeug
 south
@@ -13,6 +13,9 @@ git+git://github.com/quinode/subhub.git
 pysolr
 Geohash
 geopy
+
+# redisg
+git+git://github.com/ui/django-rq.git
 
 # haystack
 # git+git://github.com/rhec/pyelasticsearch.git
