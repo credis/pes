@@ -48,5 +48,7 @@ def listener(notification, **kwargs):
             g.parse(uri)
             log.debug("New graph parsed %s " % g)
             eS.toSesameRep(settings.SESAME_REPOSITORY_NAME, g, None, None)
+            log.debug("Graph updated in SEsame")
+        
 
 
