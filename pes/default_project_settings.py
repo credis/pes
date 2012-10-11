@@ -1,11 +1,12 @@
 # -*- coding:utf-8 -*-
 # Django settings for pes project.
+import os
+from pes_local.settings import PROJECT_PATH
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-import os.path
-PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
+
 
 ADMINS = (
      ('Claude', 'contact@quinode.fr'),

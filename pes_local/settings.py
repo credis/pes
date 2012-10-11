@@ -5,7 +5,8 @@ SESAME_REPOSITORY_NAME = PROJECT_NAME + "Repository"
 SECRET_KEY = 'c!&amp;5exu!yjh$n-!s%t4cyps-#1dd)!g=28w$^@6km3_5@l0w^0'
 
 
-
+import os.path
+PROJECT_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # OpenRDF configuration
 OPENRDF_SERVER_NAME = 'localhost'  # default value ... to be change
