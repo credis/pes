@@ -10,7 +10,7 @@ django-easyconfig
 feedparser
 django-push
 git+git://github.com/quinode/subhub.git
-pysolr
+# pysolr
 Geohash
 geopy
 
