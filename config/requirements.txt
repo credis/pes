@@ -14,7 +14,7 @@ pysolr
 Geohash
 geopy
 
-# redisg
+# redis
 git+git://github.com/ui/django-rq.git
 
 # haystack

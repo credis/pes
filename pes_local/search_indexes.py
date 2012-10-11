@@ -12,7 +12,7 @@ from django.conf import settings
 # in openrdf store or not.
 import rdflib
 ess_data = rdflib.Graph()
-ess_data.parse('config/rdf/exchange-methods.ttl', format='n3')
+ess_data.parse(settings.PROJECT_PATH + '/../config/rdf/exchange-methods.ttl', format='n3')
 
 
 if getattr(settings, 'HAYSTACK_REALTIME', False):
