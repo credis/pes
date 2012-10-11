@@ -15,7 +15,7 @@ class Organization(djRdf, myRdfSubject):
 
     label = rdfSingle(settings.NS.rdfs.label)
     description = rdfSingle(settings.NS.dct.description)
-    tags = rdfMultiple(settings.NS.ess.tagged, range_type=settings.NS.skosxl.Label)
+    tags = rdfMultiple(settings.NS.dct.subject, range_type=settings.NS.skosxl.Label)
     # abstract = rdfSingle(DCT.abstract)  # wait for issue #208 of rdflib
     web = rdfSingle(settings.NS.foaf.homepage)
     logo = rdfSingle(settings.NS.foaf.logo)

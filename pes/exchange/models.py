@@ -13,7 +13,7 @@ class Exchange(djRdf, myRdfSubject):
     label = rdfSingle(settings.NS.rdfs.label)
     title = rdfSingle(settings.NS.dct.title)
     description = rdfSingle(settings.NS.dct.description)
-    tags = rdfMultiple(settings.NS.ess.tagged, range_type=settings.NS.skosxl.Label)
+    tags = rdfMultiple(settings.NS.dct.subject, range_type=settings.NS.skosxl.Label)
     category = rdfSingle(settings.NS.ov.category)
     publisher = rdfSingle(settings.NS.dct.publisher, range_type=settings.NS.org.Organization)
     area = rdfMultiple(settings.NS.gr.eligibleRegions, range_type=settings.NS.dct.location)

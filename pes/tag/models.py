@@ -30,7 +30,7 @@ class Tag(djRdf, myRdfSubject):
         """ returns the URI list from RDF resources using this tag
         filtered by rdfType
         """
-        tagged = list(self.db.subjects(settings.NS.ess.tagged, self))
+        tagged = list(self.db.subjects(settings.NS.dct.subject, self))
         model = mapper()[str(rdfType)]
         if tagged == []:
             return []
