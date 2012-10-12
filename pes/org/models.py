@@ -43,7 +43,7 @@ class Organization(djRdf, myRdfSubject):
 
     @property
     def contacts(self):
-        return list(self.db.objects(self, NS.ess.hasContactMedium))
+        return list(self.db.objects(self, settings.NS.ess.hasContactMedium))
 
     @models.permalink
     def get_absolute_url(self):
