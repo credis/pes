@@ -8,10 +8,15 @@ from pes.org.models import Contact
 from pes.org.models import Person as BasePerson
 from pes.tag.models import Tag as BaseTag
 from pes.thess.models import Concept as BaseConcept
+from pes.article.models import Article as BaseArticle
 from rdfalchemy.orm import mapper
 import pes.geo.models    # Mandatory to build the RDFAlchemy mapper
 
 # Becareful for rdfalchemy mapper, the rdf_type attribut HAS to be set here
+
+
+class Article(BaseArticle):
+    rdf_type = settings.NS.dct.Text
 
 
 class Exchange(BaseExchange):
@@ -24,7 +29,7 @@ class Organization(BaseOrganization):
 
 
 class Tel(Contact):
-    rdf_type = settings.NS.person.Tel
+    rdf_type = settings.NS.vcard.Tel
 
 
 class Cell(Contact):
