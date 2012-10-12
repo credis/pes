@@ -17,5 +17,11 @@ class Article(djRdf, myRdfSubject):
 
     tags = rdfMultiple(settings.NS.dct.subject, range_type=settings.NS.skosxl.Label)
 
+    class Meta:
+
+        abstract = True
+        verbose_name = _(u'Article')
+        verbose_name_plural = _(u'Articles')
+
 
 
