@@ -211,7 +211,7 @@ RDF_NAMESPACES = {
  }
 
 
-NS = AttributeDict( DJRDF_NS.items() +
+NS = AttributeDict(DJRDF_NS.items() +
                     transform_dict(RDF_NAMESPACES).items()
                     )
 

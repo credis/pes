@@ -1,11 +1,9 @@
 # -*- coding:utf-8 -*-
 # Create your models here.
-from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from rdfalchemy import rdfSingle
+from rdfalchemy import rdfSingle, rdfMultiple
 from django.conf import settings
 from djrdf.models import myRdfSubject, djRdf
-from rdfalchemy.orm import mapper
 
 
 class Article(djRdf, myRdfSubject):
