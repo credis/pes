@@ -34,6 +34,6 @@ class Location(myRdfSubject):
 
 class Address(myRdfSubject):
     rdf_type = settings.NS.locn.Address
-    geometry = rdfSingle(settings.NS.locn.geometry)
+    # geometry = rdfSingle(settings.NS.locn.geometry)
 
 

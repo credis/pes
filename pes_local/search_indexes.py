@@ -6,7 +6,7 @@ from pes_local.models import Organization, Person, Exchange
 from django.contrib.gis.geos import Point
 from djrdf.import_rdf.models import SparqlQuery
 from django.conf import settings
-
+from rdfalchemy.orm import mapper
 
 # TODO : We have to decide if theses data have to be store
 # in openrdf store or not.
@@ -44,6 +44,14 @@ class PESIndex(Indexes):
     # def prepare_modified(self, obj):
     #     return [str(obj.modified)]
 
+    # Ok this is very 'lourding' but... with the ClassInstances method we 
+    # avoid many problems.... such as relocation of uri 
+    # the cost is to double the request ...
+    def index_queryset(self):
+        "Used when the entire index for model is updated."
+        list_of_ids = map(lambda x: x.id, list(self.get_model().ClassInstances()))
+        return self.get_model().objects.filter(pk__in=list_of_ids)
+
     def prepare_tags(self, obj):
         return ["%s " % tag.name for tag in obj.tags]
 
@@ -65,9 +73,8 @@ class PESIndex(Indexes):
         return prepared_data
 
 
-    def index_queryset(self):
-        """Used when the entire index for model is updated."""
-        return self.get_model().objects.filter(modified__lte=datetime.datetime.now())
+
+
 
 
 
@@ -77,6 +84,7 @@ class OrganizationIndex(PESIndex, indexes.Indexable):
     def get_model(self):
         return Organization
 
+
     def prepare_category(self, obj):
         return [u"association"]
 
@@ -85,15 +93,10 @@ class OrganizationIndex(PESIndex, indexes.Indexable):
         return map(title, obj.seeks) + map(title, obj.offers)
 
     def prepare_location(self, obj):
-        addr = obj.pref_address
-        if not addr:
-            if obj.location != []:
-                addr = obj.location[0]
-        if addr and isinstance(addr.geometry, Point):
-            return "%s,%s" % (addr.geometry.y, addr.geometry.x)
-        else:
-            # print "OBJ %s " % obj
-            return None
+        res = obj.geoPoint
+        if res == None:
+            res = Point(x=0, y=0)
+        return "%s,%s" % (res.y, res.x)
 
     def prepare(self, obj):
         # print "prepare %s" % obj
@@ -122,20 +125,11 @@ class ExchangeIndex(PESIndex, indexes.Indexable):
         return [u"annonce"]
 
     def prepare_location(self, obj):
-        addr = None
-        if obj.location != []:
-                addr = obj.location[0]
-        else:
-            try:
-                addr = obj.publisher.pref_address
-            except:
-                addr = None
+        res = obj.geoPoint
+        if res == None:
+            res = Point(x=0, y=0)
+        return "%s,%s" % (res.y, res.x)
 
-        if addr and isinstance(addr.geometry, Point):
-            return "%s,%s" % (addr.geometry.y, addr.geometry.x)
-        else:
-            # print "OBJ %s " % obj
-            return None
 
     def prepare(self, obj):
         # print "prepare %s" % obj

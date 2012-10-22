@@ -3,4 +3,77 @@
 
 {% block content %}
 
+     <div id="content" class="grid_4 grid">
+
+          <div id="dernieres_annonces">
+              <h4>Les 10 dernières annonces</h4>
+               <ul>
+              {% for i in dernieres_annonces %}
+              <li><a href="{{i.get_absolute_url}}">{{ i.title }}</a> publiée par 
+              	     <a href="{{i.publisher.get_absolute_url}}">{{ i.publisher.title }}</a></li>
+              {%endfor%}
+          </ul>
+
+          <p><a href="/exchange/">Toutes les annonces</a>
+
+          </div>
+    </div>
+
+
+
+    <h4> Les organization dernièrement modifiées en paca </h4>
+
+    <div id="map"> </div>
+	<script>
+	   var map = new L.Map('map');
+	   var marseille = new L.LatLng(43.2964820, 5.3697800);
+	   map.setView(marseille, 8)
+		L.tileLayer('http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png', {
+		    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+		    maxZoom: 18
+		}).addTo(map);
+
+
+		$.getJSON("/geojson/organization/20/", function(data) {
+
+		        var geojson = L.geoJson(data, {
+
+		        // style for all vector layers (color, opacity, etc.), either function or object (optional)
+		        style: function (feature) {
+		            return feature.properties && feature.properties.style;
+		        },
+
+		        // function for creating layers for GeoJSON point features (optional) 
+		        // default value
+		        // pointToLayer: function (feature, latlng) {
+		        //     return L.marker(latlng);
+		        // },
+
+
+		        // function that gets called on every created feature layer (optional)
+		        onEachFeature: function (feature, layer) {
+
+		            if (feature.properties && feature.properties.popupContent) {
+		                     layer.bindPopup(feature.properties.popupContent);
+		                 }
+		            // var content = feature.properties && feature.properties.popupContent;
+		            // if (content) {
+		            //     layer.bindPopup(content);
+		            // }
+		        }
+
+		    }).addTo(map);
+
+		    map.fitBounds(geojson.getBounds());
+
+		});
+
+	// to call jquery stuff, necessairy to use $.getJson
+    $(function(){});
+
+
+
+	</script>
+ 
+
 {% endblock %}

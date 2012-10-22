@@ -45,6 +45,10 @@ class Tag(djRdf, myRdfSubject):
     def org_tagged(self):
         return self.tagged(settings.NS.org.Organization)
 
+    def exchange_tagged(self):
+        return self.tagged(settings.NS.ess.Exchange)
+
+
    # django models attributes
     count = IntegerField(blank=True, null=True)
 

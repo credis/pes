@@ -6,6 +6,7 @@ from rdfalchemy import rdfMultiple, rdfSingle
 from djrdf.models import myRdfSubject, djRdf
 from django.conf import settings
 from rdfalchemy.orm import mapper
+from pes.utils import fromAddrToPoint
 
 
 class Exchange(djRdf, myRdfSubject):
@@ -18,7 +19,7 @@ class Exchange(djRdf, myRdfSubject):
     publisher = rdfSingle(settings.NS.dct.publisher, range_type=settings.NS.org.Organization)
     area = rdfMultiple(settings.NS.gr.eligibleRegions, range_type=settings.NS.dct.location)
     method = rdfSingle(settings.NS.ess.hasMethod)
-    location = rdfMultiple(settings.NS.locn.location, range_type=settings.NS.dct.Location)
+    location = rdfMultiple(settings.NS.locn.location, range_type=settings.NS.locn.Address)
 
     class Meta:
         abstract = True
@@ -33,7 +34,33 @@ class Exchange(djRdf, myRdfSubject):
         org = mapper()[str(settings.NS.org.Organization)]
         return map(org, list(self.db.subjects(settings.NS.gr.seeks, self)))
 
+    @property
+    def geoPoint(self):
+        addr = None
+        if len(self.location) > 0:
+            addr = self.location[0]
+        # on peut forcer et utiliser la localization de lù'arganization
+        if not addr:
+            return self.publisher.geoPoint
+        else:
+            return fromAddrToPoint(addr)
+
+
     @models.permalink
     def get_absolute_url(self):
         return ('pes.exchange.views.detailExchange', [str(self.id)])
+
+    def to_geoJson(self):
+        if self.geoPoint:
+           return {
+               "type": "Feature",
+                "properties": {
+                        "name": self.title,
+                        "popupContent": u"<h4>" + self.title + "</h4><p><a href='" + self.get_absolute_url() + u"'>" + self.title + "</a></p>"
+                        },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [self.geoPoint.x, self.geoPoint.y]
+                        }
+                    }
 

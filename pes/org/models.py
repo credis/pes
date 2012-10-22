@@ -6,6 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from rdfalchemy import rdfSingle, rdfMultiple
 from django.conf import settings
 from djrdf.models import myRdfSubject, djRdf
+from pes.utils import fromAddrToPoint
 
 
 # Warning the order of the classes is MANDATORY
@@ -49,6 +50,48 @@ class Organization(djRdf, myRdfSubject):
     def get_absolute_url(self):
         return ('pes.org.views.detailOrg', [str(self.id)])
 
+    @property
+    def geoPoint(self):
+        addr = self.pref_address
+        if not addr:
+            if len(self.location) > 0:
+                addr = self.location[0]
+        return fromAddrToPoint(addr)
+
+    def to_geoJson(self):
+        if self.geoPoint:
+            return {
+               "type": "Feature",
+                "properties": {
+                        "name": self.title,
+                        "popupContent": u"<h4>" + self.title + "</h4><p><a href='" + self.get_absolute_url() + u"'>" + self.title + "</a></p>"
+                        },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [self.geoPoint.x, self.geoPoint.y]
+                        }
+                    }
+
+
+    # for haystack purpose
+    # def get_location(self):
+    #     # Remember, longitude FIRST!
+
+    #     addr = self.pref_address
+    #     if not addr:
+    #         if self.location != []:
+    #             addr = self.location[0]
+
+    #     if addr and isinstance(addr.geometry, Point):
+    #         return Point(addr.geometry.y, addr.geometry.x)
+    #     else:
+    #         # print "OBJ %s " % obj
+    #         return None
+
+
+    #     return Point(self.longitude, self.latitude)
+
+
 
 
 class Contact(djRdf, myRdfSubject):
@@ -72,7 +115,7 @@ class Membership(myRdfSubject):
 
 class Role(myRdfSubject):
     rdf_type = settings.NS.org.Role
-    label = rdfSingle(settings.NS.rdfs.label)
+    label = rdfSingle(settings.NS.skos.prefLabel)
 
 
 class Person(djRdf, myRdfSubject):

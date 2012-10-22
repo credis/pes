@@ -1,21 +1,33 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h2>Tous les details sur {{tag.label}}</h2>
+    <h2>TAG: {{tag.label}}</h2>
     <ul>
 
     </ul>
 
 
-    <div> {{form.render|safe }} </div>
+    {# <div> {{form.render|safe }} </div> #}
 
 
-    <div> Les organisations qui utilisent ce tag sont : 
-    {% for org in tag.org_tagged %}
-            <li><a href="{{ org.get_absolute_url }}">{{ org.title }}</a>
-             </li>
-     {% endfor %}
+    {% if tag.org_tagged %}
+        <div> Les organisations qui utilisent ce tag sont : 
+        {% for org in tag.org_tagged %}
+                <li><a href="{{ org.get_absolute_url }}">{{ org.title }}</a>
+                 </li>
+         {% endfor %}
+        </div>
+    {% endif %}
 
-    </div>
+
+    {% if tag.exchange_tagged %}
+        <div> Les échanges qui utilisent ce tag sont : 
+        {% for ex in tag.exchange_tagged %}
+                <li><a href="{{ ex.get_absolute_url }}">{{ ex.title }}</a>
+                 </li>
+         {% endfor %}
+        </div>
+    {% endif %}
+
 
 {% endblock %}
