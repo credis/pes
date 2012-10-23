@@ -4,6 +4,7 @@ from django import forms
 from haystack.forms import SearchForm, HighlightedSearchForm, FacetedSearchForm
 from haystack.utils.geo import Point, D
 from pes.tag.forms import TagForm as BaseTagForm
+from pes_local.models import Organization, Exchange
 
 
 
@@ -38,6 +39,8 @@ class MyFacetedSearchForm(FacetedSearchForm):
     dist = forms.IntegerField(required=False, label=_(u'Distance max'))
     marseille = Point(5.3697800, 43.2964820)
 
+    _sqs_cache = None
+
     def search(self):
         # First, store the SearchQuerySet received from other processing.
         sqs = super(MyFacetedSearchForm, self).search()
@@ -57,4 +60,22 @@ class MyFacetedSearchForm(FacetedSearchForm):
                 max_dist = D(km=self.cleaned_data['dist'])
                 sqs = sqs.dwithin('location', point, max_dist).distance('location', point).order_by('distance')
 
+
+        self._sqs_cache = sqs
         return sqs
+
+    def geoJson(self):
+        if not self._sqs_cache:
+            self.search()
+        result = []
+        for s in self._sqs_cache:
+            if s.model == Organization or s.model == Exchange:
+                gj = s.object.to_geoJson()
+                if gj:
+                    result.append(gj)
+        result = {"type": "FeatureCollection", "features":  result}
+        return result
+
+
+
+

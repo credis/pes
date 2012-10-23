@@ -7,6 +7,7 @@ from djrdf.models import myRdfSubject, djRdf
 from django.conf import settings
 from rdfalchemy.orm import mapper
 from pes.utils import fromAddrToPoint
+from djrdf.import_rdf.models import SparqlQuery
 
 
 class Exchange(djRdf, myRdfSubject):
@@ -52,15 +53,23 @@ class Exchange(djRdf, myRdfSubject):
 
     def to_geoJson(self):
         if self.geoPoint:
-           return {
+            return {
                "type": "Feature",
                 "properties": {
-                        "name": self.title,
-                        "popupContent": u"<h4>" + self.title + "</h4><p><a href='" + self.get_absolute_url() + u"'>" + self.title + "</a></p>"
+                        "name": self.title.encode('utf-8'),
+                        "popupContent": "<h4>" + self.title.encode('utf-8') + "</h4><p><a href='" + self.get_absolute_url() + "'>" + self.title.encode('utf-8') + "</a></p>"
                         },
                     "geometry": {
                         "type": "Point",
                         "coordinates": [self.geoPoint.x, self.geoPoint.y]
                         }
                     }
+
+
+
+    def proposition(self):
+        query = SparqlQuery.objects.get(label='possible exchange').query % (self.uri, self.uri, self.uri)
+        res = map(lambda x: x[0], self.db.query(query, initNs=settings.NS))
+        return map(self.__class__, res)
+
 

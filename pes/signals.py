@@ -1,8 +1,10 @@
 # from django_push.subscriber.signals import updated
 from djrdf.import_rdf.models import EntrySite
 from django.conf import settings
-from rdflib import Graph
+from rdflib import Graph, URIRef
 import logging
+from django.core.validators import URLValidator
+from django.core.exceptions import ValidationError
 
 log = logging.getLogger('djrdf')
 
@@ -15,6 +17,28 @@ log = logging.getLogger('djrdf')
 #         if url.startswith(eS.home):
 #             return eS
 #     return None
+
+
+
+
+# Lets follows because the PES is not listerning on all
+# types of objects
+def follow(g, es):
+    objs = list(g.objects(None, None))
+    uriobjs = []
+    for o in objs:
+        if isinstance(o, URIRef):
+            uriobjs.append(o)
+    res = g
+    validate = URLValidator(verify_exists=False)
+    for o in uriobjs:
+        if str(o).startswith(es.home):
+            try:
+                validate(str(o))
+                res += Graph().parse(str(o))
+            except ValidationError:
+                pass
+    return res
 
 
 
@@ -35,7 +59,6 @@ def listener(notification, **kwargs):
     except Exception, e:
         log.warning(u'%s' % e)
 
-
     print "ok for Es %s and hub %s" % (eS, hub)
     # log.debug("notification %s " % notification)
     for entry in notification.entries:
@@ -46,7 +69,8 @@ def listener(notification, **kwargs):
             log.debug("Found an EntrySite %s and uri %s" % (eS, uri))
             g = Graph()
             g.parse(uri)
-            log.debug("New graph parsed %s " % g)
+            g = follow(g, eS)
+            log.debug("New graph parsed %s " % g.serialyse(format='n3'))
             eS.toSesameRep(settings.SESAME_REPOSITORY_NAME, g, None, None)
             log.debug("Graph updated in SEsame")
         

@@ -5,16 +5,44 @@
 
     <div> {{ex.description|safe}} </div>
 
+    {% if ex.publisher.title %}
+        <span>
+        publiée par: 
+        <a href="{{ex.publisher.get_absolute_url}}">{{ ex.publisher.title }}</a>
+        </span>
+    {% endif %}
 
-    <h3> Les tags </h3>
+
     <div>
+    <h3> Les tags </h3>
+    <ul>
     {% for tag in ex.tags %}
             <li>{{ tag.label }} 
              </li>
      {% endfor %}
+     </ul>
      </div>
-
      <br/>
+
+{% if ex.proposition %}
+Quelques propositions pour cette annonce:
+
+               <ul>
+              {% for e in ex.proposition %}
+                  {% if e.publisher.title %}
+                   <li><a href="{{e.get_absolute_url}}">{{ e.title }}</a> publiée par 
+                         <a href="{{e.publisher.get_absolute_url}}">{{ e.publisher.title }}</a></li>
+                   {% else %}
+                   <li><a href="{{e.get_absolute_url}}">{{ e.title }}</a> </li>
+                   {% endif %}
+
+              {%endfor%}
+          </ul>
+
+
+
+{% endif %}
+
 <br/>
 <br/>
 

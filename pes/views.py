@@ -14,8 +14,15 @@ import json
 
 def _first(gen, size, cls):
     res = []
-    for i in range(size):
-        res.append(cls(gen.next()[0]))
+    if size == None:
+        try:
+            while True:
+                res.append(cls(gen.next()[0]))
+        except Exception:
+            pass
+    else:
+        for i in range(size):
+            res.append(cls(gen.next()[0]))
     return res
 
 
@@ -46,7 +53,7 @@ def index(request):
 
 
 
-def geojson(request, model, num):
+def geojson(request, model, num=None):
     if model == 'exchange':
         cls = Exchange
     elif model == 'organization':
@@ -56,7 +63,10 @@ def geojson(request, model, num):
         sq = SparqlQuery.objects.get(label='ordered by modified')
         sq = sq.query % str(cls.rdf_type)
         res = cls.db.query(sq,  initNs=settings.NS)
-        first = _first(res, int(num), cls)
+        if num:
+            first = _first(res, int(num), cls)
+        else:
+            first = _first(res, None, cls)
 
         result = []
         for e in first:

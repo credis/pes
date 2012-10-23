@@ -9,8 +9,13 @@
               <h4>Les 10 dernières annonces</h4>
                <ul>
               {% for i in dernieres_annonces %}
-              <li><a href="{{i.get_absolute_url}}">{{ i.title }}</a> publiée par 
-              	     <a href="{{i.publisher.get_absolute_url}}">{{ i.publisher.title }}</a></li>
+	              {% if i.publisher.title %}
+	               <li><a href="{{i.get_absolute_url}}">{{ i.title }}</a> publiée par 
+	              	     <a href="{{i.publisher.get_absolute_url}}">{{ i.publisher.title }}</a></li>
+	               {% else %}
+	               <li><a href="{{i.get_absolute_url}}">{{ i.title }}</a> </li>
+	               {% endif %}
+
               {%endfor%}
           </ul>
 
@@ -21,10 +26,10 @@
 
 
 
-    <h4> Les organization dernièrement modifiées en paca </h4>
+    <h4> Cartographie des strutures </h4>
 
     <div id="map"> </div>
-	<script>
+	<script type="text/javascript">
 	   var map = new L.Map('map');
 	   var marseille = new L.LatLng(43.2964820, 5.3697800);
 	   map.setView(marseille, 8)
@@ -33,15 +38,29 @@
 		    maxZoom: 18
 		}).addTo(map);
 
+		geojsonMarkerOptions = {
+				    radius: 8,
+				    fillColor: "#81cb54",
+				    color: "#000",
+				    weight: 1,
+				    opacity: 1,
+				    fillOpacity: 0.6
+				};
 
-		$.getJSON("/geojson/organization/20/", function(data) {
+		$.getJSON("/geojson/organization/", function(data) {
 
 		        var geojson = L.geoJson(data, {
+
 
 		        // style for all vector layers (color, opacity, etc.), either function or object (optional)
 		        style: function (feature) {
 		            return feature.properties && feature.properties.style;
 		        },
+
+			    pointToLayer: function (feature, latlng) {
+			        return L.circleMarker(latlng, geojsonMarkerOptions);
+			    },
+
 
 		        // function for creating layers for GeoJSON point features (optional) 
 		        // default value

@@ -14,6 +14,7 @@ urlpatterns = patterns('',
 
 
     url(r'^geojson/((?P<model>[\w-]+))/(?P<num>\d+)/$', 'pes.views.geojson'),
+    url(r'^geojson/((?P<model>[\w-]+))/$', 'pes.views.geojson'),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
