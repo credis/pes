@@ -12,34 +12,46 @@
 
     {% if org.offers  or org.seeks %}
         <h3> Exchange : </h3>
-        <p>
+        {% if org.offers %}
+        <h4>  offre </h4>
+        <ul>
             {% for ex in org.offers %}
-                <a href="{{ ex.get_absolute_url }}">{{ ex.title}}</a>
+                <li><a href="{{ ex.get_absolute_url }}">{{ ex.title}}</a></li>
             {% endfor %}
+        </ul>
+        {% endif %}
+
+        {% if org.seeks %}
+        <h4>  recherche </h4>
+        <ul>
+
             {% for ex in org.seeks %}
-                <a href="{{ ex.get_absolute_url }}">{{ ex.title}}</a>
+                <li><a href="{{ ex.get_absolute_url }}">{{ ex.title}}</a></li>
             {% endfor %}
-        </p>
-         {% endif %}
+        </ul>
+        {% endif %}
+
+
+    {% endif %}
   
     {% if org.roles %}
         <h3> Les membres </h3>
-        <div>
+        <ul>
         {% for ms in org.roles %}
                 <li>{{ ms.role.label }} :  {{ms.member.name}}
                  </li>
          {% endfor %}
-         </div>
+         </ul>
     {% endif %}
 
     {% if org.tags %}
-        <h3> Tags : </h3>
-        <p>
+        <span>
+            <strong>Tags : </strong> 
             {% for tag in org.tags %}
                 <a href="{{ tag.get_absolute_url }}">{{ tag.label}}</a>
             {% endfor %}
-        </p>
-   {% endif %}
+            </span>
+    {% endif %}
 
      <br/>
 <br/>

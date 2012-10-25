@@ -1,0 +1,56 @@
+[
+    {
+        "pk": 4, 
+        "model": "import_rdf.sparqlquery", 
+        "fields": {
+            "query": "PREFIX search: <http://rdf.opensahara.com/search#>\r\n\r\nselect <%s> ?nom where {\r\n<%s> a org:Organization .\r\n<%s> locn:location ?l .\r\n?l locn:geometry ?gg .\r\n?com a dct:Location .\r\n?com locn:geometry ?ccom .\r\n?com rdfs:label ?nom .\r\nFILTER (search:intersects(?ccom,?gg)) .\r\n}", 
+            "notation": "", 
+            "label": "geo inter"
+        }
+    }, 
+    {
+        "pk": 5, 
+        "model": "import_rdf.sparqlquery", 
+        "fields": {
+            "query": "select  ?a where  { \r\n   %s rdfs:label ?a . \r\n    filter ( lang(?a) = \"fr\" )\r\n}", 
+            "notation": "", 
+            "label": "fr filter"
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "import_rdf.sparqlquery", 
+        "fields": {
+            "query": "PREFIX search: <http://rdf.opensahara.com/search#>\r\n\r\nselect  ?nom where {\r\n<%s> locn:location ?l .\r\n?l locn:geometry ?gg .\r\n?com a schema:AdministrativeArea .\r\n?com locn:geometry ?ccom .\r\n?com rdfs:label ?nom .\r\n?com skos:notation ?note .\r\nFILTER (search:contains(?ccom,?gg) && bound(?note)) .\r\n}", 
+            "notation": "ATTENTION tant que les conditions de d2r mapping ne marche pas....je suis oblig\u00e9e de filter sur le fait qu'on ait\r\nune property skos:notation ou pas.\r\n", 
+            "label": "geo contains"
+        }
+    }, 
+    {
+        "pk": 6, 
+        "model": "import_rdf.sparqlquery", 
+        "fields": {
+            "query": "SELECT ?s\r\nWHERE {?s a <%s> .\r\n       ?s dct:modified ?date . }\r\nORDER BY DESC(?date)\r\n", 
+            "notation": "Return all %s (where %s is an rdf Class) orderer by modified date", 
+            "label": "ordered by modified"
+        }
+    }, 
+    {
+        "pk": 7, 
+        "model": "import_rdf.sparqlquery", 
+        "fields": {
+            "query": "select ?ex2 where {\r\n?o1 gr:offers <%s>.\r\n?o2 gr:seeks ?ex2.\r\n\r\n<%s> ess:hasMethod ?m1.\r\n?ex2 ess:hasMethod ?m2.\r\n\r\n<%s> dct:subject ?t1.\r\n?ex2 dct:subject ?t2.\r\nfilter((?m2 = ?m1) && (?t1 = ?t2)).\r\n}\r\n", 
+            "notation": "", 
+            "label": "possible exchange offer"
+        }
+    }, 
+    {
+        "pk": 8, 
+        "model": "import_rdf.sparqlquery", 
+        "fields": {
+            "query": "select ?ex2 where {\r\n?o1 gr:seeks <%s>.\r\n?o2 gr:offers ?ex2.\r\n\r\n<%s> ess:hasMethod ?m1.\r\n?ex2 ess:hasMethod ?m2.\r\n\r\n<%s> dct:subject ?t1.\r\n?ex2 dct:subject ?t2.\r\nfilter((?m2 = ?m1) && (?t1 = ?t2)).\r\n}\r\n", 
+            "notation": "", 
+            "label": "possible exchange seek"
+        }
+    }
+]

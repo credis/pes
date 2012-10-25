@@ -6,7 +6,6 @@ from django.contrib.gis.geos import Point
 
 
 
-
 def validGeoPoint(p):
     return (-90 <= p.y <= 90) and (-180 <= p.x <= 180)
 
@@ -26,3 +25,5 @@ def fromAddrToPoint(addr):
         geo = fromstr(str(loc.geometry))
         if isinstance(geo, Point) and validGeoPoint(geo):
             return geo
+
+

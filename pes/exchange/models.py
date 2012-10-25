@@ -41,7 +41,7 @@ class Exchange(djRdf, myRdfSubject):
         if len(self.location) > 0:
             addr = self.location[0]
         # on peut forcer et utiliser la localization de lù'arganization
-        if not addr:
+        if not addr and self.publisher:
             return self.publisher.geoPoint
         else:
             return fromAddrToPoint(addr)
@@ -68,8 +68,16 @@ class Exchange(djRdf, myRdfSubject):
 
 
     def proposition(self):
-        query = SparqlQuery.objects.get(label='possible exchange').query % (self.uri, self.uri, self.uri)
-        res = map(lambda x: x[0], self.db.query(query, initNs=settings.NS))
-        return map(self.__class__, res)
+        if self.publisher:
+            if self in self.publisher.offers:
+                query = SparqlQuery.objects.get(label='possible exchange offer').query % (self.uri, self.uri, self.uri)
+            elif self in self.publisher.seeks:
+                query = SparqlQuery.objects.get(label='possible exchange seek').query % (self.uri, self.uri, self.uri)
+            else:
+                query = None
+            if query:
+                res = map(lambda x: x[0], self.db.query(query, initNs=settings.NS))
+                return map(self.__class__, res)
+        return []
 
 

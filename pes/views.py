@@ -10,6 +10,8 @@ from djrdf.import_rdf.models import SparqlQuery
 from pes_local.models import Exchange, Organization
 from django.conf import settings
 import json
+from django.contrib.gis.utils import GeoIP
+from django.contrib.gis.geos import Point
 
 
 def _first(gen, size, cls):
@@ -48,6 +50,9 @@ def index(request):
 
     exchanges = {"type": "FeatureCollection", "features":  exchanges}
     context['geoJson'] = json.dumps(exchanges)
+
+    # Un beau moyen de faire des variables globales....
+    setattr(settings, 'PES_REMOTE_CLIENT', request.META.get('REMOTE_ADDR', None))
 
     return render_to_response('home.html', context, RequestContext(request))
 
