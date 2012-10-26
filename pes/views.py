@@ -23,8 +23,11 @@ def _first(gen, size, cls):
         except Exception:
             pass
     else:
-        for i in range(size):
-            res.append(cls(gen.next()[0]))
+        try:
+            for i in range(size):
+                res.append(cls(gen.next()[0]))
+        except Exception:
+            pass
     return res
 
 
