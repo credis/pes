@@ -5,6 +5,7 @@ from rdflib import Graph, URIRef
 import logging
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
+import urllib2
 
 log = logging.getLogger('djrdf')
 
@@ -32,12 +33,13 @@ def follow(g, es):
     res = g
     validate = URLValidator(verify_exists=False)
     for o in uriobjs:
-        if str(o).startswith(es.home):
+        if str(o).startswith(es.home) and not str(o).startswith(es.home + '/media'):
             try:
                 validate(str(o))
                 res += Graph().parse(str(o))
-            except ValidationError:
+            except (ValidationError, urllib2.HTTPError):
                 pass
+    log.debug('end follow')
     return res
 
 
@@ -59,7 +61,9 @@ def listener(notification, **kwargs):
     except Exception, e:
         log.warning(u'%s' % e)
 
-    print "ok for Es %s and hub %s" % (eS, hub)
+    log.debug("ok for Es %s and hub %s" % (eS, hub))
+    validate = URLValidator(verify_exists=False)
+
     # log.debug("notification %s " % notification)
     for entry in notification.entries:
         # do something with entry here
@@ -67,12 +71,19 @@ def listener(notification, **kwargs):
         if eS:
             uri = str(entry.summary)
             log.debug("Found an EntrySite %s and uri %s" % (eS, uri))
-            g = Graph()
-            g.parse(uri)
-            g = follow(g, eS)
-            log.debug("New graph parsed %s " % g.serialyse(format='n3'))
-            eS.toSesameRep(settings.SESAME_REPOSITORY_NAME, g, None, None)
-            log.debug("Graph updated in SEsame")
+            try:
+                validate(uri)
+                g = Graph()
+                g.parse(uri)
+                log.debug('uri parse')
+                # g = follow(g, eS)
+                log.debug('follow ok')
+                # log.debug("New graph parsed %s " % g.serialyse(format='n3'))
+                eS.toSesameRep(settings.SESAME_REPOSITORY_NAME, g, None, None)
+                log.debug("Graph updated in SEsame")
+            except ValidationError:
+                pass
+
         
 
 

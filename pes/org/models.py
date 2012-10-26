@@ -40,7 +40,7 @@ class Organization(djRdf, myRdfSubject):
 
     @property
     def roles(self):
-        return map(Membership, list(self.db.subjects(settings.NS.org.organization, self)))
+        return map(Engagement, list(self.db.subjects(settings.NS.org.organization, self)))
 
     @property
     def contacts(self):
@@ -105,7 +105,7 @@ class Contact(djRdf, myRdfSubject):
 
 
 
-class Membership(myRdfSubject):
+class Engagement(myRdfSubject):
     rdf_type = settings.NS.org.Membership
     member = rdfSingle(settings.NS.org.member, range_type=settings.NS.person.Person)
     role = rdfSingle(settings.NS.org.role, range_type=settings.NS.org.Role)

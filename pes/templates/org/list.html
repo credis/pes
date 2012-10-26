@@ -6,12 +6,13 @@
     <h2>Organizations</h2>
     <ul>
         {% for org in object_list %}
-            <li><h4>{{ org.title }} </h4>tous les details de cette organisation sont ici
+            <li>
             	<a href="{{ org.get_absolute_url }}">{{ org.title }}</a>
-            	vous pouvez aussi consulter son site internet
- 			
-            	<!-- avant il faut tester si le site existe -->
-            	<a href="{{ org.web }}">{{ org.web}}</a>
+
+                {% if org.web %}
+                	(vous pouvez aussi consulter son site internet 			
+                	<a href="{{ org.web }}">{{ org.web}}</a>)
+                {% endif %}
             </li>
         {% endfor %}
     </ul>
