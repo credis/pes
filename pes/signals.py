@@ -6,6 +6,7 @@ import logging
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
 import urllib2
+import urlparse
 
 log = logging.getLogger('djrdf')
 
@@ -62,7 +63,7 @@ def listener(notification, **kwargs):
         log.warning(u'%s' % e)
 
     log.debug("ok for Es %s and hub %s" % (eS, hub))
-    validate = URLValidator(verify_exists=False)
+    validate = URLValidator(verify_exists=True)
 
     # log.debug("notification %s " % notification)
     for entry in notification.entries:
@@ -70,9 +71,11 @@ def listener(notification, **kwargs):
         # entry.link donne le topic
         if eS:
             uri = str(entry.summary)
+            up = urlparse.urlsplit(uri)
+            url = up.scheme + '://' + up.netloc
             log.debug("Found an EntrySite %s and uri %s" % (eS, uri))
             try:
-                validate(uri)
+                validate(url)
                 g = Graph()
                 g.parse(uri)
                 log.debug('uri parse')

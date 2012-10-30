@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Les articles</h2>
+    <ul>
+        {% for article in object_list %}
+            <li> <a href="{{ article.get_absolute_url }}">{{ article.title}}</a>
+            publiée le {{ article.dct_created }} 
+            {% if article.organization.title %}
+            par <a href="{{article.organization.get_absolute_url}}">{{article.organization.title }}</a>
+            {% endif %}
+ 	        <p> {{ article.summary|safe}} </p>           
+            </li>
+                
+        {% endfor %}
+    </ul>
+
+
+  {% if is_paginated %}
+        <div class="pagination">
+            <span class="page-links">
+                {% if page_obj.has_previous %}
+                    <a href="/article?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+                <span class="page-current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+                {% if page_obj.has_next %}
+                    <a href="/article?page={{ page_obj.next_page_number }}">next</a>
+                {% endif %}
+            </span>
+        </div>
+  
+{% else %}
+    
+    <p>Plus d'autres parutions !</p>
+{% endif %}
+{% endblock %}

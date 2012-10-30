@@ -7,11 +7,13 @@ from django.http import HttpResponse
 from haystack.query import SearchQuerySet
 from django.template import RequestContext
 from djrdf.import_rdf.models import SparqlQuery
-from pes_local.models import Exchange, Organization
+from pes_local.models import Exchange, Organization, Article
 from django.conf import settings
 import json
 from django.contrib.gis.utils import GeoIP
 from django.contrib.gis.geos import Point
+from django.contrib.sites.models import Site
+
 
 
 def _first(gen, size, cls):
@@ -20,7 +22,7 @@ def _first(gen, size, cls):
         try:
             while True:
                 res.append(cls(gen.next()[0]))
-        except Exception:
+        except StopIteration:
             pass
     else:
         try:
@@ -38,12 +40,14 @@ def _first(gen, size, cls):
 # Should use a template....
 def index(request):
     context = {}
-    context['intro'] = u""" %s Welcome """ % settings.PROJECT_NAME.upper()
-    sq = SparqlQuery.objects.get(label='ordered by modified')
-    sq = sq.query % str(Exchange.rdf_type)
-    res = Exchange.db.query(sq,  initNs=settings.NS)
+    context['intro'] = u"%s" % Site.objects.get_current().domain
+    sqom = SparqlQuery.objects.get(label='ordered by modified')
+    sq = sqom.query % str(Exchange.rdf_type)
+    res = Exchange.db.query(sq, initNs=settings.NS)
     first10 = _first(res, 10, Exchange)
-    context['dernieres_annonces'] = first10
+    context['last_annonces'] = first10
+    sqoc = SparqlQuery.objects.get(label='ordered by created')
+    context['last_articles'] = _first(Article.db.query(sqoc.query % str(Article.rdf_type), initNs=settings.NS), 10, Article)
 
     exchanges = []
     for e in first10:

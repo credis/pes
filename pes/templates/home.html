@@ -8,7 +8,7 @@
           <div id="dernieres_annonces">
               <h4>Les 10 dernières annonces</h4>
                <ul>
-              {% for i in dernieres_annonces %}
+              {% for i in last_annonces %}
 	              {% if i.publisher.title %}
 	               <li><a href="{{i.get_absolute_url}}">{{ i.title }}</a> publiée par 
 	              	     <a href="{{i.publisher.get_absolute_url}}">{{ i.publisher.title }}</a></li>
@@ -20,6 +20,38 @@
           </ul>
 
           <p><a href="/exchange/">Toutes les annonces</a>
+
+          </div>
+    </div>
+
+
+     <div id="content" class="grid_4 grid">
+
+          <div id="dernieres_news">
+              <h4>Les dernières parutions</h4>
+               <ul>
+              {% for i in last_articles %}
+                  <li>
+                  	
+	              {% if i.organization.title %}
+	                   <a href="{{i.get_absolute_url}}">{{ i.title }}</a> publiée par 
+	              	     <a href="{{i.organization.get_absolute_url}}">{{ i.organization.title }}</a>
+	               {% else %}
+	                 <a href="{{i.get_absolute_url}}">{{ i.title }}</a> 
+	               {% endif %}
+	               {% if i.dct_created %}
+	                   le {{ i.dct_created}}
+	               {% endif %}
+	              
+	               {% if i.summary %}
+	                   <p> {{ i.summary|safe }} </p>
+	               {% endif %}
+	               </li>
+
+              {%endfor%}
+          </ul>
+
+          <p><a href="/article/">Toutes les parutions</a>
 
           </div>
     </div>
