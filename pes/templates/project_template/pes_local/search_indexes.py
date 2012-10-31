@@ -55,7 +55,7 @@ class PESIndex(Indexes):
     def prepare_tags(self, obj):
         return ["%s " % tag.name for tag in obj.tags]
 
-    # Comme on s'en sert de facette. On n'a pas besoin de trop de détails
+    # Comme on s'en sert de facette. On n'a pas besoin de trop de details
     def prepare_modified(sel, obj):
         return obj.dct_modified.date()
 
@@ -155,7 +155,7 @@ class ExchangeIndex(PESIndex, indexes.Indexable):
 #         return self.get_model().objects.filter(modified__lte=datetime.datetime.now())
 
 
-# On cree les instance de Word. Cette methode doit etre appellerr
+# On cree les instance de Word. Cette methode doit etre appeller
 
 
 
