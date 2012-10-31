@@ -8,7 +8,7 @@ except ImportError:
     ez_setup.use_setuptools()
     from setuptools import setup, find_packages
 
-VERSION = __import__('coop').__version__
+VERSION = __import__('pes').__version__
 
 import os
 
@@ -19,7 +19,7 @@ def read(fname):
 setup(
     name = 'pes',
     version = VERSION,
-    description = 'A basis for a cooperative organization directory, with people, organization, offers.',
+    description = 'A basis for ess agreator',
     packages = ['pes',
                 'pes.article',
                 'pes.bin',
