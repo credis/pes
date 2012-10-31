@@ -52,5 +52,14 @@
             "notation": "", 
             "label": "possible exchange seek"
         }
+    }, 
+    {
+        "pk": 9, 
+        "model": "import_rdf.sparqlquery", 
+        "fields": {
+            "query": "SELECT ?s\r\nWHERE {?s a <%s> .\r\n       ?s dct:created ?date . }\r\nORDER BY DESC(?date)\r\n", 
+            "notation": "", 
+            "label": "ordered by created"
+        }
     }
 ]
