@@ -1,9 +1,4 @@
 recursive-include pes/templates *
 recursive-include pes/static *
 recursive-include pes/bin *.sh
-recursive-include pes/article/locale *.mo *.po
-recursive-include pes/exchange/locale *.mo *.po
-recursive-include pes/geo/locale *.mo *.po
-recursive-include pes/org/locale *.mo *.po
-recursive-include pes/tag/locale *.mo *.po
-recursive-include pes/thess/locale *.mo *.po
+recursive-include pes/locale *.mo *.po
