@@ -1,9 +1,8 @@
 # -*- coding:utf-8 -*-
 
-PROJECT_NAME = 'pes'
-SESAME_REPOSITORY_NAME = PROJECT_NAME + "Repository"
-SECRET_KEY = 'c!&amp;5exu!yjh$n-!s%t4cyps-#1dd)!g=28w$^@6km3_5@l0w^0'
-
+PROJECT_NAME = '{{ project_name }}' 
+SESAME_REPOSITORY_NAME = "pesRepository"
+SECRET_KEY = '{{ secret_key }}'
 
 import os.path
 PROJECT_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -32,7 +31,7 @@ except ImportError, exp:
     raise ImproperlyConfigured("No db_settings.py file was found")
 
 
-SITE_TITLE = 'PES'
+SITE_TITLE = '{{ project_name }}'
 
 
 

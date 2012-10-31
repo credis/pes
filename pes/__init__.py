@@ -1,7 +1,8 @@
 # -*- coding:utf-8 -*-
-import rdfalchemy
-from   djrdf.repository import Repository
-from django.conf import settings
+VERSION = (0, 0, 2)
 
 
-rdfalchemy.rdfSubject.db = Repository(settings.SESAME_REPOSITORY_NAME)
+def get_version():
+    return '%s.%s.%s' % (VERSION[0], VERSION[1], VERSION[2])
+
+__version__ = get_version()

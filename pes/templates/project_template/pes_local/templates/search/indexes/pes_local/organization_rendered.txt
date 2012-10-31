@@ -1,0 +1,4 @@
+<p> <a href="{{ object.get_absolute_url }}">{{ object.title }}</a>
+</p>
+<p>{{ object.description|safe|truncatewords:50 }} <p>
+

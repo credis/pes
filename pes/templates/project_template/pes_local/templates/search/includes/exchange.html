@@ -1,0 +1,19 @@
+{% load highlight %}
+
+<h4> 
+	<a href="{{ result.object.get_absolute_url }}">{{ result.object.title }}</a>
+
+
+
+	 TAGS :{% for tag in result.object.tags %}
+            {{ tag.label }},
+             
+     {% endfor %}
+
+</h4>
+<p> 
+	{% highlight result.object.description with query %}
+</p>
+
+
+{% include "search/includes/mlt.html" %}
