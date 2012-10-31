@@ -1,11 +1,10 @@
 # django and tools
-django
+ipython
 django-extensions
 django-admin-tools
 psycopg2
 httplib2
 Werkzeug
-south
 django-easyconfig 
 feedparser
 django-push
@@ -13,6 +12,7 @@ git+git://github.com/quinode/subhub.git
 # pysolr
 Geohash
 geopy
+
 
 # redis
 git+git://github.com/ui/django-rq.git
@@ -31,6 +31,8 @@ git+git://github.com/RDFLib/rdflib-jsonld.git
 git+git://github.com/RDFLib/rdflib-sparqlstore.git
 git+git://github.com/gjhiggins/RDFAlchemy.git
 git+git://github.com/FormAlchemy/formalchemy.git
+SQLAlchemy==0.7.9
+
 
 # core agregator
 git+git://github.com/quinode/django-rdfalchemy.git

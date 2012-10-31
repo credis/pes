@@ -73,8 +73,8 @@ class UpdateFeed(Feed):
                 for l in ll:
                     if pes.org.models.Contact in l.__mro__:
                         self._mType.append(l)
-
-        self.title = _(u"Updates for %s on %s." % (self._model, Site.objects.get_current().name))
+        words = ['Updates for', self._model, 'on', Site.objects.get_current().name]
+        self.title = _(' '.join(words))
         self.link = "/feed/%s/" % self._model
         return None
 
@@ -142,7 +142,8 @@ class UpdateFeedObject(Feed):
                     if pes.org.models.Contact in l.__mro__:
                         self._mType.append(l)
 
-        self.title = _(u"Updates for %s on %s." % (self._model, Site.objects.get_current().name))
+        words = ['Updates for', self._model, 'on', Site.objects.get_current().name]
+        self.title = _(' '.join(words))
         self.link = "/feed/%s/%s" % (self._model, self._uuid)
         return None
 
