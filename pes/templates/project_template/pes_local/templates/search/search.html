@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
 
 {% load es_extra %}
+{% load i18n %}
 
 
 {% block content %}
-    <h2>Recherche</h2>
+    <h2>{% trans "Search" %}</h2>
 
     <form method="get" action=".">
         <table>
@@ -19,7 +20,7 @@
 
         {% if query %}
 
-             {# <div> Les résultats </div> #}
+             {# <div> the result </div> #}
 
             <!-- Begin faceting. -->
                {# <h2>Par facettes</h2> #}
@@ -37,7 +38,7 @@
  
 
                         {% if facets.fields.category %}
-                            <dt>catégories</dt>
+                            <dt>{% trans "categories" %}</dt>
 
                             {% for category in facets.fields.category|slice:":5" %}
                             {% comment %}
@@ -50,7 +51,7 @@
                             {% endfor %}
                         {% endif %}
                        {% if facets.fields.modified %}
-                            <dt>modifié</dt>
+                            <dt>{% trans "modified" %}</dt>
                             {% for modified in facets.fields.modified|slice:":5" %}
                                 <dd><a href="{{ request.get_full_path|skippage }}&amp;selected_facets=modified_exact:{{ modified.0|urlencode }}">{{ modified.0|todate|date:"d M Y" }}</a> ({{ modified.1 }})</dd>
                             {% endfor %}
@@ -120,7 +121,7 @@
 
             </script>
 
-            <h3>Résultats</h3>
+            <h3>{% trans "Results" %}</h3>
 
             {% for result in page.object_list %}
 
@@ -145,7 +146,7 @@
  {% endcomment %}
 
             {% empty %}
-                <p>No results found.</p>
+                <p>{% trans "No results found." %}</p>
             {% endfor %}
 
 
