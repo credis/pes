@@ -1,5 +1,10 @@
 from django.conf.urls import patterns, include, url
 from pes.feeds import UpdateFeed, UpdateFeedObject
+from django.views.generic import ListView
+from pes_local.models import Organization, Tag, Exchange, Article
+
+from django.contrib import admin
+admin.autodiscover()
 
 
 
@@ -19,13 +24,33 @@ urlpatterns = patterns('',
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
-    # haystack
-    # (r'^search/', include('haystack.urls')),
-
-
-
     # Uncomment the next line to enable the admin:
-    # url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', include(admin.site.urls)),
+
+
+    url(r'^org/$', ListView.as_view(model=Organization, template_name="org/list.html")),
+    url(r'^org/(\d+)/$', 'pes.org.views.detailOrg'),
+    url(r'^exchange/$', ListView.as_view(model=Exchange, template_name="exchange/list.html")),
+    url(r'^exchange/(\d+)/$', 'pes.exchange.views.detailExchange'),
+    url(r'^tag/$', ListView.as_view(model=Tag, template_name="tag/list.html")),
+    url(r'^tag/(\d+)/$', 'pes.tag.views.detailTag'),
+    url(r'^article/$', ListView.as_view(model=Article, template_name="article/list.html",\
+          paginate_by=30)),
+    url(r'^article/(\d+)/$', 'pes.article.views.detailArticle'),
+
 )
 
 
+
+
+from haystack.views import  search_view_factory, FacetedSearchView
+from pes.forms import MyFacetedSearchForm
+
+urlpatterns += patterns('haystack.views',
+    url(r'^search/$', search_view_factory(
+        view_class=FacetedSearchView,
+        template='search/search.html',
+        # searchqueryset=sqs,
+        form_class=MyFacetedSearchForm
+    ), name='haystack_search'),
+)

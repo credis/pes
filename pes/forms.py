@@ -41,7 +41,7 @@ class MySearchForm(HighlightedSearchForm):
 class MyFacetedSearchForm(FacetedSearchForm):
     # latitude = forms.DecimalField(required=False)
     # longitude = forms.DecimalField(required=False)
-    # dist = forms.IntegerField(required=False, label=_(u'Distance max'))
+    dist = forms.IntegerField(required=False, label=_(u'Distance max'))
     marseille = Point(5.3697800, 43.2964820)
 
     _sqs_cache = None
@@ -61,22 +61,22 @@ class MyFacetedSearchForm(FacetedSearchForm):
 
 
 
-        # if self.is_bound:
-        #     # sqs = sqs.autocomplete(content_auto=self.cleaned_data['q'])
+        if self.is_bound:
+            # sqs = sqs.autocomplete(content_auto=self.cleaned_data['q'])
 
-        #     # if self.cleaned_data['latitude'] and self.cleaned_data['longitude']:
-        #     #     print 'latitude %s type lat %s' % (self.cleaned_data['latitude'], type(self.cleaned_data['latitude']))
-        #     #     point = Point(self.cleaned_data['latitude'], 
-        #     #                   self.cleaned_data['longitude'])
-        #     # else:
-        #     #     point = self.marseille
+            # if self.cleaned_data['latitude'] and self.cleaned_data['longitude']:
+            #     print 'latitude %s type lat %s' % (self.cleaned_data['latitude'], type(self.cleaned_data['latitude']))
+            #     point = Point(self.cleaned_data['latitude'], 
+            #                   self.cleaned_data['longitude'])
+            # else:
+            #     point = self.marseille
 
-        #     if self.cleaned_data['dist']:
-        #         max_dist = D(km=self.cleaned_data['dist'])
-        #         # Une petite idee qui ne marche pas.... ca casse le type searchquery
-        #         # good_distance = lambda x: distance(point, x.object.geoPoint, max_dist)
-        #         # sqs = filter(good_distance, sqs)
-        #         sqs = sqs.dwithin('location', point, max_dist).distance('location', point).order_by('distance')
+            if self.cleaned_data['dist']:
+                max_dist = D(km=self.cleaned_data['dist'])
+                # Une petite idee qui ne marche pas.... ca casse le type searchquery
+                # good_distance = lambda x: distance(point, x.object.geoPoint, max_dist)
+                # sqs = filter(good_distance, sqs)
+                sqs = sqs.dwithin('location', point, max_dist).distance('location', point).order_by('distance')
 
 
         self._sqs_cache = sqs

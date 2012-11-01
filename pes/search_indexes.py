@@ -2,7 +2,7 @@
 import datetime
 from haystack import indexes
 from pes.models import Word
-from pes_local.models import Organization, Person, Exchange
+from pes_local.models import Organization, Person, Exchange, Article
 from django.contrib.gis.geos import Point
 from djrdf.import_rdf.models import SparqlQuery
 from django.conf import settings
@@ -34,7 +34,7 @@ else:
 # The main class
 class PESIndex(Indexes):
     text = indexes.CharField(document=True, use_template=True)
-    tags = indexes.MultiValueField(boost=1.2)
+    tags = indexes.MultiValueField(boost=1.2, faceted=True)
     category = indexes.MultiValueField(faceted=True)
     modified = indexes.DateField(model_attr='dct_modified', faceted=True)
     zone = indexes.MultiValueField(faceted=True)
@@ -75,9 +75,6 @@ class PESIndex(Indexes):
 
 
 
-
-
-
 class OrganizationIndex(PESIndex, indexes.Indexable):
     exchange = indexes.MultiValueField()
 
@@ -103,7 +100,6 @@ class OrganizationIndex(PESIndex, indexes.Indexable):
         prepared_data = super(OrganizationIndex, self).prepare(obj)
         prepared_data['text'] = prepared_data['text'] + ' ' + ' '.join(prepared_data['exchange'])
         return prepared_data
-
 
 
 
@@ -138,6 +134,16 @@ class ExchangeIndex(PESIndex, indexes.Indexable):
         return prepared_data
 
 
+
+
+
+class ArticleIndex(PESIndex, indexes.Indexable):
+
+    def get_model(self):
+        return Article
+
+    def prepare_category(self, obj):
+        return [u"article"]
 
 
 

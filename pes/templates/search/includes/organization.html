@@ -1,15 +1,23 @@
 {% load highlight %}
 <h4>  
 	<a href="{{ result.object.get_absolute_url }}">{{ result.object.title }}</a>
-	 TAGS :{% for tag in result.object.tags %}
-            {{ tag.label }},
-             
-     {% endfor %}
 
 </h4>
 <p> 
 	{% highlight result.object.description with query %}
 </p>
+
+
+
+{% if result.object.tags %}
+<p>
+	<strong> tags : </strong>
+	 {% for tag in result.object.tags %}
+	        <a href="{{ tag.get_absolute_url }}">{{ tag.label}}</a>,
+	             
+	{% endfor %}
+</p>
+{% endif %}
 
 {% comment %}
 <p> 

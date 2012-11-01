@@ -1,3 +1,0 @@
-<p> 
-	tag : <a href="{{ object.get_absolute_url }}">{{ object.name }}</a>
-</p>
