@@ -31,9 +31,17 @@ MEDIA_URL = '/media/'
 STATIC_ROOT = os.path.abspath(PROJECT_PATH + '/static_collected/')
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = (
-    os.path.abspath(PROJECT_PATH + '/static/'),
-)
+# STATICFILES_DIRS = (
+#     os.path.abspath(PROJECT_PATH + '/static/'),
+# )
+
+import admin_tools
+ADMIN_TOOLS_PATH = os.path.dirname(os.path.abspath(admin_tools.__file__))
+
+STATICFILES_DIRS = [
+    os.path.abspath(ADMIN_TOOLS_PATH + '/media/'),
+]
+
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
