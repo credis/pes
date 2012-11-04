@@ -15,6 +15,7 @@ urlpatterns += patterns('haystack.views',
         view_class=FacetedSearchView,
         template='search/search.html',
         # searchqueryset=sqs,
-        form_class=MyFacetedSearchForm
+        form_class=MyFacetedSearchForm,
+        load_all = False
     ), name='haystack_search'),
 )

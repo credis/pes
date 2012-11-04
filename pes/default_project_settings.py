@@ -119,7 +119,7 @@ INSTALLED_APPS = (
     'djrdf.import_rdf',
     'pes',
     'django_extensions',
-    'debug_toolbar'
+    # 'debug_toolbar'
 )
 
 
