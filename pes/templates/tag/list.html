@@ -4,13 +4,11 @@
     <h2>Tags</h2>
     <ul>
         {% for tag in object_list %}
-            <li>{{ tag.name }}  tous les details sur ce tag sont
-           <a href="{{ tag.get_absolute_url }}">{{ tag.name}}</a>
+            <li> <a href="{{ tag.get_absolute_url }}">{{ tag.name}}</a>
 
             </li>
     
             
-
         {% endfor %}
     </ul>
 {% endblock %}

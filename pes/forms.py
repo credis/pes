@@ -49,7 +49,7 @@ class MyFacetedSearchForm(FacetedSearchForm):
     def search(self):
         # First, store the SearchQuerySet received from other processing.
         sqs = super(MyFacetedSearchForm, self).search()
-        sqs = sqs.facet('zone').facet('category')#.facet('modified')
+        sqs = sqs.facet('zone').facet('category').facet('tags')#.facet('modified')
 
         ip = getattr(settings, 'PES_REMOTE_CLIENT', None)
         g = GeoIP(path=settings.PROJECT_PATH + '/config/GEO/')
@@ -80,6 +80,7 @@ class MyFacetedSearchForm(FacetedSearchForm):
 
 
         self._sqs_cache = sqs
+        print sqs
         return sqs
 
     def geoJson(self):

@@ -21,6 +21,7 @@
 
              {# <div> Les résultats </div> #}
 
+
             <!-- Begin faceting. -->
                {# <h2>Par facettes</h2> #}
 
@@ -34,23 +35,26 @@
                             {% endfor %}
                         {% endif %}
 
- 
-
                         {% if facets.fields.category %}
                             <dt>catégories</dt>
-
                             {% for category in facets.fields.category|slice:":5" %}
                             {% comment %}
                                 <dd><a href="{{ request.get_full_path }}&amp;selected_facets=category_exact:{{ category.0|urlencode }}">{{ category.0 }}</a> ({{ category.1 }})</dd>
                             {% endcomment %}
                                 <dd><a href="{{ request.get_full_path|skippage }}&amp;selected_facets=category_exact:{{ category.0|urlencode }}">{{ category.0 }}</a> ({{ category.1 }})</dd>
-
-
-
                             {% endfor %}
                         {% endif %}
+
+                        {% if facets.fields.tags %}
+                            <dt>tags</dt>
+                            {% for tag in facets.fields.tags|slice:":5" %}
+                               <dd><a href="{{ request.get_full_path|skippage }}&amp;selected_facets=tags_exact:{{ tag.0|urlencode }}">{{ tag.0 }}</a> ({{ tag.1 }})</dd>
+                            {% endfor %}
+                        {% endif %}
+
+
                        {% if facets.fields.modified %}
-                            <dt>modifié</dt>
+                            <dt>date de modification</dt>
                             {% for modified in facets.fields.modified|slice:":5" %}
                                 <dd><a href="{{ request.get_full_path|skippage }}&amp;selected_facets=modified_exact:{{ modified.0|urlencode }}">{{ modified.0|todate|date:"d M Y" }}</a> ({{ modified.1 }})</dd>
                             {% endfor %}
@@ -120,9 +124,11 @@
 
             </script>
 
-            <h3>Résultats</h3>
 
+            <h3>Résultats</h3>
             {% for result in page.object_list %}
+            {{ result.display|safe }} <br />
+{% comment %}
 
                 {% if result.content_type == "pes_local.exchange" %}
                 {% include "search/includes/exchange.html" %}
@@ -130,19 +136,10 @@
                 {% if result.content_type == "pes_local.organization" %}
                 {% include "search/includes/organization.html" %}
                 {% endif %}
-                {% if result.content_type == "pes_local.person" %}
-                {% include "search/includes/person.html" %}
+                {% if result.content_type == "pes_local.article" %}
+                {% include "search/includes/article.html" %}
                 {% endif %}
-
-
-
-
-
-  {% comment %}
-               <div class="search_result">
-                   {{ result.rendered|safe }}
-                </div>
- {% endcomment %}
+{% endcomment %}
 
             {% empty %}
                 <p>No results found.</p>
@@ -157,6 +154,9 @@
                     {% if page.has_next %}<a href="?q={{ query }}&amp;page={{ page.next_page_number }}">{% endif %}Next &raquo;{% if page.has_next %}</a>{% endif %}
                 </div>
             {% endif %}
+
+
+
         {% else %}
             {# Show some example queries to run, maybe query syntax, something else? #}
         {% endif %}

@@ -38,6 +38,7 @@ class PESIndex(Indexes):
     category = indexes.MultiValueField(faceted=True)
     modified = indexes.DateField(model_attr='dct_modified', faceted=True)
     zone = indexes.MultiValueField(faceted=True)
+    display = indexes.CharField(use_template=True, indexed=False)
     # suggestions = indexes.CharField(faceted=True)  # for solr only?
     location = indexes.LocationField()
 
@@ -53,7 +54,7 @@ class PESIndex(Indexes):
         return self.get_model().objects.filter(pk__in=list_of_ids)
 
     def prepare_tags(self, obj):
-        return ["%s " % tag.name for tag in obj.tags]
+        return [u"%s" % tag.name for tag in obj.tags]
 
     # Comme on s'en sert de facette. On n'a pas besoin de trop de details
     def prepare_modified(sel, obj):
@@ -75,7 +76,7 @@ class PESIndex(Indexes):
 
 
 
-class OrganizationIndex(PESIndex, indexes.Indexable):
+class OrganizationIndex(PESIndex):
     exchange = indexes.MultiValueField()
 
     def get_model(self):
@@ -83,7 +84,7 @@ class OrganizationIndex(PESIndex, indexes.Indexable):
 
 
     def prepare_category(self, obj):
-        return [u"association"]
+        return [u"association", u"structure"]
 
     def prepare_exchange(self, obj):
         title = lambda x: x.title
@@ -104,7 +105,7 @@ class OrganizationIndex(PESIndex, indexes.Indexable):
 
 
 
-class ExchangeIndex(PESIndex, indexes.Indexable):
+class ExchangeIndex(PESIndex):
     method = indexes.MultiValueField()
 
     def get_model(self):
@@ -137,7 +138,7 @@ class ExchangeIndex(PESIndex, indexes.Indexable):
 
 
 
-class ArticleIndex(PESIndex, indexes.Indexable):
+class ArticleIndex(PESIndex):
 
     def get_model(self):
         return Article
@@ -166,7 +167,7 @@ class ArticleIndex(PESIndex, indexes.Indexable):
 
 
 
-class WordIndex(Indexes, indexes.Indexable):
+class WordIndex(Indexes):
     text = indexes.CharField(document=True, use_template=False)
     content_auto = indexes.EdgeNgramField(model_attr='name')
 

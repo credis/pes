@@ -1,14 +1,18 @@
 {% extends "base.html" %}
-
+{% load highlight %}
 {% block content %}
-   {# <h2>Tous les details sur {{org.title}}</h2> #}
-
+ 
 
     <span>
-        <img src="{{org.logo.resUri}}" width="100" height="80" alt="logo de {{org.title}}" />   
-        {{org.description|safe}} 
+        {% if org.logo %}
+        <img src="{{org.logo.resUri}}" width="100" height="80" alt="logo de {{org.title}}" /> {% endif %} 
+        <h2> {{org.title}} </h2>
+
     </span>
 
+    <div>
+        {{org.description|safe}} 
+    </div>
 
     {% if org.offers  or org.seeks %}
         <h3> Exchange : </h3>
@@ -43,7 +47,8 @@
          {% endfor %}
          </ul>
     {% endif %}
-
+     <br/>
+    
     {% if org.tags %}
         <span>
             <strong>Tags : </strong> 
@@ -52,6 +57,7 @@
             {% endfor %}
             </span>
     {% endif %}
+
 
      <br/>
 <br/>
@@ -72,6 +78,8 @@
 {% endcomment %}
 
 {# <div> La version grid donne  <br/> <table> <caption>{{org.title}}</caption>	{{org.grid.render|safe}} </table> </div> #}
+
+
 
 
 {% endblock %}
