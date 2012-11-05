@@ -8,6 +8,7 @@ from django.contrib.gis.utils import GeoIP
 from pes.tag.forms import TagForm as BaseTagForm
 from pes_local.models import Organization, Exchange
 from django.conf import settings
+import simplejson
 
 
 
@@ -83,15 +84,19 @@ class MyFacetedSearchForm(FacetedSearchForm):
         # print sqs
         return sqs
 
+
+    # Ca marche pas encore : PB d'ENCODAGE!
     def geoJson(self):
         if not self._sqs_cache:
             self.search()
         result = []
         for s in self._sqs_cache:
             if s.model == Organization or s.model == Exchange:
-                gj = s.object.to_geoJson()
+                gj = s.geoJson
                 if gj:
-                    result.append(gj)
+                    gj = simplejson.loads(gj.encode('utf-8'))
+                    if not gj == {}:
+                        result.append(gj)
         result = {"type": "FeatureCollection", "features":  result}
         return result
 

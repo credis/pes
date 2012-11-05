@@ -1,0 +1,28 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+    <h2> {{product.title}}</h2>
+
+    <div> {{product.description|safe}} </div>
+
+    {% if product.organization.title %}
+        <span>
+        proposée par: 
+        <a href="{{product.organization.get_absolute_url}}">{{product.organization.title }}</a>
+        </span>
+    {% endif %}
+
+     <br/>
+
+    {% if product.tags %}
+        <span>
+            <strong>Tags : </strong> 
+            {% for tag in org.tags %}
+                <a href="{{ tag.get_absolute_url }}">{{ tag.label}}</a>
+            {% endfor %}
+            </span>
+    {% endif %}
+
+
+{% endblock %}

@@ -6,6 +6,7 @@ from pes_local.models import Organization, Person, Exchange, Article, Product
 from django.contrib.gis.geos import Point
 from djrdf.import_rdf.models import SparqlQuery
 from django.conf import settings
+import simplejson
 from rdfalchemy.orm import mapper
 
 # TODO : We have to decide if theses data have to be store
@@ -31,6 +32,26 @@ else:
 #     return p.sub('', data)
 
 
+
+# For index which represente localizated 
+# class LocationIndex(object):
+#     location = indexes.LocationField()
+#     geoJson = indexes.CharField(indexed=False)
+
+#     def prepare_location(self, obj):
+#         res = obj.geoPoint
+#         if res == None:
+#             res = Point(x=0, y=0)
+#         return "%s,%s" % (res.y, res.x)
+
+#     def prepare_geoJson(self, obj):
+#         res = obj.to_geoJson()
+#         if res == None:
+#             res = {}
+#         return json.dumps(res)
+
+
+
 # The main class
 class PESIndex(Indexes):
     text = indexes.CharField(document=True, use_template=True)
@@ -41,6 +62,7 @@ class PESIndex(Indexes):
     display = indexes.CharField(use_template=True, indexed=False)
     # suggestions = indexes.CharField(faceted=True)  # for solr only?
     location = indexes.LocationField()
+    geoJson = indexes.CharField(indexed=False)
 
     # def prepare_modified(self, obj):
     #     return [str(obj.modified)]
@@ -96,6 +118,12 @@ class OrganizationIndex(PESIndex):
             res = Point(x=0, y=0)
         return "%s,%s" % (res.y, res.x)
 
+    def prepare_geoJson(self, obj):
+        res = obj.to_geoJson()
+        if res == None:
+            res = {}
+        return simplejson.dumps(res)
+
     def prepare(self, obj):
         # print "prepare %s" % obj
         prepared_data = super(OrganizationIndex, self).prepare(obj)
@@ -111,6 +139,18 @@ class ExchangeIndex(PESIndex):
     def get_model(self):
         return Exchange
 
+    def prepare_location(self, obj):
+        res = obj.geoPoint
+        if res == None:
+            res = Point(x=0, y=0)
+        return "%s,%s" % (res.y, res.x)
+
+    def prepare_geoJson(self, obj):
+        res = obj.to_geoJson()
+        if res == None:
+            res = {}
+        return simplejson.dumps(res)
+
     def prepare_method(self, obj):
         if obj.method:
             query = SparqlQuery.objects.get(label='fr filter').query % str(obj.method.n3())
@@ -120,13 +160,6 @@ class ExchangeIndex(PESIndex):
 
     def prepare_category(self, obj):
         return [u"annonce"]
-
-    def prepare_location(self, obj):
-        res = obj.geoPoint
-        if res == None:
-            res = Point(x=0, y=0)
-        return "%s,%s" % (res.y, res.x)
-
 
     def prepare(self, obj):
         # print "prepare %s" % obj

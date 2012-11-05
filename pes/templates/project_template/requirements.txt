@@ -12,6 +12,7 @@ git+git://github.com/quinode/subhub.git
 # pysolr
 Geohash
 geopy
+simplejson
 
 
 # redis

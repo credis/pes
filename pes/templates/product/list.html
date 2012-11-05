@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Les produits</h2>
+    <ul>
+        {% for product in object_list %}
+            <li> <a href="{{ product.get_absolute_url }}">{{ product.title}}</a>
+            publiée le {{ product.dct_created }} 
+            {% if product.organization.title %}
+            par <a href="{{product.organization.get_absolute_url}}">{{product.organization.title }}</a>
+            {% endif %}
+ 	        <p> {{ product.description|safe}} </p>           
+            </li>
+                
+        {% endfor %}
+    </ul>
+
+
+  {% if is_paginated %}
+        <div class="pagination">
+            <span class="page-links">
+                {% if page_obj.has_previous %}
+                    <a href="/product?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+                <span class="page-current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+                {% if page_obj.has_next %}
+                    <a href="/product?page={{ page_obj.next_page_number }}">next</a>
+                {% endif %}
+            </span>
+        </div>
+  
+{% else %}
+    
+    <p>Plus d'autres produits !</p>
+{% endif %}
+{% endblock %}

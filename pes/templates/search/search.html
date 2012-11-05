@@ -66,6 +66,9 @@
                 </div>
             <!-- End faceting -->
 
+
+{% comment %}
+            <!-- trop couteux en performance -->
             <div id="map"> </div>
             <script type="text/javascript">
                var map = new L.Map('map');
@@ -123,7 +126,7 @@
                 map.fitBounds(geojson.getBounds());
 
             </script>
-
+{% endcomment %}
 
             <h3>Résultats</h3>
             {% for result in page.object_list %}
@@ -142,7 +145,7 @@
 {% endcomment %}
 
             {% empty %}
-                <p>No results found.</p>
+                <p>Aucun autre resultat.</p>
             {% endfor %}
 
 
