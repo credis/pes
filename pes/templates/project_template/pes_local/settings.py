@@ -39,7 +39,7 @@ INSTALLED_APPS += (
     'pes_local',)
 
 
-FEED_MODELS = ['organization', 'contact', 'exchange', 'article', 'location']
+FEED_MODELS = ['organization', 'contact', 'exchange', 'article', 'location', 'product']
 # Later, it should be
 # FEED_MODELS=['organization', 'person', 'role', 'product', 'engagement', 'location', 
 #               'relation', 'exchange', 'contact', 'article']

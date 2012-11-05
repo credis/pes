@@ -12,9 +12,16 @@
         </span>
     {% endif %}
 
-
      <br/>
 
+    {% if article.tags %}
+        <span>
+            <strong>Tags : </strong> 
+            {% for tag in org.tags %}
+                <a href="{{ tag.get_absolute_url }}">{{ tag.label}}</a>
+            {% endfor %}
+            </span>
+    {% endif %}
 
 
 {% endblock %}

@@ -2,7 +2,7 @@
 import datetime
 from haystack import indexes
 from pes.models import Word
-from pes_local.models import Organization, Person, Exchange, Article
+from pes_local.models import Organization, Person, Exchange, Article, Product
 from django.contrib.gis.geos import Point
 from djrdf.import_rdf.models import SparqlQuery
 from django.conf import settings
@@ -84,7 +84,7 @@ class OrganizationIndex(PESIndex):
 
 
     def prepare_category(self, obj):
-        return [u"association", u"structure"]
+        return [u"structure"]
 
     def prepare_exchange(self, obj):
         title = lambda x: x.title
@@ -145,6 +145,24 @@ class ArticleIndex(PESIndex):
 
     def prepare_category(self, obj):
         return [u"article"]
+
+
+class ArticleIndex(PESIndex):
+
+    def get_model(self):
+        return Article
+
+    def prepare_category(self, obj):
+        return [u"article"]
+
+
+class ProductIndex(PESIndex):
+
+    def get_model(self):
+        return Product
+
+    def prepare_category(self, obj):
+        return [u"produit"]
 
 
 

@@ -80,7 +80,7 @@ class MyFacetedSearchForm(FacetedSearchForm):
 
 
         self._sqs_cache = sqs
-        print sqs
+        # print sqs
         return sqs
 
     def geoJson(self):

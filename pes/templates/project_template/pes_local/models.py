@@ -9,14 +9,20 @@ from pes.org.models import Person as BasePerson
 from pes.tag.models import Tag as BaseTag
 from pes.thess.models import Concept as BaseConcept
 from pes.article.models import Article as BaseArticle
+from pes.article.models import Product as BaseProduct
 from rdfalchemy.orm import mapper
 import pes.geo.models    # Mandatory to build the RDFAlchemy mapper
 
 # Becareful for rdfalchemy mapper, the rdf_type attribut HAS to be set here
 
 
+class Product(BaseProduct):
+    rdf_type = settings.NS.schema.Product
+
+
 class Article(BaseArticle):
     rdf_type = settings.NS.dct.Text
+
 
 
 class Exchange(BaseExchange):
