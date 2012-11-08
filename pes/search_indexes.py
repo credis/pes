@@ -230,12 +230,10 @@ class WordIndex(Indexes):
         return self.get_model().objects.all()
 
 
-# Bof bof, va-t-on ou pas indexer les personnes?
 class PersonIndex(PESIndex):
     text = indexes.CharField(document=True, use_template=True)
     # Define the additional field.
     # rendered = indexes.CharField(use_template=True, indexed=False)
-    suggestions = indexes.CharField()
 
     def get_model(self):
         return Person

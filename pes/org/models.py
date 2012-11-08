@@ -121,10 +121,10 @@ class Role(myRdfSubject):
 class Person(djRdf, myRdfSubject):
     # rdf_type = settings.NS.person.Person  # on peut aussi bien ecrire rdf_type = FOAF.Person
     name = rdfSingle(settings.NS.foaf.familyName)
+    full_name = rdfSingle(settings.NS.foaf.name)
 
     class Meta:
         abstract = True
-
 
 
 
