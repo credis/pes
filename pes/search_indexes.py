@@ -63,6 +63,7 @@ class PESIndex(Indexes):
     # suggestions = indexes.CharField(faceted=True)  # for solr only?
     location = indexes.LocationField()
     geoJson = indexes.CharField(indexed=False)
+    uri = indexes.CharField(model_attr='uri')
 
     # def prepare_modified(self, obj):
     #     return [str(obj.modified)]
