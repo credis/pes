@@ -43,24 +43,30 @@ class MyFacetedSearchForm(FacetedSearchForm):
     # latitude = forms.DecimalField(required=False)
     # longitude = forms.DecimalField(required=False)
     dist = forms.IntegerField(required=False, label=_(u'Distance max'))
-    marseille = Point(5.3697800, 43.2964820)
 
     _sqs_cache = None
+
+    def client_location(self):
+        marseille = Point(5.3697800, 43.2964820)
+        ip = getattr(settings, 'PES_REMOTE_CLIENT', None)
+        g = GeoIP(path=settings.PROJECT_PATH + '/config/GEO/')
+
+        if ip and g.city(ip):
+            return (Point(g.city(ip)['longitude'], g.city(ip)['latitude']), 
+                    g.city(ip)['city'])
+        else:
+            return (marseille, u'Marseille')  # default city
+
+
+
 
     def search(self):
         # First, store the SearchQuerySet received from other processing.
         sqs = super(MyFacetedSearchForm, self).search()
         sqs = sqs.facet('zone').facet('category').facet('tags')#.facet('modified')
 
-        ip = getattr(settings, 'PES_REMOTE_CLIENT', None)
-        g = GeoIP(path=settings.PROJECT_PATH + '/config/GEO/')
-
-        if ip and g.city(ip):
-            point = Point(g.city(ip)['longitude'], g.city(ip)['latitude'])
-        else:
-            point = self.marseille  # default city
-
-
+        (point, city) = self.client_location()
+        self.fields['dist'].label = _(u'Distance max de %s' % city)
 
         if self.is_bound:
             # sqs = sqs.autocomplete(content_auto=self.cleaned_data['q'])

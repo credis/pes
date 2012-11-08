@@ -68,6 +68,7 @@
 
 
 {% comment %}
+
             <!-- trop couteux en performance -->
             <div id="map"> </div>
             <script type="text/javascript">
@@ -88,7 +89,20 @@
                             fillOpacity: 0.6
                         };
 
-                var geojsonFeature = {% autoescape off %}{{ form.geoJson }}{% endautoescape %};
+                //var geojsonFeature = {% autoescape off %}{{ form.geoJson }}{% endautoescape %};
+                
+                var result = []
+                {% autoescape off %}
+                {% for res in page.object_list %}
+                    {% if res.geoJson %}
+                       result = result.concat([ {{ res.geoJson }} ]);
+                    {% endif %}
+                {% endfor %}
+                {% endautoescape %}
+
+                var geojsonFeature = {
+                    "type": "FeatureCollection", 
+                    "features":  result};
 
                 var geojson = L.geoJson(geojsonFeature, {
 
@@ -124,9 +138,9 @@
                 }).addTo(map);
 
                 map.fitBounds(geojson.getBounds());
-
             </script>
 {% endcomment %}
+
 
             <h3>Résultats</h3>
             {% for result in page.object_list %}
@@ -152,9 +166,9 @@
 
             {% if page.has_previous or page.has_next %}
                 <div>
-                    {% if page.has_previous %}<a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">{% endif %}&laquo; Previous{% if page.has_previous %}</a>{% endif %}
+                    {% if page.has_previous %}<a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">{% endif %}&laquo; Précédant{% if page.has_previous %}</a>{% endif %}
                     |
-                    {% if page.has_next %}<a href="?q={{ query }}&amp;page={{ page.next_page_number }}">{% endif %}Next &raquo;{% if page.has_next %}</a>{% endif %}
+                    {% if page.has_next %}<a href="?q={{ query }}&amp;page={{ page.next_page_number }}">{% endif %}Suivant &raquo;{% if page.has_next %}</a>{% endif %}
                 </div>
             {% endif %}
 
