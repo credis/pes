@@ -243,6 +243,20 @@ class PersonIndex(PESIndex):
     def get_model(self):
         return Person
 
+    def prepare_location(self, obj):
+        res = obj.geoPoint
+        if res == None:
+            res = Point(x=0, y=0)
+        return "%s,%s" % (res.y, res.x)
+
+    def prepare_geoJson(self, obj):
+        res = obj.to_geoJson()
+        if res == None:
+            res = {}
+        return simplejson.dumps(res)
+
+    def prepare_category(self, obj):
+        return [u"personne"]
 
     def prepare(self, obj):
         prepared_data = super(PersonIndex, self).prepare(obj)
