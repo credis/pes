@@ -7,6 +7,8 @@ from django.contrib import admin
 admin.autodiscover()
 
 
+handler500 = 'coop.views.SentryHandler500'
+
 
 urlpatterns = patterns('',
     # Examples:

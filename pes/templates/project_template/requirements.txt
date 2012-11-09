@@ -39,3 +39,7 @@ SQLAlchemy==0.7.9
 git+git://github.com/quinode/django-rdfalchemy.git
 
 
+# central logging
+raven
+sentry
+

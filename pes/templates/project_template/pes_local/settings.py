@@ -15,6 +15,7 @@ OPENRDF_SERVER_PORT = '8080'       # default value when served with stock jetty 
 ROOT_URLCONF = 'pes_local.urls'
 WSGI_APPLICATION = 'pes_local.wsgi.application'
 
+SENTRY_DSN =''
 
 from django.core.exceptions import ImproperlyConfigured
 

@@ -106,3 +106,15 @@ def suggestion(request):
     # les tags sont des groupes de mots
     resp = "\n".join([r.object.name for r in results])
     return HttpResponse(resp)
+
+
+
+def SentryHandler500(request):
+    from django.template import Context, loader
+    from django.http import HttpResponseServerError
+
+    t = loader.get_template('500.html')  # You need to create a 500.html template.
+    return HttpResponseServerError(t.render(Context({
+        'request': request,
+        'STATIC_URL': settings.STATIC_URL,
+    })))
