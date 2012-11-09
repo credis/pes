@@ -34,9 +34,6 @@ def _first(gen, size, cls):
 
 
 
-
-
-
 # Should use a template....
 def index(request):
     context = {}
@@ -90,23 +87,33 @@ def geojson(request, model, num=None):
     return HttpResponse(json.dumps(result), mimetype="application/json")
 
 
-
-
-
-
-# Auto complete features... to be used with JQuery or ...
-def suggestion(request):
-    word = request.GET['q']
+def suggestions(request):
+    model = request.GET['model_name']
+    term = request.GET['q']
     limit = request.GET['limit']
+    search_field = '%s_label' % model
+    query_args = {search_field: term}
+    qs = SearchQuerySet().autocomplete(**query_args).values(search_field, "uri")
+    html = u''
+    for r in qs:
+        html += r[search_field] + u'|' + r["uri"] + u'\n'
+    return HttpResponse(html)
 
-    results = SearchQuerySet().autocomplete(content_auto=word)
-    if limit:
-        results = results[:int(limit)]
-    # Ici il y a un peu plus de boulot.... Il faut revenir aux mots
-    # les tags sont des groupes de mots
-    resp = "\n".join([r.object.name for r in results])
-    return HttpResponse(resp)
 
+
+
+# # Auto complete features... to be used with JQuery or ...
+# def suggestion(request):
+#     word = request.GET['q']
+#     limit = request.GET['limit']
+
+#     results = SearchQuerySet().autocomplete(content_auto=word)
+#     if limit:
+#     results = results[:int(limit)]
+#     # Ici il y a un peu plus de boulot.... Il faut revenir aux mots
+#     # les tags sont des groupes de mots
+#     resp = "\n".join([r.object.name for r in results])
+#     return HttpResponse(resp)
 
 
 def SentryHandler500(request):

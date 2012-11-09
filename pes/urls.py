@@ -29,6 +29,7 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
 
+    url(r'^suggestions/$', 'pes.views.suggestions'),
 
     url(r'^org/$', ListView.as_view(model=Organization, template_name="org/list.html", \
         paginate_by=30)),
