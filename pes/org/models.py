@@ -127,6 +127,29 @@ class Person(djRdf, myRdfSubject):
     class Meta:
         abstract = True
 
+    @property
+    def geoPoint(self):
+        addr = self.pref_address
+        if not addr:
+            if len(self.location) > 0:
+                addr = self.location[0]
+        return fromAddrToPoint(addr)
+
+    def to_geoJson(self):
+        if self.geoPoint:
+            return {
+               "type": "Feature",
+                "properties": {
+                        "name": self.title.encode('utf-8'),
+                        "popupContent": "<h4>" + self.title.encode('utf-8') + "</h4><p><a href='" + self.get_absolute_url() + "'>" + self.title.encode('utf-8') + "</a></p>"
+                        },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [self.geoPoint.x, self.geoPoint.y]
+                        }
+                    }
+
+
 
 
 from django_push.subscriber.signals import updated
