@@ -37,7 +37,7 @@ def _first(gen, size, cls):
 # Should use a template....
 def index(request):
     context = {}
-    context['intro'] = u"%s" % Site.objects.get_current().domain
+    context['intro'] = u"%s" % Site.objects.get_current().name
     sqom = SparqlQuery.objects.get(label='ordered by modified')
     sq = sqom.query % str(Exchange.rdf_type)
     res = Exchange.db.query(sq, initNs=settings.NS)
