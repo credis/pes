@@ -37,7 +37,7 @@ def _first(gen, size, cls):
 # Should use a template....
 def index(request):
     context = {}
-    context['intro'] = u"%s" % Site.objects.get_current().domain
+    context['intro'] = u"%s" % Site.objects.get_current().name
     sqom = SparqlQuery.objects.get(label='ordered by modified')
     sq = sqom.query % str(Exchange.rdf_type)
     res = Exchange.db.query(sq, initNs=settings.NS)
@@ -109,8 +109,19 @@ def suggestions(request):
 
 #     results = SearchQuerySet().autocomplete(content_auto=word)
 #     if limit:
-#         results = results[:int(limit)]
+#     results = results[:int(limit)]
 #     # Ici il y a un peu plus de boulot.... Il faut revenir aux mots
 #     # les tags sont des groupes de mots
 #     resp = "\n".join([r.object.name for r in results])
 #     return HttpResponse(resp)
+
+
+def SentryHandler500(request):
+    from django.template import Context, loader
+    from django.http import HttpResponseServerError
+
+    t = loader.get_template('500.html')  # You need to create a 500.html template.
+    return HttpResponseServerError(t.render(Context({
+        'request': request,
+        'STATIC_URL': settings.STATIC_URL,
+    })))
