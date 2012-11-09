@@ -122,6 +122,7 @@ class Person(djRdf, myRdfSubject):
     # rdf_type = settings.NS.person.Person  # on peut aussi bien ecrire rdf_type = FOAF.Person
     name = rdfSingle(settings.NS.foaf.familyName)
     full_name = rdfSingle(settings.NS.foaf.name)
+    tags = rdfMultiple(settings.NS.dct.subject, range_type=settings.NS.skosxl.Label)
 
     class Meta:
         abstract = True
