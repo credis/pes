@@ -24,7 +24,6 @@ setup(
                 'pes.article',
                 'pes.bin',
                 'pes.exchange',
-                'pes.fixtures',
                 'pes.geo',
                 'pes.management',
                 'pes.management.commands',
