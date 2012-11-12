@@ -123,16 +123,17 @@ class Person(djRdf, myRdfSubject):
     name = rdfSingle(settings.NS.foaf.familyName)
     full_name = rdfSingle(settings.NS.foaf.name)
     tags = rdfMultiple(settings.NS.dct.subject, range_type=settings.NS.skosxl.Label)
+    location = rdfMultiple(settings.NS.locn.location, range_type=settings.NS.locn.Address)
 
     class Meta:
         abstract = True
 
     @property
     def geoPoint(self):
-        addr = self.pref_address
-        if not addr:
-            if len(self.location) > 0:
-                addr = self.location[0]
+        addr = None
+        if len(self.location) > 0:
+            addr = self.location[0]
+        # on peut forcer et utiliser la localization de l'organization
         return fromAddrToPoint(addr)
 
     def to_geoJson(self):
@@ -140,8 +141,8 @@ class Person(djRdf, myRdfSubject):
             return {
                "type": "Feature",
                 "properties": {
-                        "name": self.title.encode('utf-8'),
-                        "popupContent": "<h4>" + self.title.encode('utf-8') + "</h4><p><a href='" + self.get_absolute_url() + "'>" + self.title.encode('utf-8') + "</a></p>"
+                        "name": self.full_name.encode('utf-8'),
+                        "popupContent": "<h4>" + self.full_name.encode('utf-8') + "</h4><p><a href='" + self.get_absolute_url() + "'>" + self.full_name.encode('utf-8') + "</a></p>"
                         },
                     "geometry": {
                         "type": "Point",

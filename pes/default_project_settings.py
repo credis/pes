@@ -252,7 +252,7 @@ RDF_NAMESPACES = {
  'skos': u'http://www.w3.org/2004/02/skos/core#',
  'skosxl': u'http://www.w3.org/2008/05/skos-xl#',
  'vcard': u'http://www.w3.org/2006/vcard/ns#',
- 'vcal': u'http://www.w3.org/2002/12/cal/icaltzd#Vcalendar',
+ 'vcal': u'http://www.w3.org/2002/12/cal/icaltzd#',
  'xsd': u'http://www.w3.org/2001/XMLSchema#',
  }
 

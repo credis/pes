@@ -59,7 +59,7 @@ class Rss(Contact):
 
 
 class Cal(Contact):
-    rdf_type = settings.NS.vcal.Calendar
+    rdf_type = settings.NS.vcal.Vcalendar
 
 
 class Email(Contact):
