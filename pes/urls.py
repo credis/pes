@@ -11,7 +11,9 @@ handler500 = 'coop.views.SentryHandler500'
 
 
 urlpatterns = patterns('',
-    # Examples:
+
+    url(r'^', include('scanredirect.urls')),
+    
     url(r'^$', 'pes.views.index'),
 
     url(r'^subscriber/', include('django_push.subscriber.urls')),
