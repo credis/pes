@@ -123,6 +123,8 @@ INSTALLED_APPS = (
     'pes',
     'django_extensions',
     # 'debug_toolbar'
+    'scanredirect',
+
 )
 
 
