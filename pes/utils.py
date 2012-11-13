@@ -13,6 +13,15 @@ def validGeoPoint(p):
 
 
 
+
+def map_coop_model(model):
+    if model in settings.MAPPING_COOP_PES:
+        return settings.MAPPING_COOP_PES[model]
+    else:
+        return model
+
+
+
 def fromAddrToPoint(addr):
     if not addr:
         return None
@@ -118,3 +127,6 @@ desired (allowing, for example, custom ``Cache-Control`` settings).
                     response[k] = v
                 break
         return response
+
+
+

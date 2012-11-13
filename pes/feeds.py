@@ -8,6 +8,7 @@ from django.contrib.contenttypes.models import ContentType
 from urlparse import urlsplit
 import pes
 from django.db import models
+from pes.utils import map_coop_model
 
 
 
@@ -61,7 +62,7 @@ class UpdateFeed(Feed):
 
     # def item_extra_kwargs
     def get_object(self, request, *args, **kwargs):
-        self._model = kwargs['model']
+        self._model = map_coop_model(kwargs['model'])
         try:
             self._mType = ContentType.objects.get(model=self._model)
         except Exception:
@@ -128,7 +129,7 @@ class UpdateFeedObject(Feed):
 
     # def item_extra_kwargs
     def get_object(self, request, *args, **kwargs):
-        self._model = kwargs['model']
+        self._model = map_coop_model(kwargs['model'])
         self._uuid = kwargs['obj']
         try:
             self._mType = ContentType.objects.get(model=self._model)

@@ -263,3 +263,13 @@ NS = AttributeDict(DJRDF_NS.items() +
                     transform_dict(RDF_NAMESPACES).items()
                     )
 
+
+
+# Cela pourrait être associé au SiteEntry, un jour on aura autre chose
+# que des coop.....
+# Cela pour etre aussi un peu plus sofistiqué pour traiter les cas comme
+# la classe Contact ou le mapping et 1 -- N
+MAPPING_COOP_PES = {
+    'location': 'address',
+    'navtree': 'scheme'
+}
