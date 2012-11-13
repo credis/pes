@@ -2,7 +2,7 @@
 # Create your models here.
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
-from djrdf.models import myRdfSubject
+from djrdf.models import myRdfSubject, djRdf
 from rdfalchemy import rdfSingle
 import string
 from django.contrib.gis.geos import Point
@@ -32,8 +32,12 @@ class Location(myRdfSubject):
     geometry = rdfSingle(settings.NS.locn.geometry)
 
 
-class Address(myRdfSubject):
-    rdf_type = settings.NS.locn.Address
+
+class Address(djRdf, myRdfSubject):
+    # rdf_type = settings.NS.locn.Address
+    fullAddress = rdfSingle(settings.NS.locn.fullAddress)
     # geometry = rdfSingle(settings.NS.locn.geometry)
 
+    class Meta:
+        abstract = True
 

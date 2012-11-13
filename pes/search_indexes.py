@@ -2,7 +2,7 @@
 import datetime
 from haystack import indexes
 from pes.models import Word
-from pes_local.models import Organization, Person, Exchange, Article, Product
+from pes_local.models import Organization, Person, Exchange, Article, Product, Address
 from django.contrib.gis.geos import Point
 from djrdf.import_rdf.models import SparqlQuery
 from django.conf import settings
@@ -234,7 +234,7 @@ class WordIndex(Indexes):
 
 
 class PersonIndex(PESIndex):
-    text = indexes.CharField(document=True, use_template=True)
+    # text = indexes.CharField(document=True, use_template=True)
     person_label = indexes.EdgeNgramField(model_attr="full_name")
 
     # Define the additional field.
@@ -268,3 +268,10 @@ class PersonIndex(PESIndex):
         return self.get_model().objects.filter(modified__lte=datetime.datetime.now())
 
 
+
+class AddressIndex(Indexes):
+    text = indexes.CharField(document=True, use_template=True)
+    address_label = indexes.EdgeNgramField(model_attr="fullAddress")
+
+    def get_model(self):
+        return Address

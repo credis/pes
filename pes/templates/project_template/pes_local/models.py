@@ -10,10 +10,21 @@ from pes.tag.models import Tag as BaseTag
 from pes.thess.models import Concept as BaseConcept
 from pes.article.models import Article as BaseArticle
 from pes.article.models import Product as BaseProduct
+from pes.geo.models import Address as BaseAddress
+from pes.geo.models import Location # Mandatory to build the RDFAlchemy mapper
+
+
+
 from rdfalchemy.orm import mapper
-import pes.geo.models    # Mandatory to build the RDFAlchemy mapper
 
 # Becareful for rdfalchemy mapper, the rdf_type attribut HAS to be set here
+
+
+
+
+class Address(BaseAddress):
+    rdf_type = settings.NS.locn.Address
+
 
 
 class Product(BaseProduct):
