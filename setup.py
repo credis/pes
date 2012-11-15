@@ -21,6 +21,7 @@ setup(
     version = VERSION,
     description = 'A basis for ess agreator',
     packages = ['pes',
+                'pes.agenda',
                 'pes.article',
                 'pes.bin',
                 'pes.exchange',
