@@ -6,7 +6,7 @@ from rdfalchemy import rdfMultiple, rdfSingle
 from djrdf.models import myRdfSubject, djRdf
 from django.conf import settings
 from rdfalchemy.orm import mapper
-from pes.utils import fromAddrToPoint
+from pes.utils import loc_to_point
 from djrdf.import_rdf.models import SparqlQuery
 
 
@@ -20,7 +20,7 @@ class Exchange(djRdf, myRdfSubject):
     publisher = rdfSingle(settings.NS.dct.publisher, range_type=settings.NS.org.Organization)
     area = rdfMultiple(settings.NS.gr.eligibleRegions, range_type=settings.NS.dct.location)
     method = rdfSingle(settings.NS.ess.hasMethod)
-    location = rdfMultiple(settings.NS.locn.location, range_type=settings.NS.locn.Address)
+    location = rdfMultiple(settings.NS.locn.location, range_type=settings.NS.dct.Location)
 
     class Meta:
         abstract = True
@@ -36,23 +36,14 @@ class Exchange(djRdf, myRdfSubject):
         return map(org, list(self.db.subjects(settings.NS.gr.seeks, self)))
 
     @property
-    def geoPoint(self):
-        addr = None
-        if len(self.location) > 0:
-            addr = self.location[0]
-        # on peut forcer et utiliser la localization de lù'arganization
-        if not addr and self.publisher:
-            return self.publisher.geoPoint
-        else:
-            return fromAddrToPoint(addr)
-
-
-    @models.permalink
-    def get_absolute_url(self):
-        return ('pes.exchange.views.detailExchange', [str(self.id)])
+    def geo_point(self):
+        if self.location and len(self.location) > 0:
+            return  loc_to_point(self.location[0])
+        elif self.publisher:
+            return self.publisher.geo_point
 
     def to_geoJson(self):
-        if self.geoPoint:
+        if self.geo_point:
             return {
                "type": "Feature",
                 "properties": {
@@ -61,11 +52,14 @@ class Exchange(djRdf, myRdfSubject):
                         },
                     "geometry": {
                         "type": "Point",
-                        "coordinates": [self.geoPoint.x, self.geoPoint.y]
+                        "coordinates": [self.geo_point.x, self.geo_point.y]
                         }
                     }
 
 
+    @models.permalink
+    def get_absolute_url(self):
+        return ('pes.exchange.views.detailExchange', [str(self.id)])
 
     def proposition(self):
         if self.publisher:
@@ -81,3 +75,22 @@ class Exchange(djRdf, myRdfSubject):
         return []
 
 
+
+
+
+class Product(djRdf, myRdfSubject):    # rdf attributes
+    # rdf_type = settings.NS.skosxl.Label   #  move to the pes_local class
+    title = rdfSingle(settings.NS.schema.name)
+    description = rdfSingle(settings.NS.schema.description)
+    organization = rdfSingle(settings.NS.schema.manufacturer)
+    tags = rdfMultiple(settings.NS.dct.subject, range_type=settings.NS.skosxl.Label)
+
+    class Meta:
+
+        abstract = True
+        verbose_name = _(u'Product')
+        verbose_name_plural = _(u'Products')
+
+    @models.permalink
+    def get_absolute_url(self):
+        return ('pes.product.views.detailProduct', [str(self.id)])

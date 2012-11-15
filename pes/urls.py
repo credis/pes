@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, include, url
 from pes.feeds import UpdateFeed, UpdateFeedObject
 from django.views.generic import ListView
-from pes_local.models import Organization, Tag, Exchange, Article, Product
+from pes_local.models import Organization, Tag, Exchange, Article, Product, Event
 
 from django.contrib import admin
 admin.autodiscover()
@@ -48,6 +48,13 @@ urlpatterns = patterns('',
     url(r'^product/$', ListView.as_view(model=Product, template_name="product/list.html",\
           paginate_by=30)),
     url(r'^product/(\d+)/$', 'pes.article.views.detailProduct'),
+
+    url(r'^event/$', ListView.as_view(model=Event, template_name="event/list.html",\
+          paginate_by=30)),
+    url(r'^event/(\d+)/$', 'pes.agenda.views.detailEvent'),
+
+
+
 
 )
 

@@ -2,7 +2,8 @@
 import datetime
 from haystack import indexes
 from pes.models import Word
-from pes_local.models import Organization, Person, Exchange, Article, Product, Address
+from pes_local.models import Organization, Person, Exchange
+from pes_local.models import Event, Article, Product, Location
 from django.contrib.gis.geos import Point
 from djrdf.import_rdf.models import SparqlQuery
 from django.conf import settings
@@ -39,7 +40,7 @@ else:
 #     geoJson = indexes.CharField(indexed=False)
 
 #     def prepare_location(self, obj):
-#         res = obj.geoPoint
+#         res = obj.geo_point
 #         if res == None:
 #             res = Point(x=0, y=0)
 #         return "%s,%s" % (res.y, res.x)
@@ -116,7 +117,7 @@ class OrganizationIndex(PESIndex):
         return filter(None, map(title, obj.seeks) + map(title, obj.offers))
 
     def prepare_location(self, obj):
-        res = obj.geoPoint
+        res = obj.geo_point
         if res == None:
             res = Point(x=0, y=0)
         return "%s,%s" % (res.y, res.x)
@@ -143,7 +144,7 @@ class ExchangeIndex(PESIndex):
         return Exchange
 
     def prepare_location(self, obj):
-        res = obj.geoPoint
+        res = obj.geo_point
         if res == None:
             res = Point(x=0, y=0)
         return "%s,%s" % (res.y, res.x)
@@ -174,13 +175,25 @@ class ExchangeIndex(PESIndex):
 
 
 
-class ArticleIndex(PESIndex):
+class EventIndex(PESIndex):
 
     def get_model(self):
-        return Article
+        return Event
 
     def prepare_category(self, obj):
-        return [u"article"]
+        return [u"event"]
+        
+    def prepare_location(self, obj):
+        res = obj.geo_point
+        if res == None:
+            res = Point(x=0, y=0)
+        return "%s,%s" % (res.y, res.x)
+
+    def prepare_geoJson(self, obj):
+        res = obj.to_geoJson()
+        if res == None:
+            res = {}
+        return simplejson.dumps(res)
 
 
 class ArticleIndex(PESIndex):
@@ -244,7 +257,7 @@ class PersonIndex(PESIndex):
         return Person
 
     def prepare_location(self, obj):
-        res = obj.geoPoint
+        res = obj.geo_point
         if res == None:
             res = Point(x=0, y=0)
         return "%s,%s" % (res.y, res.x)
@@ -269,9 +282,9 @@ class PersonIndex(PESIndex):
 
 
 
-class AddressIndex(Indexes):
+class LocationIndex(Indexes):
     text = indexes.CharField(document=True, use_template=True)
-    address_label = indexes.EdgeNgramField(model_attr="fullAddress")
+    location_label = indexes.EdgeNgramField(model_attr="label")
 
     def get_model(self):
-        return Address
+        return Location

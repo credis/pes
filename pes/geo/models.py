@@ -27,17 +27,25 @@ rdflib.term.bind(settings.NS.opens.wkt, convert_wkt)
 
 
 
-class Location(myRdfSubject):
-    rdf_type = settings.NS.dct.Location
+class Location(djRdf, myRdfSubject):
+    # rdf_type = settings.NS.dct.Location
     geometry = rdfSingle(settings.NS.locn.geometry)
-
-
-
-class Address(djRdf, myRdfSubject):
-    # rdf_type = settings.NS.locn.Address
-    fullAddress = rdfSingle(settings.NS.locn.fullAddress)
-    # geometry = rdfSingle(settings.NS.locn.geometry)
+    address = rdfSingle(settings.NS.locn.address, range_type=settings.NS.locn.Address)
 
     class Meta:
         abstract = True
+
+    @property
+    def label(self):
+        if self.address:
+            return self.address.fullAddress
+        return u''
+
+
+
+class Address(myRdfSubject):
+    rdf_type = settings.NS.locn.Address
+    fullAddress = rdfSingle(settings.NS.locn.fullAddress)
+    # geometry = rdfSingle(settings.NS.locn.geometry)
+
 

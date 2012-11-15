@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Les événements</h2>
+    <ul>
+        {% for event in object_list %}
+            <li> <a href="{{ event.get_absolute_url }}">{{ event.title}}</a>
+            publiée le {{ event.dct_created }} 
+            {% if event.organization.title %}
+            par <a href="{{event.organization.get_absolute_url}}">{{event.organization.title }}</a>
+            {% endif %}
+ 	        <p> {{ event.content|safe}} </p>           
+            </li>
+                
+        {% endfor %}
+    </ul>
+
+
+  {% if is_paginated %}
+        <div class="pagination">
+            <span class="page-links">
+                {% if page_obj.has_previous %}
+                    <a href="/event?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+                <span class="page-current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+                {% if page_obj.has_next %}
+                    <a href="/event?page={{ page_obj.next_page_number }}">next</a>
+                {% endif %}
+            </span>
+        </div>
+  
+{% else %}
+    
+    <p>Plus d'autres événements !</p>
+{% endif %}
+{% endblock %}

@@ -81,7 +81,7 @@ class MyFacetedSearchForm(FacetedSearchForm):
             if self.cleaned_data['dist']:
                 max_dist = D(km=self.cleaned_data['dist'])
                 # Une petite idee qui ne marche pas.... ca casse le type searchquery
-                # good_distance = lambda x: distance(point, x.object.geoPoint, max_dist)
+                # good_distance = lambda x: distance(point, x.object.geo_point, max_dist)
                 # sqs = filter(good_distance, sqs)
                 sqs = sqs.dwithin('location', point, max_dist).distance('location', point).order_by('distance')
 

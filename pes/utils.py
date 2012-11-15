@@ -22,7 +22,7 @@ def map_coop_model(model):
 
 
 
-def fromAddrToPoint(addr):
+def addr_to_point(addr):
     if not addr:
         return None
     Loc = mapper()[str(settings.NS.dct.Location)]
@@ -38,6 +38,13 @@ def fromAddrToPoint(addr):
             return geo
 
 
+def loc_to_point(loc):
+    if loc.geometry and loc.geometry.datatype == settings.NS.opens.wkt:
+        geo = fromstr(str(loc.geometry))
+        if isinstance(geo, Point) and validGeoPoint(geo):
+            return geo
+    else:
+        return None
 
 
 

@@ -31,19 +31,3 @@ class Article(djRdf, myRdfSubject):
 
 
 
-class Product(djRdf, myRdfSubject):    # rdf attributes
-    # rdf_type = settings.NS.skosxl.Label   #  move to the pes_local class
-    title = rdfSingle(settings.NS.schema.name)
-    description = rdfSingle(settings.NS.schema.description)
-    organization = rdfSingle(settings.NS.schema.manufacturer)
-    tags = rdfMultiple(settings.NS.dct.subject, range_type=settings.NS.skosxl.Label)
-
-    class Meta:
-
-        abstract = True
-        verbose_name = _(u'Product')
-        verbose_name_plural = _(u'Products')
-
-    @models.permalink
-    def get_absolute_url(self):
-        return ('pes.product.views.detailProduct', [str(self.id)])

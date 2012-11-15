@@ -6,7 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from rdfalchemy import rdfSingle, rdfMultiple
 from django.conf import settings
 from djrdf.models import myRdfSubject, djRdf
-from pes.utils import fromAddrToPoint
+from pes.utils import addr_to_point, loc_to_point
 
 
 # Warning the order of the classes is MANDATORY
@@ -51,15 +51,14 @@ class Organization(djRdf, myRdfSubject):
         return ('pes.org.views.detailOrg', [str(self.id)])
 
     @property
-    def geoPoint(self):
-        addr = self.pref_address
-        if not addr:
-            if len(self.location) > 0:
-                addr = self.location[0]
-        return fromAddrToPoint(addr)
+    def geo_point(self):
+        if self.pref_address:
+            return addr_to_point(self.pref_address)
+        elif self.location and len(self.location) > 0:
+            return loc_to_point(self.location[0])
 
     def to_geoJson(self):
-        if self.geoPoint:
+        if self.geo_point:
             return {
                "type": "Feature",
                 "properties": {
@@ -68,7 +67,7 @@ class Organization(djRdf, myRdfSubject):
                         },
                     "geometry": {
                         "type": "Point",
-                        "coordinates": [self.geoPoint.x, self.geoPoint.y]
+                        "coordinates": [self.geo_point.x, self.geo_point.y]
                         }
                     }
 
@@ -123,21 +122,19 @@ class Person(djRdf, myRdfSubject):
     name = rdfSingle(settings.NS.foaf.familyName)
     full_name = rdfSingle(settings.NS.foaf.name)
     tags = rdfMultiple(settings.NS.dct.subject, range_type=settings.NS.skosxl.Label)
-    location = rdfMultiple(settings.NS.locn.location, range_type=settings.NS.locn.Address)
+    location = rdfMultiple(settings.NS.locn.location, range_type=settings.NS.dct.Location)
 
     class Meta:
         abstract = True
 
     @property
-    def geoPoint(self):
-        addr = None
-        if len(self.location) > 0:
-            addr = self.location[0]
+    def geo_point(self):
+        if self.location and len(self.location) > 0:
+            return loc_to_point(self.location[0])
         # on peut forcer et utiliser la localization de l'organization
-        return fromAddrToPoint(addr)
 
     def to_geoJson(self):
-        if self.geoPoint:
+        if self.geo_point:
             return {
                "type": "Feature",
                 "properties": {
@@ -146,7 +143,7 @@ class Person(djRdf, myRdfSubject):
                         },
                     "geometry": {
                         "type": "Point",
-                        "coordinates": [self.geoPoint.x, self.geoPoint.y]
+                        "coordinates": [self.geo_point.x, self.geo_point.y]
                         }
                     }
 

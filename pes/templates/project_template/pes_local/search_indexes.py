@@ -5,7 +5,7 @@ from pes.search_indexes import ExchangeIndex as BaseExchangeIndex
 from pes.search_indexes import ArticleIndex as BaseArticleIndex
 from pes.search_indexes import WordIndex as BaseWordIndex
 from pes.search_indexes import PersonIndex as BasePersonIndex
-from pes.search_indexes import AddressIndex as BaseAddressIndex
+from pes.search_indexes import LocationIndex as BaseLocationIndex
 
 
 
@@ -13,7 +13,7 @@ from pes.search_indexes import AddressIndex as BaseAddressIndex
 # lines and write your own indexes
 
 
-class AddressIndex(BaseAddressIndex, indexes.Indexable):
+class LocationIndex(BaseLocationIndex, indexes.Indexable):
     pass
 
 
