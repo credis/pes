@@ -64,6 +64,9 @@ STATICFILES_FINDERS = (
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
+TEMPLATE_DIRS = [
+    os.path.abspath(PROJECT_PATH + '/pes_local/templates/')
+]
 
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
@@ -98,9 +101,6 @@ TEMPLATE_CONTEXT_PROCESSORS = [
     ]
 
 
-TEMPLATE_DIRS = (
-    os.path.abspath(PROJECT_PATH + '/org/')
-)
 
 INSTALLED_APPS = (
     'django.contrib.auth',
