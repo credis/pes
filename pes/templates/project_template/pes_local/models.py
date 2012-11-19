@@ -4,7 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from pes.exchange.models import Exchange as BaseExchange
 from pes.org.models import Organization as BaseOrganization
-from pes.org.models import Contact
+from pes.org.models import Contact as BaseContact
 from pes.org.models import Person as BasePerson
 from pes.tag.models import Tag as BaseTag
 from pes.thess.models import Concept as BaseConcept
@@ -49,40 +49,40 @@ class Organization(BaseOrganization):
 
 
 
-class Tel(Contact):
-    rdf_type = settings.NS.vcard.Tel
+class Contact(BaseContact):
+    rdf_type = settings.NS.ess.ContactMedium
 
 
-class Cell(Contact):
-    rdf_type = settings.NS.vcard.Cell
+# class Cell(Contact):
+#     rdf_type = settings.NS.vcard.Cell
 
 
-class Fax(Contact):
-    rdf_type = settings.NS.vcard.Fax
+# class Fax(Contact):
+#     rdf_type = settings.NS.vcard.Fax
 
 
-class Skype(Contact):
-    rdf_type = settings.NS.ess.Skype
+# class Skype(Contact):
+#     rdf_type = settings.NS.ess.Skype
 
 
-class Twitter(Contact):
-    rdf_type = settings.NS.ov.MicroblogPost
+# class Twitter(Contact):
+#     rdf_type = settings.NS.ov.MicroblogPost
 
 
-class Rss(Contact):
-    rdf_type = settings.NS.rss.Channel
+# class Rss(Contact):
+#     rdf_type = settings.NS.rss.Channel
 
 
-class Cal(Contact):
-    rdf_type = settings.NS.vcal.Vcalendar
+# class Cal(Contact):
+#     rdf_type = settings.NS.vcal.Vcalendar
 
 
-class Email(Contact):
-    rdf_type = settings.NS.vcard.Email
+# class Email(Contact):
+#     rdf_type = settings.NS.vcard.Email
 
 
-class Web(Contact):
-    rdf_type = settings.NS.sioc.Site
+# class Web(Contact):
+#     rdf_type = settings.NS.sioc.Site
 
 
 class Person(BasePerson):

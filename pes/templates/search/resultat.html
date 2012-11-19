@@ -1,0 +1,88 @@
+
+{% load es_extra %}
+
+
+{% block content %}
+
+
+
+
+
+ 
+        {% if query %}
+
+             {# <div> Les résultats </div> #}
+
+
+            <!-- Begin faceting. -->
+               {# <h2>Par facettes</h2> #}
+
+                <div id="facets">
+                    <dl>
+                        {% if facets.fields.zone %}
+                            <dt>zone</dt>
+                            {# Provide only the top 5 modified #}
+                            {% for zone in facets.fields.zone|slice:":5" %}
+                                <dd><a href="{{ request.get_full_path|skippage }}&amp;selected_facets=zone_exact:{{ zone.0|urlencode }}">{{ zone.0 }}</a> ({{ zone.1 }})</dd>
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if facets.fields.category %}
+                            <dt>catégories</dt>
+                            {% for category in facets.fields.category|slice:":5" %}
+                            {% comment %}
+                                <dd><a href="{{ request.get_full_path }}&amp;selected_facets=category_exact:{{ category.0|urlencode }}">{{ category.0 }}</a> ({{ category.1 }})</dd>
+                            {% endcomment %}
+                                <dd><a href="{{ request.get_full_path|skippage }}&amp;selected_facets=category_exact:{{ category.0|urlencode }}">{{ category.0 }}</a> ({{ category.1 }})</dd>
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if facets.fields.tags %}
+                            <dt>tags</dt>
+                            {% for tag in facets.fields.tags|slice:":5" %}
+                               <dd><a href="{{ request.get_full_path|skippage }}&amp;selected_facets=tags_exact:{{ tag.0|urlencode }}">{{ tag.0 }}</a> ({{ tag.1 }})</dd>
+                            {% endfor %}
+                        {% endif %}
+
+
+                       {% if facets.fields.modified %}
+                            <dt>date de modification</dt>
+                            {% for modified in facets.fields.modified|slice:":5" %}
+                                <dd><a href="{{ request.get_full_path|skippage }}&amp;selected_facets=modified_exact:{{ modified.0|urlencode }}">{{ modified.0|todate|date:"d M Y" }}</a> ({{ modified.1 }})</dd>
+                            {% endfor %}
+                        {% endif %}
+
+
+
+                    </dl>
+                </div>
+            <!-- End faceting -->
+
+
+            <div id="results">
+            <h3>Résultats</h3>
+            {% for result in page.object_list %}
+            {{ result.display|safe }} <br />
+
+            {% empty %}
+                <p>Aucun autre resultat.</p>
+            {% endfor %}
+
+        </div>
+
+
+            {% if page.has_previous or page.has_next %}
+                <div id="pagination">
+                    {% if page.has_previous %}<a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">{% endif %}&laquo; Précédant{% if page.has_previous %}</a>{% endif %}
+                    |
+                    {% if page.has_next %}<a href="?q={{ query }}&amp;page={{ page.next_page_number }}">{% endif %}Suivant &raquo;{% if page.has_next %}</a>{% endif %}
+                </div>
+            {% endif %}
+
+
+
+        {% else %}
+            {# Show some example queries to run, maybe query syntax, something else? #}
+        {% endif %}
+
+{% endblock %}

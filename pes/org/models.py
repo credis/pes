@@ -7,6 +7,7 @@ from rdfalchemy import rdfSingle, rdfMultiple
 from django.conf import settings
 from djrdf.models import myRdfSubject, djRdf
 from pes.utils import addr_to_point, loc_to_point
+from rdflib import URIRef
 
 
 # Warning the order of the classes is MANDATORY
@@ -28,7 +29,8 @@ class Organization(djRdf, myRdfSubject):
     offers = rdfMultiple(settings.NS.gr.offers, range_type=settings.NS.ess.Exchange)
     members = rdfMultiple(settings.NS.org.hasMember, range_type=settings.NS.person.Person)
     comment = rdfMultiple(settings.NS.rdfs.comment)
-    # contacts = rdfMultiple(settings.NS.ess.hasContactMedium, range_type=settings.NS.ess.ContactMedium)
+
+    contacts = rdfMultiple(settings.NS.ess.hasContactMedium, range_type=settings.NS.ess.ContactMedium)
 
     # django models attributes
     marks = IntegerField(blank=True, null=True)
@@ -42,9 +44,9 @@ class Organization(djRdf, myRdfSubject):
     def roles(self):
         return map(Engagement, list(self.db.subjects(settings.NS.org.organization, self)))
 
-    @property
-    def contacts(self):
-        return list(self.db.objects(self, settings.NS.ess.hasContactMedium))
+    # @property
+    # def contacts(self):
+    #     return list(self.db.objects(self, settings.NS.ess.hasContactMedium))
 
     @models.permalink
     def get_absolute_url(self):
@@ -93,13 +95,34 @@ class Organization(djRdf, myRdfSubject):
 
 
 
+
+
 class Contact(djRdf, myRdfSubject):
-    rdf_type = settings.NS.ess.ContactMedium
+    # rdf_type = settings.NS.ess.ContactMedium
     details = rdfMultiple(settings.NS.rdfs.comment)
     content = rdfSingle(settings.NS.rdf.value)
 
+
+    contact_mapping = {
+        settings.NS.vcard.Cell: u'cell',
+        settings.NS.vcard.Fax: u'fax',
+        settings.NS.ess.Skype: u'skype',
+        settings.NS.ov.MicroblogPost: u'twitter',
+        settings.NS.rss.Channel: u'rss',
+        settings.NS.vcal.Vcalendar: u'ics',
+        settings.NS.vcard.Email: u'email',
+        settings.NS.sioc.Site: u'web',
+        settings.NS.vcard.Tel: u'phone'
+    }
+
+
     class Meta:
         abstract = True
+
+    def contact_type(self):
+        types = list(self.db.triples((self, settings.NS.rdf.type, None)))
+        types.remove((URIRef(self.uri), settings.NS.rdf.type, self.rdf_type))
+        return self.contact_mapping[types[0][2]]
 
 
 

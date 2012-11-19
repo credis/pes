@@ -11,6 +11,17 @@
     </span>
 
     <div>
+         {% for contact in org.contacts %}
+             {{ contact.contact_type }}: {{ contact.content}} {{ contact.detail}}
+             <br />
+         {% endfor %}
+    </div>
+
+
+
+
+
+    <div>
         {{org.description|safe}} 
     </div>
 
