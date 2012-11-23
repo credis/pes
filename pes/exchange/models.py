@@ -21,6 +21,7 @@ class Exchange(djRdf, myRdfSubject):
     area = rdfMultiple(settings.NS.gr.eligibleRegions, range_type=settings.NS.dct.location)
     method = rdfSingle(settings.NS.ess.hasMethod)
     location = rdfMultiple(settings.NS.locn.location, range_type=settings.NS.dct.Location)
+    creator = rdfSingle(settings.NS.dct.creator, range_type=settings.NS.person.Person)
 
     class Meta:
         abstract = True
@@ -94,3 +95,8 @@ class Product(djRdf, myRdfSubject):    # rdf attributes
     @models.permalink
     def get_absolute_url(self):
         return ('pes.product.views.detailProduct', [str(self.id)])
+
+
+    @property
+    def label(self):
+        return self.title

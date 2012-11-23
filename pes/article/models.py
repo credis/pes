@@ -14,8 +14,8 @@ class Article(djRdf, myRdfSubject):
     title = rdfSingle(settings.NS.dct.title)
     summary = rdfSingle(rdflib.URIRef(str(settings.NS['dct']) + 'abstract'))
     content = rdfSingle(settings.NS.dct.description)
-    person = rdfSingle(settings.NS.dct.creator)
-    organization = rdfSingle(settings.NS.dct.publisher)
+    person = rdfSingle(settings.NS.dct.creator, range_type=settings.NS.person.Person)
+    organization = rdfSingle(settings.NS.dct.publisher, range_type=settings.NS.org.Organization)
 
     tags = rdfMultiple(settings.NS.dct.subject, range_type=settings.NS.skosxl.Label)
 
@@ -28,6 +28,10 @@ class Article(djRdf, myRdfSubject):
     @models.permalink
     def get_absolute_url(self):
         return ('pes.article.views.detailArticle', [str(self.id)])
+
+    @property
+    def label(self):
+        return self.title
 
 
 

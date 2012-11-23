@@ -3,7 +3,7 @@ import datetime
 from haystack import indexes
 from pes.models import Word
 from pes_local.models import Organization, Person, Exchange
-from pes_local.models import Event, Article, Product, Location
+from pes_local.models import Event, Article, Product, Location, Contact
 from django.contrib.gis.geos import Point
 from djrdf.import_rdf.models import SparqlQuery
 from django.conf import settings
@@ -60,11 +60,14 @@ class PESIndex(Indexes):
     category = indexes.MultiValueField(faceted=True)
     modified = indexes.DateField(model_attr='dct_modified', faceted=True)
     zone = indexes.MultiValueField(faceted=True)
-    display = indexes.CharField(use_template=True, indexed=False)
+    # display = indexes.CharField(use_template=True, indexed=False)
     # suggestions = indexes.CharField(faceted=True)  # for solr only?
     location = indexes.LocationField()
     geoJson = indexes.CharField(indexed=False)
     uri = indexes.CharField(model_attr='uri')
+    json_ld = indexes.CharField(indexed=False)
+    json_result = indexes.CharField(use_template=True, indexed=False)
+    json_export = indexes.CharField(use_template=True, indexed=False)
 
     # def prepare_modified(self, obj):
     #     return [str(obj.modified)]
@@ -78,11 +81,17 @@ class PESIndex(Indexes):
         return self.get_model().objects.filter(pk__in=list_of_ids)
 
     def prepare_tags(self, obj):
-        return [u"%s" % tag.name for tag in obj.tags]
+        try:
+            return [u"%s" % tag.name for tag in obj.tags]
+        except AttributeError:
+            return []
 
     # Comme on s'en sert de facette. On n'a pas besoin de trop de details
-    def prepare_modified(sel, obj):
+    def prepare_modified(self, obj):
         return obj.dct_modified.date()
+
+    def prepare_json_ld(self, obj):
+        return obj.toJson()       
 
     def prepare_zone(self, obj):
         # On traite pour le moment les zones contenantes
@@ -204,6 +213,10 @@ class ArticleIndex(PESIndex):
     def prepare_category(self, obj):
         return [u"article"]
 
+    # def index_queryset(self):
+    #     """Used when the entire index for model is updated."""
+    #     return self.get_model().objects.filter(id__lte=7080)
+
 
 class ProductIndex(PESIndex):
 
@@ -282,9 +295,21 @@ class PersonIndex(PESIndex):
 
 
 
-class LocationIndex(Indexes):
-    text = indexes.CharField(document=True, use_template=True)
+class LocationIndex(PESIndex):
     location_label = indexes.EdgeNgramField(model_attr="label")
+
+    def prepare_category(self, obj):
+        return [u"location"]
 
     def get_model(self):
         return Location
+
+
+class ContactIndex(PESIndex):
+    contact_label = indexes.EdgeNgramField(model_attr="content")
+
+    def prepare_category(self, obj):
+        return [u"contact"]
+
+    def get_model(self):
+        return Contact

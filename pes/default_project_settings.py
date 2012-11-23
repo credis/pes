@@ -75,6 +75,7 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'pes.middleware.ThreadLocals',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -236,6 +237,8 @@ RDF_NAMESPACES = {
  'ctag': u'http://commontag.org/ns#',
  'd2rq': u'http://www.wiwiss.fu-berlin.de/suhl/bizer/D2RQ/0.1#',
  'dct': u'http://purl.org/dc/terms/',
+ 'dce': u'  http://purl.org/dc/elements/1.1/',
+ 'dcmi': u'http://purl.org/dc/dcmitype/',
  'ess':  u'http://ns.economie-solidaire.fr/ess#',
  'event': u'http://purl.org/NET/c4dm/event.owl#',
  'foaf': u'http://xmlns.com/foaf/0.1/',

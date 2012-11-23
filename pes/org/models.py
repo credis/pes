@@ -18,8 +18,8 @@ class Organization(djRdf, myRdfSubject):
     label = rdfSingle(settings.NS.rdfs.label)
     description = rdfSingle(settings.NS.dct.description)
     tags = rdfMultiple(settings.NS.dct.subject, range_type=settings.NS.skosxl.Label)
-    # abstract = rdfSingle(DCT.abstract)  # wait for issue #208 of rdflib
-    web = rdfSingle(settings.NS.foaf.homepage)
+    abstract = rdfSingle(URIRef(str(settings.NS['dct']) + 'abstract'))
+    homepage = rdfSingle(settings.NS.foaf.homepage)
     logo = rdfSingle(settings.NS.foaf.logo)
     title = rdfSingle(settings.NS.legal.legalName)
     acronym = rdfSingle(settings.NS.ov.prefAcronym)
@@ -29,7 +29,8 @@ class Organization(djRdf, myRdfSubject):
     offers = rdfMultiple(settings.NS.gr.offers, range_type=settings.NS.ess.Exchange)
     members = rdfMultiple(settings.NS.org.hasMember, range_type=settings.NS.person.Person)
     comment = rdfMultiple(settings.NS.rdfs.comment)
-
+    identifiers = rdfMultiple(settings.NS.org.identifier)
+    notes = rdfSingle(settings.NS.skos.note)
     contacts = rdfMultiple(settings.NS.ess.hasContactMedium, range_type=settings.NS.ess.ContactMedium)
 
     # django models attributes
@@ -39,6 +40,11 @@ class Organization(djRdf, myRdfSubject):
         abstract = True
         verbose_name = _(u'Organization')
         verbose_name_plural = _(u'Organizations')
+
+    @property
+    def web(self):
+        if self.homepage:
+            return unicode(self.homepage)
 
     @property
     def roles(self):
@@ -74,24 +80,6 @@ class Organization(djRdf, myRdfSubject):
                     }
 
 
-    # for haystack purpose
-    # def get_location(self):
-    #     # Remember, longitude FIRST!
-
-    #     addr = self.pref_address
-    #     if not addr:
-    #         if self.location != []:
-    #             addr = self.location[0]
-
-    #     if addr and isinstance(addr.geometry, Point):
-    #         return Point(addr.geometry.y, addr.geometry.x)
-    #     else:
-    #         # print "OBJ %s " % obj
-    #         return None
-
-
-    #     return Point(self.longitude, self.latitude)
-
 
 
 
@@ -101,7 +89,6 @@ class Contact(djRdf, myRdfSubject):
     # rdf_type = settings.NS.ess.ContactMedium
     details = rdfMultiple(settings.NS.rdfs.comment)
     content = rdfSingle(settings.NS.rdf.value)
-
 
     contact_mapping = {
         settings.NS.vcard.Cell: u'cell',
@@ -115,9 +102,12 @@ class Contact(djRdf, myRdfSubject):
         settings.NS.vcard.Tel: u'phone'
     }
 
-
     class Meta:
         abstract = True
+
+    @property
+    def label(self):
+        return self.content
 
     def contact_type(self):
         types = list(self.db.triples((self, settings.NS.rdf.type, None)))
@@ -146,9 +136,15 @@ class Person(djRdf, myRdfSubject):
     full_name = rdfSingle(settings.NS.foaf.name)
     tags = rdfMultiple(settings.NS.dct.subject, range_type=settings.NS.skosxl.Label)
     location = rdfMultiple(settings.NS.locn.location, range_type=settings.NS.dct.Location)
+    notes = rdfSingle(settings.NS.skos.note)
+    contacts = rdfMultiple(settings.NS.ess.hasContactMedium, range_type=settings.NS.ess.ContactMedium)
 
     class Meta:
         abstract = True
+
+    @property
+    def label(self):
+        return self.full_name
 
     @property
     def geo_point(self):

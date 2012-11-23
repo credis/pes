@@ -1,9 +1,69 @@
 {% extends "base.html" %}
 
+    {% block javascript %}
+    {{ block.super }}
+    <script src="{{ STATIC_URL }}js/mustache.js" charset="utf-8" type="text/javascript"></script>
+    <script type="text/html" id="li-templ">
+       <ul>
+       [[#results ]] 
+        <li><a href="[[local_url]]">[[ label ]]</a></li>
+       [[/results ]]
+       </ul>
+    </script>
+
+    {% endblock javascript %}
+
 
 {% block content %}
 
      <div id="content" class="grid_4 grid">
+
+
+
+
+    <h2>Recherche</h2>
+
+    <form id="main_search" method="get" >
+        <table>
+            {{ form.as_table }}
+            <tr>
+                <td>&nbsp;</td>
+                <td>
+                    <input type="submit" value="Trouver">
+                </td>
+            </tr>
+        </table>
+
+
+<div id="resultats"></div>
+
+<script type="text/javascript">
+
+function get_res(query, tmpl){
+		$.getJSON(
+			"/searchJson/?" + query,
+			function(data){
+				results_html = Mustache.render(tmpl,data);
+				$("#resultats").html(results_html)
+			}
+		)
+
+};
+
+$(function(){
+    Mustache.tags = ['[[', ']]'];
+    litmpl = $('#li-templ').html()
+
+
+	$('#main_search').submit(function() {
+	  get_res($(this).serialize(), litmpl);
+	  return false;
+	});
+
+});
+</script>
+
+
 
           <div id="dernieres_annonces">
               <h4>Les 10 dernières annonces</h4>
@@ -58,9 +118,20 @@
 
 
 
+
+
+
+
+
+
+
+
+
+{% comment %}
     <h4> Cartographie des strutures </h4>
 
     <div id="map"> </div>
+
 	<script type="text/javascript">
 	   var map = new L.Map('map');
 	   var marseille = new L.LatLng(43.2964820, 5.3697800);
@@ -125,6 +196,6 @@
 
 
 	</script>
- 
+ {% endcomment %}
 
 {% endblock %}

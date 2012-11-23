@@ -27,8 +27,12 @@ rdflib.term.bind(settings.NS.opens.wkt, convert_wkt)
 
 
 
+
+# attention : on est sur le geoHash.... 
+# et plusieurs adresses peuvent avoir la meme coordonees geohash
 class Location(djRdf, myRdfSubject):
     # rdf_type = settings.NS.dct.Location
+    rdfs_label = rdfSingle(settings.NS.rdfs.label)
     geometry = rdfSingle(settings.NS.locn.geometry)
     address = rdfSingle(settings.NS.locn.address, range_type=settings.NS.locn.Address)
 
@@ -39,7 +43,7 @@ class Location(djRdf, myRdfSubject):
     def label(self):
         if self.address:
             return self.address.fullAddress
-        return u''
+        return self.rdfs_label
 
 
 

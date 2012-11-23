@@ -5,6 +5,10 @@ from django.contrib.gis.geos import fromstr
 from django.contrib.gis.geos import Point
 from djrdf.import_rdf.models import EntrySite
 from django.conf import settings
+from django.contrib.gis.utils import GeoIP
+from django.contrib.gis.geos import Point
+import socket
+
 
 
 
@@ -12,6 +16,23 @@ def validGeoPoint(p):
     return (-90 <= p.y <= 90) and (-180 <= p.x <= 180)
 
 
+def get_geoIP(request):
+    # marseille = Point(5.3697800, 43.2964820)
+    clermont = Point(3.0870250, 45.7772220)
+    ip = request.META.get('REMOTE_ADDR', None)
+
+    g = GeoIP(path=settings.PROJECT_PATH + '/config/GEO/')
+
+    if ip and g.city(ip):
+        return (Point(g.city(ip)['longitude'], g.city(ip)['latitude']), 
+               g.city(ip)['city'])
+    else:
+        return getattr(settings, 'DEFAULT_MAIN_CITY', (clermont, u'Clermont-Fd'))  # default city
+
+
+def get_hostname(request):
+    ip = request.META.get('REMOTE_ADDR', None)
+    return socket.gethostbyaddr(ip)[0]
 
 
 def map_coop_model(model):

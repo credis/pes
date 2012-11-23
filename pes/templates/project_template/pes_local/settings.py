@@ -15,7 +15,11 @@ OPENRDF_SERVER_PORT = '8080'       # default value when served with stock jetty 
 ROOT_URLCONF = 'pes_local.urls'
 WSGI_APPLICATION = 'pes_local.wsgi.application'
 
-SENTRY_DSN =''
+# uncommnt and set your own SENTRY_DSN
+# SENTRY_DSN = ''
+
+# uncomment and set your own main city
+# DEFAULT_MAIN_CITY = (Point(5.3697800, 43.2964820), u'Marseille')  #set your own main city
 
 from django.core.exceptions import ImproperlyConfigured
 

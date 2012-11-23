@@ -14,8 +14,8 @@ class Event(djRdf, myRdfSubject):
     # rdf_type = settings.NS.vcal.Vevent   #  move to the pes_local class
     title = rdfSingle(settings.NS.vcal.summary)
     content = rdfSingle(settings.NS.vcal.description)
-    person = rdfSingle(settings.NS.vcal.contact)
-    organization = rdfSingle(settings.NS.vcal.organizer)
+    person = rdfSingle(settings.NS.vcal.contact, range_type=settings.NS.person.Person)
+    organization = rdfSingle(settings.NS.vcal.organizer, range_type=settings.NS.org.Organization)
     location = rdfMultiple(settings.NS.locn.location, range_type=settings.NS.dct.Location)
 
     tags = rdfMultiple(settings.NS.dct.subject, range_type=settings.NS.skosxl.Label)
@@ -25,6 +25,11 @@ class Event(djRdf, myRdfSubject):
         abstract = True
         verbose_name = _(u'Event')
         verbose_name_plural = _(u'Events')
+
+    @property
+    def label(self):
+        return self.title
+
 
     @models.permalink
     def get_absolute_url(self):
