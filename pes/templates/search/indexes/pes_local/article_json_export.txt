@@ -1,0 +1,15 @@
+
+
+    {% if object.person %}, "persons" : [
+       {
+       {% include "search/indexes/pes_local/person_json_result.txt" with object="object.person"  %}
+       }
+    ]
+    {% endif %}
+
+    {% if object.organization %}, "organizations" : [
+       {
+       {% include "search/indexes/pes_local/organization_json_result.txt" with object="object.organization"  %}
+       }
+    ]
+    {% endif %}

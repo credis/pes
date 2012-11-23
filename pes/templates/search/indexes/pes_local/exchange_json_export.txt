@@ -1,0 +1,14 @@
+    {% if object.publisher %}, "organizations" : [
+       {
+       {% include "search/indexes/pes_local/organization_json_result.txt" with object="object.publisher"  %}
+       }
+    ]
+    {% endif %}
+
+    {% if object.creator %}, "persons" : [
+       {
+       {% include "search/indexes/pes_local/person_json_result.txt" with object="object.person"  %}
+       }
+    ]
+    {% endif %}
+
