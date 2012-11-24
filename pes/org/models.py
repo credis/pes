@@ -142,6 +142,10 @@ class Person(djRdf, myRdfSubject):
     class Meta:
         abstract = True
 
+    @models.permalink
+    def get_absolute_url(self):
+        return ('pes.org.views.detailPerson', [str(self.id)])
+
     @property
     def label(self):
         return self.full_name

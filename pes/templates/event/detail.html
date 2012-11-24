@@ -14,14 +14,6 @@
 
      <br/>
 
-    {% if event.tags %}
-        <span>
-            <strong>Tags : </strong> 
-            {% for tag in event.tags %}
-                <a href="{{ tag.get_absolute_url }}">{{ tag.label}}</a>
-            {% endfor %}
-            </span>
-    {% endif %}
-
+    {% include "tags.html" with object=event  %}
 
 {% endblock %}

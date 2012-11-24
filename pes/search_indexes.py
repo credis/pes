@@ -191,7 +191,7 @@ class EventIndex(PESIndex):
 
     def prepare_category(self, obj):
         return [u"event"]
-        
+
     def prepare_location(self, obj):
         res = obj.geo_point
         if res == None:

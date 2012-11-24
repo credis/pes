@@ -36,7 +36,7 @@ class Product(BaseProduct):
 
 
 class Article(BaseArticle):
-    rdf_type = settings.NS.dct.Text
+    rdf_type = settings.NS.dcmi.Text
 
 
 

@@ -14,14 +14,8 @@
 
      <br/>
 
-    {% if article.tags %}
-        <span>
-            <strong>Tags : </strong> 
-            {% for tag in article.tags %}
-                <a href="{{ tag.get_absolute_url }}">{{ tag.name}}</a>
-            {% endfor %}
-            </span>
-    {% endif %}
+
+    {% include "tags.html" with object=article  %}
 
 
 {% endblock %}

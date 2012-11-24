@@ -1,7 +1,10 @@
     {% if object.members %}, "persons" : [
     	{% for  member in object.members %}
 	       {
-	       {% include "search/indexes/pes_local/person_json_result.txt" with object="member"  %}
+	       {% include "search/indexes/pes_local/person_json_result.txt" with object=member  %}
+	       {% include "search/indexes/pes_local/person_json_export.txt" with object=member  %}
+
+
 	       }
 	       {% if forloop.last %}{% else %},{% endif%}
 
@@ -12,7 +15,8 @@
     {% if object.location %}, "locations" : [
     	{% for  location in object.location %}
 	       {
-	       {% include "search/indexes/pes_local/location_json_result.txt" with object="location"  %}
+	       {% include "search/indexes/pes_local/location_json_result.txt" with object=location  %}
+	       {% include "search/indexes/pes_local/location_json_export.txt" with object=location  %}
 	       }
 	       {% if forloop.last %}{% else %},{% endif%}
 
@@ -24,7 +28,8 @@
     {% if object.contats %}, "contacts" : [
     	{% for  contact in object.contats %}
 	       {
-	       {% include "search/indexes/pes_local/contact_json_result.txt" with object="contact"  %}
+	       {% include "search/indexes/pes_local/contact_json_result.txt" with object=contact %}
+	       {% include "search/indexes/pes_local/contact_json_export.txt" with object=contact %}
 	       }
 	       {% if forloop.last %}{% else %},{% endif%}
 

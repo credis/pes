@@ -60,15 +60,8 @@
     {% endif %}
      <br/>
     
-    {% if org.tags %}
-        <span>
-            <strong>Tags : </strong> 
-            {% for tag in org.tags %}
-                <a href="{{ tag.get_absolute_url }}">{{ tag.label}}</a>
-            {% endfor %}
-            </span>
-    {% endif %}
 
+    {% include "tags.html" with object=org  %}
 
      <br/>
 <br/>

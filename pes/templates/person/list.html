@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}pes personnes{% endblock %}
+
+{% block content %}
+    <h2>Personnes</h2>
+    <ul>
+        {% for person in object_list %}
+            <li>
+            	<a href="{{ person.get_absolute_url }}">{{ person.full_name }}</a>
+
+                {% if person.web %}
+                	(vous pouvez aussi consulter son site internet 			
+                	<a href="{{ person.web }}">{{ person.web}}</a>)
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+
+{% include "pagination.html" with model="person"  end_message="La liste des personnes est terminée!" %}
+
+{% endblock %}
