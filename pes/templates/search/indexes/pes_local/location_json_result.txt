@@ -2,5 +2,5 @@
 	"uri": "{{ object.uri }}",
 	"import_rdf_url": "{{ object.uri_import}}",
 	"authority_source": "{{ object.authority_source }}",
-    "label": "{{ object.label}}",
+    "label": "{{ object.label|escape }}",
     "summary" : ""
