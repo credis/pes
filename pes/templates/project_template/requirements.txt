@@ -13,6 +13,7 @@ git+git://github.com/quinode/subhub.git
 Geohash
 geopy
 simplejson
+django-scanredirect
 
 
 # redis
