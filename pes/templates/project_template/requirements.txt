@@ -43,3 +43,6 @@ git+git://github.com/quinode/django-rdfalchemy.git
 raven
 sentry
 
+# dev debug tools
+django-debug-toolbar
+FirePython
