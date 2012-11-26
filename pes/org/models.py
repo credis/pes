@@ -91,15 +91,15 @@ class Contact(djRdf, myRdfSubject):
     content = rdfSingle(settings.NS.rdf.value)
 
     contact_mapping = {
-        settings.NS.vcard.Cell: u'cell',
-        settings.NS.vcard.Fax: u'fax',
-        settings.NS.ess.Skype: u'skype',
-        settings.NS.ov.MicroblogPost: u'twitter',
-        settings.NS.rss.Channel: u'rss',
-        settings.NS.vcal.Vcalendar: u'ics',
-        settings.NS.vcard.Email: u'email',
-        settings.NS.sioc.Site: u'web',
-        settings.NS.vcard.Tel: u'phone'
+        settings.NS.vcard.Cell: _(u'cell'),
+        settings.NS.vcard.Fax: _(u'fax'),
+        settings.NS.ess.Skype: _(u'skype'),
+        settings.NS.ov.MicroblogPost: _(u'twitter'),
+        settings.NS.rss.Channel: _(u'rss'),
+        settings.NS.vcal.Vcalendar: _(u'ics'),
+        settings.NS.vcard.Email: _(u'email'),
+        settings.NS.sioc.Site: _(u'web'),
+        settings.NS.vcard.Tel: _(u'phone')
     }
 
     class Meta:

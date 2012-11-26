@@ -66,7 +66,10 @@ def _first(gen, size, cls):
 
 def get_rdf(request, uri):
     # est-ce django qui me pique mon '/'?
+    print "uri %s" % uri
     uri = urllib.unquote(uri) + '/'
+    print "uri 2 %s" % uri
+    print "json %s " % uri_to_json(uri)
     return HttpResponse(uri_to_json(uri), mimetype="application/json")
 
 
