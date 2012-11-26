@@ -38,9 +38,9 @@ urlpatterns = patterns('',
 
 
     # Json url
-    url(r'^geojson/((?P<model>[\w-]+))/(?P<num>\d+)/$', 'pes.views.geojson'),
-    url(r'^geojson/((?P<model>[\w-]+))/$', 'pes.views.geojson'),
-    url(r'^get_rdf/((?P<uri>[\S]+))/$', 'pes.views.get_rdf'),
+    url(r'^geojson/(?P<model>[\w-]+)/(?P<num>\d+)/$', 'pes.views.geojson'),
+    url(r'^geojson/(?P<model>[\w-]+)/$', 'pes.views.geojson'),
+    url(r'^get_rdf/$', 'pes.views.get_rdf'),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),

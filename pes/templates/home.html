@@ -3,14 +3,32 @@
     {% block javascript %}
     {{ block.super }}
     <script src="{{ STATIC_URL }}js/mustache.js" charset="utf-8" type="text/javascript"></script>
-    <script type="text/html" id="li-templ">
-       <ul>
+    <script type="text/html" id="res-templ">
+      [[#facets ]] 
+      <h3> catégories </h
+       <ul> 
+       [[#categories ]] 
+        <li> [[ label ]] <a href="[[link]]">([[ count ]])</a></li>
+       [[/categories ]]
+       </ul>
+
+       <h3> tags </h3>
+       <ul> 
+      [[#tags ]] 
+        <li> [[ label ]] <a href="[[link]]">([[ count ]])</a></li>
+       [[/tags ]]
+       </ul>
+        [[/facets ]]
+      
+
+
+        <h3> Résultats </h3>
+        <ul>
        [[#results ]] 
-        <li><a href="[[local_url]]">[[ label ]]</a></li>
+        <li><a href="[[local_url]]" onclick="window.open(this.href); return false;">[[ &label ]]</a></li>
        [[/results ]]
        </ul>
     </script>
-
     {% endblock javascript %}
 
 
@@ -52,11 +70,11 @@ function get_res(query, tmpl){
 
 $(function(){
     Mustache.tags = ['[[', ']]'];
-    litmpl = $('#li-templ').html()
+    restmpl = $('#res-templ').html()
 
 
 	$('#main_search').submit(function() {
-	  get_res($(this).serialize(), litmpl);
+	  get_res($(this).serialize(), restmpl);
 	  return false;
 	});
 

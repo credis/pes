@@ -4,6 +4,10 @@ PROJECT_NAME = '{{ project_name }}'
 SESAME_REPOSITORY_NAME = "pesRepository"
 SECRET_KEY = '{{ secret_key }}'
 
+DEBUG = True
+TEMPLATE_DEBUG = DEBUG
+
+
 import os.path
 PROJECT_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -27,6 +31,17 @@ try:
     from pes.default_project_settings import *
 except ImportError, exp:
     raise ImproperlyConfigured("Unable to find default_project_settings.py file from pes")
+
+
+# debug settings : load dev tools (FireLogger & Django debug Toolbar) or setup Sentry Logging
+try:
+    DEBUG_SETTINGS = {'apps': INSTALLED_APPS,
+                      'middleware': MIDDLEWARE_CLASSES,
+                      'logging': LOGGING
+                        }
+    from pes.debug_settings import *
+except ImportError, exp:
+    raise ImproperlyConfigured("Unable to find pes/debug_settings.py file in pes : ", exp)
 
 
 # db_settings file for DATABASES, DATABASE ROUTERS and CACHE backend settings

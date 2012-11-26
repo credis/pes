@@ -66,12 +66,8 @@ import logging
 log = logging.getLogger('pes')
 
 
-def get_rdf(request, uri):
-    # est-ce django qui me pique mon '/'?
-    log.debug("uri %s" % uri)
-    uri = urllib.unquote(uri) + '/'
-    log.debug("uri 2 %s" % uri)
-    log.debug("json %s " % uri_to_json(uri))
+def get_rdf(request):
+    uri = request.GET.get('url', '')
     return HttpResponse(uri_to_json(uri), mimetype="application/json")
 
 
