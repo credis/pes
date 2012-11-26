@@ -44,7 +44,7 @@ class Organization(djRdf, myRdfSubject):
     @property
     def web(self):
         if self.homepage:
-            return unicode(self.homepage)
+            return unicode(self.homepage.resUri)
 
     @property
     def roles(self):
