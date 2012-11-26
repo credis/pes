@@ -62,14 +62,16 @@ def _first(gen, size, cls):
 #     return render_to_response('home.html', context, RequestContext(request))
 
 
+import logging
+log = logging.getLogger('pes')
 
 
 def get_rdf(request, uri):
     # est-ce django qui me pique mon '/'?
-    print "uri %s" % uri
+    log.debug("uri %s" % uri)
     uri = urllib.unquote(uri) + '/'
-    print "uri 2 %s" % uri
-    print "json %s " % uri_to_json(uri)
+    log.debug("uri 2 %s" % uri)
+    log.debug("json %s " % uri_to_json(uri))
     return HttpResponse(uri_to_json(uri), mimetype="application/json")
 
 
