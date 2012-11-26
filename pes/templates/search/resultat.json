@@ -1,0 +1,82 @@
+
+{% load es_extra %}
+
+{
+{% if query %}
+
+{# Facettes #}
+
+"success": true,
+"query": "{{ query }}",
+"pages_nb": {{ paginator.page_range|last }},
+"page_number": {{ page.number }},
+"page_next": {{ page.next_page_number }},
+"page_prev": {{ page.previous_page_number }},
+
+{% if facets %}
+"facets": {
+
+    {% if facets.fields.category %}
+        "categories": [
+        {% for category in facets.fields.category|slice:":5" %}
+        {
+            "label": "{{ category.0 }}",
+            "count": {{ category.1 }},
+            "link": "{{ request.HTTP_REFERER }}?q={{ query }}&amp;selected_facets=category_exact:{{ category.0 }}"
+        }
+        {% if forloop.last %}
+        {% else %}
+           ,
+        {% endif%}
+
+        {% endfor %}
+        ]
+    {% endif %}            
+
+
+    {% if facets.fields.tags %}
+        ,
+        "tags": [
+        {% for tag in facets.fields.tags|slice:":10" %}
+        {
+            "label": "{{ tag.0 }}",
+            "count": {{ tag.1 }},
+            "link": "{{ request.HTTP_REFERER  }}?q={{ query }}&amp;selected_facets=tags_exact:{{ tag.0}}"
+        }
+        {% if forloop.last %}
+        {% else %}
+           ,
+        {% endif%}
+
+
+        {% endfor %}
+        ]
+    {% endif %}
+
+},
+{% endif %}
+
+
+"results": [
+    {% for result in page.object_list %}
+      {
+         {{ result.json_result|replace_quote|safe }}
+         {{ result.json_export|replace_quote|safe }}
+        
+      }
+        {% if forloop.last %}
+        {% else %}
+           ,
+        {% endif%}
+
+    {% endfor %}
+]
+
+
+
+{% else %}
+    "success": false,
+    "message": "An error occured"
+{% endif %}
+
+}

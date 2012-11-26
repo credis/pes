@@ -2,7 +2,7 @@
 # Create your models here.
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
-from djrdf.models import myRdfSubject
+from djrdf.models import myRdfSubject, djRdf
 from rdfalchemy import rdfSingle
 import string
 from django.contrib.gis.geos import Point
@@ -27,13 +27,29 @@ rdflib.term.bind(settings.NS.opens.wkt, convert_wkt)
 
 
 
-class Location(myRdfSubject):
-    rdf_type = settings.NS.dct.Location
+
+# attention : on est sur le geoHash.... 
+# et plusieurs adresses peuvent avoir la meme coordonees geohash
+class Location(djRdf, myRdfSubject):
+    # rdf_type = settings.NS.dct.Location
+    rdfs_label = rdfSingle(settings.NS.rdfs.label)
     geometry = rdfSingle(settings.NS.locn.geometry)
+    address = rdfSingle(settings.NS.locn.address, range_type=settings.NS.locn.Address)
+
+    class Meta:
+        abstract = True
+
+    @property
+    def label(self):
+        if self.address:
+            return self.address.fullAddress
+        return self.rdfs_label
+
 
 
 class Address(myRdfSubject):
     rdf_type = settings.NS.locn.Address
+    fullAddress = rdfSingle(settings.NS.locn.fullAddress)
     # geometry = rdfSingle(settings.NS.locn.geometry)
 
 

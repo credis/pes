@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2> {{event.title}}</h2>
+
+    <div> {{event.content|safe}} </div>
+
+    {% if event.organization.title %}
+        <span>
+        publiée par: 
+        <a href="{{event.organization.get_absolute_url}}">{{event.organization.title }}</a>
+        </span>
+    {% endif %}
+
+     <br/>
+
+    {% include "tags.html" with object=event  %}
+
+{% endblock %}

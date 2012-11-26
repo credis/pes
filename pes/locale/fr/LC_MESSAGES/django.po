@@ -8,32 +8,50 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-31 15:10+0100\n"
+"POT-Creation-Date: 2012-11-25 12:46+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 
-#: feeds.py:16 feeds.py:84
+#: feeds.py:17 feeds.py:87
 #, python-format
 msgid "Updates for %s."
-msgstr ""
+msgstr "Mise à jour pour %s"
 
-#: feeds.py:18 feeds.py:86
+#: feeds.py:19 feeds.py:89
 #, python-format
 msgid "All records updates listed on the %s website."
 msgstr ""
 
-#: feeds.py:77 feeds.py:146
+#: feeds.py:80 feeds.py:151
 msgid " "
+msgstr ""
+
+#: forms.py:15
+msgid "Distance max"
+msgstr ""
+
+#: forms.py:22
+#, python-format
+msgid "Distance max de %s"
 msgstr ""
 
 #: models.py:9
 msgid "name"
 msgstr "nom"
+
+#: agenda/models.py:26
+msgid "Event"
+msgstr "Evénement"
+
+#: agenda/models.py:27
+msgid "Events"
+msgstr "Evénements"
 
 #: article/models.py:25
 msgid "Article"
@@ -42,6 +60,14 @@ msgstr "Article"
 #: article/models.py:26
 msgid "Articles"
 msgstr "Articles"
+
+#: exchange/models.py:92
+msgid "Product"
+msgstr "Produit"
+
+#: exchange/models.py:93
+msgid "Products"
+msgstr "Produits"
 
 #: management/commands/startproject.py:12
 msgid ""
@@ -64,13 +90,49 @@ msgid ""
 "localhost:8000/"
 msgstr ""
 
-#: org/models.py:38
+#: org/models.py:41
 msgid "Organization"
-msgstr ""
+msgstr "Organisation"
 
-#: org/models.py:39
+#: org/models.py:42
 msgid "Organizations"
 msgstr "Organisations"
+
+#: org/models.py:94
+msgid "cell"
+msgstr "portable"
+
+#: org/models.py:95
+msgid "fax"
+msgstr ""
+
+#: org/models.py:96
+msgid "skype"
+msgstr ""
+
+#: org/models.py:97
+msgid "twitter"
+msgstr ""
+
+#: org/models.py:98
+msgid "rss"
+msgstr ""
+
+#: org/models.py:99
+msgid "ics"
+msgstr ""
+
+#: org/models.py:100
+msgid "email"
+msgstr ""
+
+#: org/models.py:101
+msgid "web"
+msgstr ""
+
+#: org/models.py:102
+msgid "phone"
+msgstr "téléphone"
 
 #: tag/models.py:25
 msgid "Tag"
@@ -80,41 +142,25 @@ msgstr ""
 msgid "Tags"
 msgstr ""
 
-#: templates/project_template/pes_local/forms.py:23
-msgid "Distance max"
+#: templates/404.html:4 templates/404.html.py:7
+msgid "Page not found"
+msgstr "Page not trouvée"
+
+#: templates/404.html:10
+msgid "The requested page can't be found on the server"
+msgstr "La page ne peut être trouvée sur le serveur"
+
+#: templates/500.html:4 templates/500.html.py:6
+msgid "Server Error"
 msgstr ""
 
-#: templates/project_template/pes_local/templates/search/search.html:8
-msgid "Search"
-msgstr "Recherche"
-
-#: templates/project_template/pes_local/templates/search/search.html:41
-msgid "categories"
-msgstr "catégories"
-
-#: templates/project_template/pes_local/templates/search/search.html:55
-msgid "modified"
-msgstr "modifié"
-
-#: templates/project_template/pes_local/templates/search/search.html:125
-msgid "Results"
-msgstr "Résultats"
-
-#: templates/project_template/pes_local/templates/search/search.html:151
-msgid "No results found."
-msgstr "Il n'a pas de résultat"
-
-#: templates/project_template/pes_local/templates/search/includes/mlt.html:6
-msgid "More results"
-msgstr "Plus de résultats"
-
-#: templates/project_template/pes_local/templates/search/includes/mlt.html:14
-msgid "No more results"
-msgstr "Plus d'autres résultats"
+#: templates/500.html:14
+msgid "An error has occured"
+msgstr ""
 
 #: thess/models.py:57
 msgid "concept"
-msgstr "concepte"
+msgstr "concept"
 
 #: thess/models.py:58
 msgid "concepts"
@@ -138,3 +184,24 @@ msgstr ""
 #, python-format
 msgid "Scheme %s defined in many conctexts, not handled yes"
 msgstr ""
+
+#~ msgid "Search"
+#~ msgstr "Recherche"
+
+#~ msgid "categories"
+#~ msgstr "catégories"
+
+#~ msgid "modified"
+#~ msgstr "modifié"
+
+#~ msgid "Results"
+#~ msgstr "Résultats"
+
+#~ msgid "No results found."
+#~ msgstr "Il n'a pas de résultat"
+
+#~ msgid "More results"
+#~ msgstr "Plus de résultats"
+
+#~ msgid "No more results"
+#~ msgstr "Plus d'autres résultats"

@@ -6,7 +6,8 @@ from django.utils.translation import ugettext_lazy as _
 from rdfalchemy import rdfSingle, rdfMultiple
 from django.conf import settings
 from djrdf.models import myRdfSubject, djRdf
-from pes.utils import fromAddrToPoint
+from pes.utils import addr_to_point, loc_to_point
+from rdflib import URIRef
 
 
 # Warning the order of the classes is MANDATORY
@@ -17,8 +18,8 @@ class Organization(djRdf, myRdfSubject):
     label = rdfSingle(settings.NS.rdfs.label)
     description = rdfSingle(settings.NS.dct.description)
     tags = rdfMultiple(settings.NS.dct.subject, range_type=settings.NS.skosxl.Label)
-    # abstract = rdfSingle(DCT.abstract)  # wait for issue #208 of rdflib
-    web = rdfSingle(settings.NS.foaf.homepage)
+    abstract = rdfSingle(URIRef(str(settings.NS['dct']) + 'abstract'))
+    homepage = rdfSingle(settings.NS.foaf.homepage)
     logo = rdfSingle(settings.NS.foaf.logo)
     title = rdfSingle(settings.NS.legal.legalName)
     acronym = rdfSingle(settings.NS.ov.prefAcronym)
@@ -28,7 +29,9 @@ class Organization(djRdf, myRdfSubject):
     offers = rdfMultiple(settings.NS.gr.offers, range_type=settings.NS.ess.Exchange)
     members = rdfMultiple(settings.NS.org.hasMember, range_type=settings.NS.person.Person)
     comment = rdfMultiple(settings.NS.rdfs.comment)
-    # contacts = rdfMultiple(settings.NS.ess.hasContactMedium, range_type=settings.NS.ess.ContactMedium)
+    identifiers = rdfMultiple(settings.NS.org.identifier)
+    notes = rdfSingle(settings.NS.skos.note)
+    contacts = rdfMultiple(settings.NS.ess.hasContactMedium, range_type=settings.NS.ess.ContactMedium)
 
     # django models attributes
     marks = IntegerField(blank=True, null=True)
@@ -39,27 +42,31 @@ class Organization(djRdf, myRdfSubject):
         verbose_name_plural = _(u'Organizations')
 
     @property
+    def web(self):
+        if self.homepage:
+            return unicode(self.homepage.resUri)
+
+    @property
     def roles(self):
         return map(Engagement, list(self.db.subjects(settings.NS.org.organization, self)))
 
-    @property
-    def contacts(self):
-        return list(self.db.objects(self, settings.NS.ess.hasContactMedium))
+    # @property
+    # def contacts(self):
+    #     return list(self.db.objects(self, settings.NS.ess.hasContactMedium))
 
     @models.permalink
     def get_absolute_url(self):
         return ('pes.org.views.detailOrg', [str(self.id)])
 
     @property
-    def geoPoint(self):
-        addr = self.pref_address
-        if not addr:
-            if len(self.location) > 0:
-                addr = self.location[0]
-        return fromAddrToPoint(addr)
+    def geo_point(self):
+        if self.pref_address:
+            return addr_to_point(self.pref_address)
+        elif self.location and len(self.location) > 0:
+            return loc_to_point(self.location[0])
 
     def to_geoJson(self):
-        if self.geoPoint:
+        if self.geo_point:
             return {
                "type": "Feature",
                 "properties": {
@@ -68,39 +75,44 @@ class Organization(djRdf, myRdfSubject):
                         },
                     "geometry": {
                         "type": "Point",
-                        "coordinates": [self.geoPoint.x, self.geoPoint.y]
+                        "coordinates": [self.geo_point.x, self.geo_point.y]
                         }
                     }
 
 
-    # for haystack purpose
-    # def get_location(self):
-    #     # Remember, longitude FIRST!
 
-    #     addr = self.pref_address
-    #     if not addr:
-    #         if self.location != []:
-    #             addr = self.location[0]
-
-    #     if addr and isinstance(addr.geometry, Point):
-    #         return Point(addr.geometry.y, addr.geometry.x)
-    #     else:
-    #         # print "OBJ %s " % obj
-    #         return None
-
-
-    #     return Point(self.longitude, self.latitude)
 
 
 
 
 class Contact(djRdf, myRdfSubject):
-    rdf_type = settings.NS.ess.ContactMedium
+    # rdf_type = settings.NS.ess.ContactMedium
     details = rdfMultiple(settings.NS.rdfs.comment)
     content = rdfSingle(settings.NS.rdf.value)
 
+    contact_mapping = {
+        settings.NS.vcard.Cell: _(u'cell'),
+        settings.NS.vcard.Fax: _(u'fax'),
+        settings.NS.ess.Skype: _(u'skype'),
+        settings.NS.ov.MicroblogPost: _(u'twitter'),
+        settings.NS.rss.Channel: _(u'rss'),
+        settings.NS.vcal.Vcalendar: _(u'ics'),
+        settings.NS.vcard.Email: _(u'email'),
+        settings.NS.sioc.Site: _(u'web'),
+        settings.NS.vcard.Tel: _(u'phone')
+    }
+
     class Meta:
         abstract = True
+
+    @property
+    def label(self):
+        return self.content
+
+    def contact_type(self):
+        types = list(self.db.triples((self, settings.NS.rdf.type, None)))
+        types.remove((URIRef(self.uri), settings.NS.rdf.type, self.rdf_type))
+        return self.contact_mapping[types[0][2]]
 
 
 
@@ -123,29 +135,38 @@ class Person(djRdf, myRdfSubject):
     name = rdfSingle(settings.NS.foaf.familyName)
     full_name = rdfSingle(settings.NS.foaf.name)
     tags = rdfMultiple(settings.NS.dct.subject, range_type=settings.NS.skosxl.Label)
+    location = rdfMultiple(settings.NS.locn.location, range_type=settings.NS.dct.Location)
+    notes = rdfSingle(settings.NS.skos.note)
+    contacts = rdfMultiple(settings.NS.ess.hasContactMedium, range_type=settings.NS.ess.ContactMedium)
 
     class Meta:
         abstract = True
 
+    @models.permalink
+    def get_absolute_url(self):
+        return ('pes.org.views.detailPerson', [str(self.id)])
+
     @property
-    def geoPoint(self):
-        addr = self.pref_address
-        if not addr:
-            if len(self.location) > 0:
-                addr = self.location[0]
-        return fromAddrToPoint(addr)
+    def label(self):
+        return self.full_name
+
+    @property
+    def geo_point(self):
+        if self.location and len(self.location) > 0:
+            return loc_to_point(self.location[0])
+        # on peut forcer et utiliser la localization de l'organization
 
     def to_geoJson(self):
-        if self.geoPoint:
+        if self.geo_point:
             return {
                "type": "Feature",
                 "properties": {
-                        "name": self.title.encode('utf-8'),
-                        "popupContent": "<h4>" + self.title.encode('utf-8') + "</h4><p><a href='" + self.get_absolute_url() + "'>" + self.title.encode('utf-8') + "</a></p>"
+                        "name": self.full_name.encode('utf-8'),
+                        "popupContent": "<h4>" + self.full_name.encode('utf-8') + "</h4><p><a href='" + self.get_absolute_url() + "'>" + self.full_name.encode('utf-8') + "</a></p>"
                         },
                     "geometry": {
                         "type": "Point",
-                        "coordinates": [self.geoPoint.x, self.geoPoint.y]
+                        "coordinates": [self.geo_point.x, self.geo_point.y]
                         }
                     }
 

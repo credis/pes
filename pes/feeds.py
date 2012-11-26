@@ -8,6 +8,7 @@ from django.contrib.contenttypes.models import ContentType
 from urlparse import urlsplit
 import pes
 from django.db import models
+from pes.utils import map_coop_model
 
 
 
@@ -25,15 +26,16 @@ class UpdateFeed(Feed):
         # ping dans save de model uri
         # TODO suppress the modified field and use sparql query to build
         # the selected items
-        if not isinstance(self._mType, list):
-            return get_model(self._mType.app_label, self._model).objects.order_by('-modified')[:5]
-        else:
-            # self._mType should contains class
-            res = []
-            for t in self._mType:
-                res.extend(t.objects.order_by('-modified')[:5])
-            res = sorted(res, key=lambda x: x.modified)
-            return res[:5]
+        return get_model(self._mType.app_label, self._model).objects.order_by('-modified')[:5]
+        # if not isinstance(self._mType, list):
+        #     return get_model(self._mType.app_label, self._model).objects.order_by('-modified')[:5]
+        # else:
+        #     # self._mType should contains class
+        #     res = []
+        #     for t in self._mType:
+        #         res.extend(t.objects.order_by('-modified')[:5])
+        #     res = sorted(res, key=lambda x: x.modified)
+        #     return res[:5]
 
 
     # to deal with overwriting ...
@@ -61,18 +63,19 @@ class UpdateFeed(Feed):
 
     # def item_extra_kwargs
     def get_object(self, request, *args, **kwargs):
-        self._model = kwargs['model']
+        self._model = map_coop_model(kwargs['model'])
         try:
             self._mType = ContentType.objects.get(model=self._model)
         except Exception:
+            pass
             # self._model is an abstract class. Lets find its subclasses
-            self._mType = []
-            ll = models.get_models()
+            # self._mType = []
+            # ll = models.get_models()
             # TODO how to retrieve abstract class?
-            if self._model == u'contact':
-                for l in ll:
-                    if pes.org.models.Contact in l.__mro__:
-                        self._mType.append(l)
+            # if self._model == u'contact':
+            #     for l in ll:
+            #         if pes.org.models.Contact in l.__mro__:
+            #             self._mType.append(l)
         words = ['Updates for', self._model, 'on', Site.objects.get_current().name]
         self.title = _(' '.join(words))
         self.link = "/feed/%s/" % self._model
@@ -93,14 +96,15 @@ class UpdateFeedObject(Feed):
         # ping dans save de model uri
         # TODO suppress the modified field and use sparql query to build
         # the selected items
-        if not isinstance(self._mType, list):
-            return get_model(self._mType.app_label, self._model).objects.filter(uri__icontains=self._uuid)
-        else:
-            # self._mType should contains class
-            res = []
-            for t in self._mType:
-                res.extend(t.objects.filter(uri__icontains=self._uuid))
-            return res
+        return get_model(self._mType.app_label, self._model).objects.filter(uri__icontains=self._uuid)
+        # if not isinstance(self._mType, list):
+        #     return get_model(self._mType.app_label, self._model).objects.filter(uri__icontains=self._uuid)
+        # else:
+        #     # self._mType should contains class
+        #     res = []
+        #     for t in self._mType:
+        #         res.extend(t.objects.filter(uri__icontains=self._uuid))
+        #     return res
 
 
     # to deal with overwriting ...
@@ -128,19 +132,20 @@ class UpdateFeedObject(Feed):
 
     # def item_extra_kwargs
     def get_object(self, request, *args, **kwargs):
-        self._model = kwargs['model']
+        self._model = map_coop_model(kwargs['model'])
         self._uuid = kwargs['obj']
         try:
             self._mType = ContentType.objects.get(model=self._model)
         except Exception:
+            pass
             # self._model is an abstract class. Lets find its subclasses
-            self._mType = []
-            ll = models.get_models()
-            # TODO how to retrieve abstract class?
-            if self._model == u'contact':
-                for l in ll:
-                    if pes.org.models.Contact in l.__mro__:
-                        self._mType.append(l)
+            # self._mType = []
+            # ll = models.get_models()
+            # # TODO how to retrieve abstract class?
+            # if self._model == u'contact':
+            #     for l in ll:
+            #         if pes.org.models.Contact in l.__mro__:
+            #             self._mType.append(l)
 
         words = ['Updates for', self._model, 'on', Site.objects.get_current().name]
         self.title = _(' '.join(words))

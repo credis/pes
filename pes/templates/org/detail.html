@@ -10,9 +10,27 @@
 
     </span>
 
+
+
+
+
+
     <div>
         {{org.description|safe}} 
     </div>
+
+
+    {% if org.contacts %}
+    <strong> Contacts </strong>
+    <div>
+         {% for contact in org.contacts %}
+             {{ contact.contact_type }}: {{ contact.content}} {{ contact.detail}}
+             <br />
+         {% endfor %}
+    </div>
+    {% endif %}
+
+
 
     {% if org.offers  or org.seeks %}
         <h3> Exchange : </h3>
@@ -49,15 +67,8 @@
     {% endif %}
      <br/>
     
-    {% if org.tags %}
-        <span>
-            <strong>Tags : </strong> 
-            {% for tag in org.tags %}
-                <a href="{{ tag.get_absolute_url }}">{{ tag.label}}</a>
-            {% endfor %}
-            </span>
-    {% endif %}
 
+    {% include "tags.html" with object=org  %}
 
      <br/>
 <br/>

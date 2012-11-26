@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 # Create your views here.
 from django.utils.translation import ugettext_lazy as _
-from pes_local.models import Organization
+from pes_local.models import Organization, Person
 from pes.org.forms import OrgForm
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -31,4 +31,14 @@ def detailOrg(request, org_id):
     else:
         return render_to_response('org/detail.html', {'org': org, 'form': form}, context_instance=RequestContext(request))
 
+
+
+def detailPerson(request, person_id):
+    try:
+        person = Person.objects.get(id=person_id)
+    except Person.DoesNotExist:
+        raise Http404
+
+
+    return render_to_response('person/detail.html', {'person': person}, context_instance=RequestContext(request))
 

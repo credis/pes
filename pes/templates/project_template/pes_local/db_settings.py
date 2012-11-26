@@ -27,7 +27,7 @@ DATABASES = {
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack_fr.backends.elasticsearch_backend.ElasticsearchSearchEngine',
-        'URL': 'http://88.190.28.59:9200/',
+        'URL': '',  # set your ES address
         'INDEX_NAME': settings.PROJECT_NAME,
         # 'INCLUDE_SPELLING': True,   # not yet handled by ES
     },

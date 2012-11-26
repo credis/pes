@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Les événements</h2>
+    <ul>
+        {% for event in object_list %}
+            <li> <a href="{{ event.get_absolute_url }}">{{ event.title}}</a>
+            publiée le {{ event.dct_created }} 
+            {% if event.organization.title %}
+            par <a href="{{event.organization.get_absolute_url}}">{{event.organization.title }}</a>
+            {% endif %}
+ 	        <p> {{ event.content|safe}} </p>           
+            </li>
+                
+        {% endfor %}
+    </ul>
+
+{% include "pagination.html" with model="event"  end_message="Plus d'autres événements !" %}
+
+{% endblock %}

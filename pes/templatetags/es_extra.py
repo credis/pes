@@ -21,3 +21,9 @@ def skippage(url):
     res = re.sub(r'&page=(?P<num>[\d]+)', '',  url)
     return res
 
+
+
+
+@register.filter
+def replace_quote(string): 
+    return re.sub(r"'", r'"', string)

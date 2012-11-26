@@ -1,0 +1,10 @@
+{# the templates to show the tags #}
+{% if object.tags %}
+    <span>
+        <strong>Tags : </strong> 
+        {% for tag in object.tags %}
+            <a href="{{ tag.get_absolute_url }}">{{ tag.label}}</a>
+        {% endfor %}
+        </span>
+{% endif %}
+

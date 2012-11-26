@@ -5,14 +5,14 @@ from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import render_to_response
 from django.http import HttpResponse
 from haystack.query import SearchQuerySet
-from django.template import RequestContext
 from djrdf.import_rdf.models import SparqlQuery
 from pes_local.models import Exchange, Organization, Article
 from django.conf import settings
 import json
-from django.contrib.gis.utils import GeoIP
-from django.contrib.gis.geos import Point
 from django.contrib.sites.models import Site
+import  urllib
+from haystack.views import FacetedSearchView
+from djrdf.tools import uri_to_json
 
 
 
@@ -34,32 +34,42 @@ def _first(gen, size, cls):
 
 
 
+
 # Should use a template....
-def index(request):
-    context = {}
-    context['intro'] = u"%s" % Site.objects.get_current().name
-    sqom = SparqlQuery.objects.get(label='ordered by modified')
-    sq = sqom.query % str(Exchange.rdf_type)
-    res = Exchange.db.query(sq, initNs=settings.NS)
-    first10 = _first(res, 10, Exchange)
-    context['last_annonces'] = first10
-    sqoc = SparqlQuery.objects.get(label='ordered by created')
-    context['last_articles'] = _first(Article.db.query(sqoc.query % str(Article.rdf_type), initNs=settings.NS), 10, Article)
+# def index(request):
+#     context = {}
+#     context['intro'] = u"%s" % Site.objects.get_current().name
+#     sqom = SparqlQuery.objects.get(label='ordered by modified')
+#     sq = sqom.query % str(Exchange.rdf_type)
+#     res = Exchange.db.query(sq, initNs=settings.NS)
+#     # form = MyFacetedSearchForm()
+#     first10 = _first(res, 10, Exchange)
+#     context['last_annonces'] = first10
+#     sqoc = SparqlQuery.objects.get(label='ordered by created')
+#     context['last_articles'] = _first(Article.db.query(sqoc.query % str(Article.rdf_type), initNs=settings.NS), 10, Article)
 
-    exchanges = []
-    for e in first10:
-        gj = e.to_geoJson()
-        if gj:
-            exchanges.append(gj)
+#     exchanges = []
+#     for e in first10:
+#         gj = e.to_geoJson()
+#         if gj:
+#             exchanges.append(gj)
 
-    exchanges = {"type": "FeatureCollection", "features":  exchanges}
-    context['geoJson'] = json.dumps(exchanges)
+#     exchanges = {"type": "FeatureCollection", "features":  exchanges}
+#     context['geoJson'] = json.dumps(exchanges)
 
-    # Un beau moyen de faire des variables globales....
-    setattr(settings, 'PES_REMOTE_CLIENT', request.META.get('REMOTE_ADDR', None))
+#     # Un beau moyen de faire des variables globales....
+#     setattr(settings, 'PES_REMOTE_CLIENT', request.META.get('REMOTE_ADDR', None))
 
-    return render_to_response('home.html', context, RequestContext(request))
+#     return render_to_response('home.html', context, RequestContext(request))
 
+
+import logging
+log = logging.getLogger('pes')
+
+
+def get_rdf(request):
+    uri = request.GET.get('url', '')
+    return HttpResponse(uri_to_json(uri), mimetype="application/json")
 
 
 def geojson(request, model, num=None):
@@ -82,7 +92,6 @@ def geojson(request, model, num=None):
             gj = e.to_geoJson()
             if gj:
                 result.append(gj)
-
     result = {"type": "FeatureCollection", "features":  result}
     return HttpResponse(json.dumps(result), mimetype="application/json")
 
@@ -125,3 +134,72 @@ def SentryHandler500(request):
         'request': request,
         'STATIC_URL': settings.STATIC_URL,
     })))
+
+
+
+
+
+class JsonFacetedSearchView(FacetedSearchView):
+
+    def __name__(self):
+        return "JsonFacetedSearchView"
+
+    def create_response(self):
+        """
+        Generates the actual HttpResponse to send back to the user.
+        """
+        (paginator, page) = self.build_page()
+
+        context = {
+            'query': self.query,
+            'form': self.form,
+            'page': page,
+            'paginator': paginator,
+            'suggestion': None,
+        }
+
+        if self.results and hasattr(self.results, 'query') and self.results.query.backend.include_spelling:
+            context['suggestion'] = self.form.get_suggestion()
+
+        context.update(self.extra_context())
+        return render_to_response(self.template, \
+                                  context, \
+                                  context_instance=self.context_class(self.request), \
+                                  mimetype="application/json")
+
+
+
+class ImportJsonFacetedSearchView(JsonFacetedSearchView):
+    def __name__(self):
+        return "ImportJsonFacetedSearchView"
+
+    def build_form(self, form_kwargs=None):
+        if form_kwargs is None:
+            form_kwargs = {}
+
+        # This way the form can always receive a list containing zero or more
+        # facet expressions:
+        form_kwargs['models'] = self.request.GET.getlist("model")
+
+        return super(ImportJsonFacetedSearchView, self).build_form(form_kwargs)
+
+
+
+class HomeSearchView(FacetedSearchView):
+
+    def __name__(self):
+        return "HomeSearchView"
+
+    def extra_context(self):
+        context = super(HomeSearchView, self).extra_context()
+        context['intro'] = u"%s" % Site.objects.get_current().name
+
+        sqom = SparqlQuery.objects.get(label='ordered by modified')
+        sq = sqom.query % str(Exchange.rdf_type)
+        res = Exchange.db.query(sq, initNs=settings.NS)
+        first10 = _first(res, 10, Exchange)
+        context['last_annonces'] = first10
+        sqoc = SparqlQuery.objects.get(label='ordered by created')
+        context['last_articles'] = _first(Article.db.query(sqoc.query % str(Article.rdf_type), initNs=settings.NS), 10, Article)
+        return context
+

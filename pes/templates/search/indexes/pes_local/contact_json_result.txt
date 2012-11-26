@@ -1,0 +1,6 @@
+	"local_url": "{{ object.get_absolute_url }}",
+	"uri": "{{ object.uri }}",
+	"import_rdf_url": "{{ object.uri_import}}",
+	"authority_source": "{{ object.authority_source }}",
+    "label": "{{ object.content|escape }}",
+    "summary" : ""

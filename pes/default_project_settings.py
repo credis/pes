@@ -3,8 +3,8 @@
 import os
 from pes_local.settings import PROJECT_PATH
 
-DEBUG = True
-TEMPLATE_DEBUG = DEBUG
+# DEBUG = 
+# TEMPLATE_DEBUG = DEBUG
 
 
 
@@ -64,6 +64,9 @@ STATICFILES_FINDERS = (
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
+TEMPLATE_DIRS = [
+    os.path.abspath(PROJECT_PATH + '/pes_local/templates/')
+]
 
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
@@ -71,19 +74,20 @@ TEMPLATE_LOADERS = (
 #     'django.template.loaders.eggs.Loader',
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE_CLASSES = [
+    'pes.middleware.ThreadLocals',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'raven.contrib.django.middleware.Sentry404CatchMiddleware',
+    # 'raven.contrib.django.middleware.Sentry404CatchMiddleware',
     'pes.utils.CORSMiddleware',
 
     # 'debug_toolbar.middleware.DebugToolbarMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
-)
+]
 
 TEMPLATE_CONTEXT_PROCESSORS = [
     'django.contrib.auth.context_processors.auth',
@@ -98,11 +102,8 @@ TEMPLATE_CONTEXT_PROCESSORS = [
     ]
 
 
-TEMPLATE_DIRS = (
-    os.path.abspath(PROJECT_PATH + '/org/')
-)
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -125,7 +126,7 @@ INSTALLED_APPS = (
     # 'debug_toolbar'
     'scanredirect',
 
-)
+]
 
 
 LOGGING = {
@@ -181,16 +182,16 @@ LOGGING = {
             'handlers': ['console'],
             'level': 'DEBUG'
         },
-        'raven': {
-            'level': 'DEBUG',
-            'handlers': ['console'],
-            'propagate': False,
-        },
-        'sentry.errors': {
-            'level': 'DEBUG',
-            'handlers': ['console'],
-            'propagate': False,
-        },
+        # 'raven': {
+        #     'level': 'DEBUG',
+        #     'handlers': ['console'],
+        #     'propagate': False,
+        # },
+        # 'sentry.errors': {
+        #     'level': 'DEBUG',
+        #     'handlers': ['console'],
+        #     'propagate': False,
+        # },
 
     }
 }
@@ -236,6 +237,8 @@ RDF_NAMESPACES = {
  'ctag': u'http://commontag.org/ns#',
  'd2rq': u'http://www.wiwiss.fu-berlin.de/suhl/bizer/D2RQ/0.1#',
  'dct': u'http://purl.org/dc/terms/',
+ 'dce': u'http://purl.org/dc/elements/1.1/',
+ 'dcmi': u'http://purl.org/dc/dcmitype/',
  'ess':  u'http://ns.economie-solidaire.fr/ess#',
  'event': u'http://purl.org/NET/c4dm/event.owl#',
  'foaf': u'http://xmlns.com/foaf/0.1/',
@@ -254,7 +257,7 @@ RDF_NAMESPACES = {
  'skos': u'http://www.w3.org/2004/02/skos/core#',
  'skosxl': u'http://www.w3.org/2008/05/skos-xl#',
  'vcard': u'http://www.w3.org/2006/vcard/ns#',
- 'vcal': u'http://www.w3.org/2002/12/cal/icaltzd#Vcalendar',
+ 'vcal': u'http://www.w3.org/2002/12/cal/icaltzd#',
  'xsd': u'http://www.w3.org/2001/XMLSchema#',
  }
 
@@ -263,3 +266,13 @@ NS = AttributeDict(DJRDF_NS.items() +
                     transform_dict(RDF_NAMESPACES).items()
                     )
 
+
+
+# Cela pourrait être associé au SiteEntry, un jour on aura autre chose
+# que des coop.....
+# Cela pour etre aussi un peu plus sofistiqué pour traiter les cas comme
+# la classe Contact ou le mapping et 1 -- N
+MAPPING_COOP_PES = {
+    'location': 'address',
+    'navtree': 'scheme'
+}
