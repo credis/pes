@@ -85,13 +85,12 @@ urlpatterns = patterns('',
 
 
 
-from pes.views import JsonFacetedSearchView
+from pes.views import JsonFacetedSearchView, ImportJsonFacetedSearchView
 
 urlpatterns += patterns('haystack.views',
     url(r'^searchJson/$', search_view_factory(
         view_class=JsonFacetedSearchView,
         template='search/resultat.json',
-        # searchqueryset=sqs,
         form_class=PESFacetedSearchForm,
         load_all=False
     ), name='haystack_search'),
@@ -100,9 +99,8 @@ urlpatterns += patterns('haystack.views',
 
 urlpatterns += patterns('haystack.views',
     url(r'^searchforimportJson/$', search_view_factory(
-        view_class=JsonFacetedSearchView,
-        template='search/import.json',
-        # searchqueryset=sqs,
+        view_class=ImportJsonFacetedSearchView,
+        template='search/resultat.json',
         form_class=ImportFacetedSearchForm,
         load_all=False
     ), name='haystack_search'),

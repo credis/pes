@@ -1,5 +1,6 @@
 # -*- coding:utf-8 -*-
 from django.utils.translation import ugettext_lazy as _
+from django.db import models
 from django import forms
 from haystack.forms import FacetedSearchForm
 from haystack.utils.geo import D
@@ -33,13 +34,19 @@ class PESFacetedSearchForm(FacetedSearchForm):
 
 class ImportFacetedSearchForm(PESFacetedSearchForm):
 
+    def __init__(self, *args, **kwargs):
+        self.models = kwargs.pop("models", [])
+        super(ImportFacetedSearchForm, self).__init__(*args, **kwargs)
+
     def search(self):
         # First, store the SearchQuerySet received from other processing.
         sqs = super(ImportFacetedSearchForm, self).search()
+        m = map(lambda x: models.get_model('pes_local', x), self.models)
+
         # return only result not in the
         authority_home = get_hostname(get_current_request())
-        sqs.exclude(uri__contains=authority_home)
-        return sqs
+        sqs = sqs.exclude(uri__contains=authority_home)
+        return sqs.models(*m)
 
 
 

@@ -15,6 +15,7 @@ from haystack.views import FacetedSearchView
 from djrdf.tools import uri_to_json
 
 
+
 def _first(gen, size, cls):
     res = []
     if size == None:
@@ -165,6 +166,22 @@ class JsonFacetedSearchView(FacetedSearchView):
                                   context, \
                                   context_instance=self.context_class(self.request), \
                                   mimetype="application/json")
+
+
+
+class ImportJsonFacetedSearchView(JsonFacetedSearchView):
+    def __name__(self):
+        return "ImportJsonFacetedSearchView"
+
+    def build_form(self, form_kwargs=None):
+        if form_kwargs is None:
+            form_kwargs = {}
+
+        # This way the form can always receive a list containing zero or more
+        # facet expressions:
+        form_kwargs['models'] = self.request.GET.getlist("model")
+
+        return super(ImportJsonFacetedSearchView, self).build_form(form_kwargs)
 
 
 
