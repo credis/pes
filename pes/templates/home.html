@@ -4,6 +4,7 @@
     {{ block.super }}
     <script src="{{ STATIC_URL }}js/mustache.js" charset="utf-8" type="text/javascript"></script>
     <script type="text/html" id="res-templ">
+
       [[#facets ]] 
       <h3> catégories </h
        <ul> 
@@ -71,6 +72,12 @@ function get_res(query, tmpl){
 $(function(){
     Mustache.tags = ['[[', ']]'];
     restmpl = $('#res-templ').html()
+
+    var initParameters = window.location.search.substring(1);
+    if (initParameters.length > 0) {
+    	console.log(initParameters)
+    	get_res(initParameters, restmpl)
+    }
 
 
 	$('#main_search').submit(function() {

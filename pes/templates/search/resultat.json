@@ -22,7 +22,7 @@
         {
             "label": "{{ category.0 }}",
             "count": {{ category.1 }},
-            "link": "{{ request.META.HTTP_REFERER|skippage }}&amp;selected_facets=category_exact:{{ category.0 }}"
+            "link": "{{ request.HTTP_REFERER }}?q={{ query }}&amp;selected_facets=category_exact:{{ category.0 }}"
         }
         {% if forloop.last %}
         {% else %}
@@ -41,7 +41,7 @@
         {
             "label": "{{ tag.0 }}",
             "count": {{ tag.1 }},
-            "link": "{{ request.HTTP_REFERER|skippage }}&amp;selected_facets=tags_exact:{{ tag.0}}"
+            "link": "{{ request.HTTP_REFERER  }}?q={{ query }}&amp;selected_facets=tags_exact:{{ tag.0}}"
         }
         {% if forloop.last %}
         {% else %}
