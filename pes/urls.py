@@ -102,6 +102,7 @@ urlpatterns += patterns('haystack.views',
         view_class=ImportJsonFacetedSearchView,
         template='search/resultat.json',
         form_class=ImportFacetedSearchForm,
+        # results_per_page=50,
         load_all=False
     ), name='haystack_search'),
 )

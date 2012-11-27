@@ -2,3 +2,4 @@ recursive-include pes/templates *
 recursive-include pes/static *
 recursive-include pes/bin *.sh
 recursive-include pes/locale *.mo *.po
+recursive-include config *.xml
