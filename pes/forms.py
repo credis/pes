@@ -42,8 +42,8 @@ class ImportFacetedSearchForm(PESFacetedSearchForm):
         # First, store the SearchQuerySet received from other processing.
         sqs = super(ImportFacetedSearchForm, self).search()
         m = map(lambda x: models.get_model('pes_local', x), self.models)
-
-        # return only result not in the
+        # print "models %s et self %s" % (m, self.models)
+        # return only result not from the client site
         authority_home = get_hostname(get_current_request())
         sqs = sqs.exclude(uri__contains=authority_home)
         return sqs.models(*m)

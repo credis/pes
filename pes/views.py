@@ -3,16 +3,17 @@
 from django.utils.translation import ugettext_lazy as _
 # from pes.org.models import *
 from django.shortcuts import render_to_response
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from haystack.query import SearchQuerySet
 from djrdf.import_rdf.models import SparqlQuery
 from pes_local.models import Exchange, Organization, Article
 from django.conf import settings
 import json
 from django.contrib.sites.models import Site
-import  urllib
+import urllib
 from haystack.views import FacetedSearchView
 from djrdf.tools import uri_to_json
+from django.core.paginator import Paginator, InvalidPage
 
 
 
@@ -166,6 +167,30 @@ class JsonFacetedSearchView(FacetedSearchView):
                                   context, \
                                   context_instance=self.context_class(self.request), \
                                   mimetype="application/json")
+
+
+    def build_page(self):
+        """
+        Paginates the results appropriately.
+
+        In case someone does not want to use Django's built-in pagination, it
+        should be a simple matter to override this method to do what they would
+        like.
+        """
+        try:
+            page_no = int(self.request.GET.get('page', 1))
+        except (TypeError, ValueError):
+            raise Http404("Not a valid number for page.")
+
+        if page_no < 0:
+            raise Http404("Pages should be 0 or greater.")
+
+        # Suppress pagination by creating a single page with all results
+        if page_no == 0:
+            paginator = Paginator(self.results, self.results.count())
+            return (paginator, paginator.page(1))
+        else:
+            return super(JsonFacetedSearchView, self).build_page()
 
 
 
