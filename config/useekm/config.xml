@@ -1,0 +1,84 @@
+ <beans xmlns="http://www.springframework.org/schema/beans" 
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+     xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                         http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+ 
+
+     <!-- The id "repository" is mandatory! -->
+     <bean id="repository" class="org.openrdf.repository.sail.SailRepository">
+         <constructor-arg>
+             <bean class="com.useekm.indexing.IndexingSail">
+                 <constructor-arg ref="sail" />
+                <constructor-arg ref="indexerSettings" />
+            </bean>
+        </constructor-arg>
+    </bean>
+
+    <!-- This example uses the NativeStore as the underlying sail, you could also use the MemoryStore 
+    -->
+	    <bean id="sail" class="org.openrdf.sail.nativerdf.NativeStore" />
+	
+
+
+ <bean id="indexerSettings" lazy-init="true" class="com.useekm.indexing.postgis.PostgisIndexerSettings">
+        <property name="defaultSearchConfig" value="french" />
+        <property name="dataSource" ref="pgDatasource" />
+        <property name="matchers">
+            <list>
+                <!-- Indexing for text 
+                -->
+                <bean class="com.useekm.indexing.postgis.PostgisIndexMatcher">
+                    <property name="predicate" value="http://www.w3.org/2000/01/rdf-schema#label" />
+                    <property name="searchConfig" value="french" />
+                </bean>
+
+                <!-- This index matcher could be removed. Values
+                are duplicated with de rdfs:label values -->
+                <bean class="com.useekm.indexing.postgis.PostgisIndexMatcher">
+                    <property name="predicate" value="http://purl.org/dc/terms/title" />
+                    <property name="searchConfig" value="french" />
+                </bean>
+
+                <bean class="com.useekm.indexing.postgis.PostgisIndexMatcher">
+                    <property name="predicate" value="http://purl.org/dc/terms/abstract" />
+                    <property name="searchConfig" value="french" />
+                </bean>
+
+               <bean class="com.useekm.indexing.postgis.PostgisIndexMatcher">
+                    <property name="predicate" value="http://purl.org/dc/terms/description" />
+                    <property name="searchConfig" value="french" />
+                </bean>
+
+                <!-- Indexing for GEO properties-->
+
+                <bean class="com.useekm.indexing.postgis.PostgisIndexMatcher">
+            	    <property name="predicate" value="http://www.opengis.net/rdf#asWKT" />
+                </bean>
+            </list>
+        </property>
+        <!-- Partions setting is requested (same thing for every matcher???) 
+  	     My first test seems anwer that a single partition is enough.... 
+ 	-->
+        <property name="partitions">
+            <list>
+                <bean class="com.useekm.indexing.postgis.PartitionDef">
+                    <property name="name" value="label" />
+                    <property name="predicates">
+                        <list>
+                            <value>http://www.w3.org/2000/01/rdf-schema#label</value>
+                        </list>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+
+    <bean id="pgDatasource" lazy-init="true" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="org.postgresql.Driver"/>
+        <property name="url" value="jdbc:postgresql://localhost:5432/pes_index"/>   <!-- CUSTOMIZE! -->
+        <property name="username" value="admin"/>                              <!-- CUSTOMIZE! -->
+        <property name="password" value="un joli passwd"/>                           <!-- CUSTOMIZE! -->
+    </bean>
+</beans>
+
