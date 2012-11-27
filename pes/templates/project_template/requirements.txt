@@ -14,6 +14,9 @@ Geohash
 geopy
 simplejson
 
+# django-scanredirect
+git+git://github.com/quinode/django-scanredirect.git
+
 
 # redis
 git+git://github.com/ui/django-rq.git
