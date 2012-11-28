@@ -2,12 +2,18 @@ from django.conf.urls import patterns, include, url
 from pes.feeds import UpdateFeed, UpdateFeedObject
 from django.views.generic import ListView
 from pes_local.models import Organization, Tag, Exchange, Article, Product, Event, Person
+from django.views.generic.base import TemplateView, RedirectView
 
 from django.contrib import admin
 admin.autodiscover()
 
 
 handler500 = 'coop.views.SentryHandler500'
+
+class TextPlainView(TemplateView):
+    def render_to_response(self, context, **kwargs):
+        return super(TextPlainView, self).render_to_response(
+              context, content_type='text/plain', **kwargs)
 
 
 from haystack.views import  search_view_factory
@@ -27,8 +33,9 @@ urlpatterns = patterns('',
         load_all=False
     ), name='haystack_search'),
 
-
-
+    # Basic stuff
+    url(r'^robots\.txt$', TextPlainView.as_view(template_name='robots.txt')),
+    url(r'^favicon\.ico$', RedirectView.as_view(url='/static/img/favicon.ico')),
 
     # SubHub ans Atom Feeds
     url(r'^subscriber/', include('django_push.subscriber.urls')),

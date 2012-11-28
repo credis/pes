@@ -20,7 +20,7 @@ class PESFacetedSearchForm(FacetedSearchForm):
         sqs = super(PESFacetedSearchForm, self).search()
         sqs = sqs.facet('zone').facet('category').facet('tags')  # .facet('modified')
         (point, city) = get_geoIP(get_current_request())
-        self.fields['dist'].label = _(u'Distance max de %s' % city)
+        self.fields['dist'].label = _(u'Distance max de %s <br>(%s)' % (city, get_current_request().META['REMOTE_ADDR']))
 
         if self.is_bound:
             if self.cleaned_data['dist']:

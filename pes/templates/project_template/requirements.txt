@@ -13,6 +13,7 @@ git+git://github.com/quinode/subhub.git
 Geohash
 geopy
 simplejson
+django-scanredirect
 
 # django-scanredirect
 git+git://github.com/quinode/django-scanredirect.git
