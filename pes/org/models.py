@@ -8,6 +8,9 @@ from django.conf import settings
 from djrdf.models import myRdfSubject, djRdf
 from pes.utils import addr_to_point, loc_to_point
 from rdflib import URIRef
+import logging
+
+log = logging.getLogger('pes')
 
 
 # Warning the order of the classes is MANDATORY
@@ -43,8 +46,11 @@ class Organization(djRdf, myRdfSubject):
 
     @property
     def web(self):
-        if self.homepage:
-            return unicode(self.homepage.resUri)
+        try:
+            if self.homepage:
+                return unicode(self.homepage.resUri)
+        except Exception, e:
+            log.debug("Error accessing homepage field of %s : %s" % (self.uri, e))
 
     @property
     def roles(self):
