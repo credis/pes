@@ -25,8 +25,8 @@
     {% endif %}
 
 
-    {% if object.contats %}, "contacts" : [
-    	{% for  contact in object.contats %}
+    {% if object.contacts %}, "contacts" : [
+    	{% for  contact in object.contacts %}
 	       {
 	       {% include "search/indexes/pes_local/contact_json_result.txt" with object=contact %}
 	       {% include "search/indexes/pes_local/contact_json_export.txt" with object=contact %}
