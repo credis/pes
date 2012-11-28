@@ -127,7 +127,7 @@ $(function(){
 	               {% endif %}
 	              
 	               {% if i.summary %}
-	                   <p> {{ i.summary|safe }} </p>
+	                   <p> {{ i.summary|safe|truncatewords:"50" }} </p>
 	               {% endif %}
 	               </li>
 

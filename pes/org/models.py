@@ -140,6 +140,7 @@ class Person(djRdf, myRdfSubject):
     # rdf_type = settings.NS.person.Person  # on peut aussi bien ecrire rdf_type = FOAF.Person
     name = rdfSingle(settings.NS.foaf.familyName)
     full_name = rdfSingle(settings.NS.foaf.name)
+    label = rdfSingle(settings.NS.rdfs.label)
     tags = rdfMultiple(settings.NS.dct.subject, range_type=settings.NS.skosxl.Label)
     location = rdfMultiple(settings.NS.locn.location, range_type=settings.NS.dct.Location)
     notes = rdfSingle(settings.NS.skos.note)
@@ -152,9 +153,9 @@ class Person(djRdf, myRdfSubject):
     def get_absolute_url(self):
         return ('pes.org.views.detailPerson', [str(self.id)])
 
-    @property
-    def label(self):
-        return self.full_name
+    # @property
+    # def label(self):
+    #     return self.full_name
 
     @property
     def geo_point(self):
