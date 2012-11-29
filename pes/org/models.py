@@ -55,7 +55,7 @@ class Organization(djRdf, myRdfSubject):
     @property
     def log_url(self):
         if self.logo:
-            return unicode(self.logo)
+            return unicode(self.logo.resUri)
         else: 
             return u""
 
