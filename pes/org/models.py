@@ -53,7 +53,7 @@ class Organization(djRdf, myRdfSubject):
             log.debug("Error accessing homepage field of %s : %s" % (self.uri, e))
 
     @property
-    def log_url(self):
+    def logo_url(self):
         if self.logo:
             return unicode(self.logo.resUri)
         else: 
