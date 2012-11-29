@@ -53,6 +53,14 @@ class Organization(djRdf, myRdfSubject):
             log.debug("Error accessing homepage field of %s : %s" % (self.uri, e))
 
     @property
+    def log_url(self):
+        if self.logo:
+            return unicode(self.logo)
+        else: 
+            return u""
+
+
+    @property
     def roles(self):
         return map(Engagement, list(self.db.subjects(settings.NS.org.organization, self)))
 

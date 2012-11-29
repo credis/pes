@@ -125,10 +125,12 @@ $(function(){
 	               {% if i.dct_created %}
 	                   le {{ i.dct_created}}
 	               {% endif %}
-	              
+	               {% comment %}
 	               {% if i.summary %}
 	                   <p> {{ i.summary|safe|truncatewords:"50" }} </p>
 	               {% endif %}
+	               {% endcomment %}
+
 	               </li>
 
               {%endfor%}
