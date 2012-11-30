@@ -17,7 +17,7 @@ class Event(djRdf, myRdfSubject):
     person = rdfSingle(settings.NS.vcal.contact, range_type=settings.NS.person.Person)
     organization = rdfSingle(settings.NS.vcal.organizer, range_type=settings.NS.org.Organization)
     location = rdfMultiple(settings.NS.locn.location, range_type=settings.NS.dct.Location)
-
+    startdate = rdfSingle(settings.NS.vcal.dtstart)
     tags = rdfMultiple(settings.NS.dct.subject, range_type=settings.NS.skosxl.Label)
 
     class Meta:

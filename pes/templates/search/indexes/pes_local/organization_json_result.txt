@@ -3,4 +3,5 @@
 	"import_rdf_url": "{{ object.uri_import}}",
 	"authority_source": "{{ object.authority_source }}",
     "label": "{{ object.title|escape }}",
+    "logo": "{{ object.logo_url }}"
     "summary" : "{{ object.abstract|truncatewords:"20"|safe|escape }}"
