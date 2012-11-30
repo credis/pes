@@ -221,11 +221,13 @@ class HomeSearchView(FacetedSearchView):
 
         sqom = SparqlQuery.objects.get(label='ordered by modified')
         sq = sqom.query % str(Exchange.rdf_type)
+
         res = Exchange.db.query(sq, initNs=settings.NS)
         first10 = _first(res, 10, Exchange)
         context['last_annonces'] = first10       
 
-        org_res = Organization.db.query(sq, initNs=settings.NS)
+        org_sq = sqom.query % str(Organization.rdf_type)
+        org_res = Organization.db.query(org_sq, initNs=settings.NS)
         org_10 = _first(org_res, 10, Organization)
         context['last_org'] = org_10
 
