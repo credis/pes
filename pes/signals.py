@@ -62,10 +62,11 @@ def listener(notification, **kwargs):
     except Exception, e:
         log.warning(u'%s' % e)
 
-    log.debug("ok for Es %s and hub %s" % (eS, hub))
+    # log.debug("ok for Es %s and hub %s" % (eS, hub))
     validate = URLValidator(verify_exists=True)
 
     # log.debug("notification %s " % notification)
+
     for entry in notification.entries:
         # do something with entry here
         # entry.link donne le topic
@@ -73,12 +74,12 @@ def listener(notification, **kwargs):
             uri = str(entry.summary)
             up = urlparse.urlsplit(uri)
             url = up.scheme + '://' + up.netloc
-            log.debug("Found an EntrySite %s and uri %s" % (eS, uri))
+            # log.debug("Found an EntrySite %s and uri %s" % (eS, uri))
             try:
                 validate(url)
                 g = Graph()
                 g.parse(uri)
-                log.debug('uri parse')
+                # log.debug('uri parse')
                 # g = follow(g, eS)
                 # log.debug('follow ok')
                 # log.debug("New graph parsed %s " % g.serialyse(format='n3'))

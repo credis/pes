@@ -35,8 +35,7 @@
 
 {% block content %}
 
-     <div id="content" class="grid_4 grid">
-
+<div id="content" class="grid_4 grid">
 
     <h2>Recherche</h2>
 
@@ -52,94 +51,109 @@
         </table>
 
 
-<div id="resultats"></div>
+	<div id="resultats"></div>
+	<script type="text/javascript">
 
-<script type="text/javascript">
+	function get_res(query, tmpl){
+			$.getJSON(
+				"/searchJson/?" + query,
+				function(data){
+					results_html = Mustache.render(tmpl,data);
+					$("#resultats").html(results_html)
+				}
+			)
 
-function get_res(query, tmpl){
-		$.getJSON(
-			"/searchJson/?" + query,
-			function(data){
-				results_html = Mustache.render(tmpl,data);
-				$("#resultats").html(results_html)
-			}
-		)
+	};
 
-};
+	$(function(){
+	    Mustache.tags = ['[[', ']]'];
+	    restmpl = $('#res-templ').html()
 
-$(function(){
-    Mustache.tags = ['[[', ']]'];
-    restmpl = $('#res-templ').html()
-
-    var initParameters = window.location.search.substring(1);
-    if (initParameters.length > 0) {
-    	console.log(initParameters)
-    	get_res(initParameters, restmpl)
-    }
+	    var initParameters = window.location.search.substring(1);
+	    if (initParameters.length > 0) {
+	    	console.log(initParameters)
+	    	get_res(initParameters, restmpl)
+	    }
 
 
-	$('#main_search').submit(function() {
-	  get_res($(this).serialize(), restmpl);
-	  return false;
+		$('#main_search').submit(function() {
+		  get_res($(this).serialize(), restmpl);
+		  return false;
+		});
+
 	});
-
-});
-</script>
-
+	</script>
+</div>
 
 
-          <div id="dernieres_annonces">
-              <h4>Les 10 dernières annonces</h4>
-               <ul>
-              {% for i in last_annonces %}
-	              {% if i.publisher.title %}
-	               <li><a href="{{i.get_absolute_url}}">{{ i.title }}</a> publiée par 
-	              	     <a href="{{i.publisher.get_absolute_url}}">{{ i.publisher.title }}</a></li>
-	               {% else %}
-	               <li><a href="{{i.get_absolute_url}}">{{ i.title }}</a> </li>
-	               {% endif %}
-
-              {%endfor%}
-          </ul>
-
-          <p><a href="/exchange/">Toutes les annonces</a>
-
-          </div>
-    </div>
+<div id="content" class="grid_4 grid">
+<div id="dernieres_organisations">
+  {% if last_annonces %}
+        <h4>Les structure dernièrement modifiées </h4>
+        <ul>
+            {% for i in last_org %}
+                <li><a href="{{i.get_absolute_url}}">{{ i.title }}</a> </li>
+            {%endfor%}
+        </ul>
+        <p><a href="/org/">Toutes les structures</a>
+    {% endif %}
+</div>
+</div>
 
 
-     <div id="content" class="grid_4 grid">
+<div id="content" class="grid_4 grid">
+<div id="dernieres_annonces">
+	{% if last_annonces %}
+        <h4>Les 10 dernières annonces</h4>
+        <ul>
+            {% for i in last_annonces %}
+                {% if i.publisher.title %}
+                    <li><a href="{{i.get_absolute_url}}">{{ i.title }}</a> publiée par 
+            	    <a href="{{i.publisher.get_absolute_url}}">{{ i.publisher.title }}</a></li>
+                {% else %}
+                <li><a href="{{i.get_absolute_url}}">{{ i.title }}</a> </li>
+                {% endif %}
+            {%endfor%}
+        </ul>
+        <p><a href="/exchange/">Toutes les annonces</a>
+    {% endif %}
+</div>
+</div>
 
-          <div id="dernieres_news">
-              <h4>Les dernières parutions</h4>
-               <ul>
-              {% for i in last_articles %}
-                  <li>
-                  	
-	              {% if i.organization.title %}
-	                   <a href="{{i.get_absolute_url}}">{{ i.title }}</a> publiée par 
-	              	     <a href="{{i.organization.get_absolute_url}}">{{ i.organization.title }}</a>
-	               {% else %}
-	                 <a href="{{i.get_absolute_url}}">{{ i.title }}</a> 
-	               {% endif %}
-	               {% if i.dct_created %}
-	                   le {{ i.dct_created}}
-	               {% endif %}
-	               {% comment %}
-	               {% if i.summary %}
-	                   <p> {{ i.summary|safe|truncatewords:"50" }} </p>
-	               {% endif %}
-	               {% endcomment %}
 
-	               </li>
+<div id="content" class="grid_4 grid">
+<div id="dernieres_news">
+    {% if last_articles %}
+        <h4>Les dernières parutions</h4>
+        <ul>
+            {% for i in last_articles %}
+              <li>
+              	
+              {% if i.organization.title %}
+                  <a href="{{i.get_absolute_url}}">{{ i.title }}</a> publiée par 
+              	   <a href="{{i.organization.get_absolute_url}}">{{ i.organization.title }}</a>
+               {% else %}
+                   <a href="{{i.get_absolute_url}}">{{ i.title }}</a> 
+               {% endif %}
+               {% if i.dct_created %}
+                   le {{ i.dct_created}}
+               {% endif %}
+               {% comment %}
+               {% if i.summary %}
+                   <p> {{ i.summary|safe|truncatewords:"50" }} </p>
+               {% endif %}
+               {% endcomment %}
 
-              {%endfor%}
-          </ul>
+              </li>
 
-          <p><a href="/article/">Toutes les parutions</a>
+           {%endfor%}
+        </ul>
 
-          </div>
-    </div>
+        <p><a href="/article/">Toutes les parutions</a>
+    {% endif %}
+
+</div>
+</div>
 
 
 
