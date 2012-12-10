@@ -30,9 +30,9 @@ if DEBUG or ('runserver' in sys.argv):
     DEBUG_TOOLBAR_CONFIG = {'INTERCEPT_REDIRECTS': False}
 
 else:
-    INSTALLED_APPS = DEBUG_SETTINGS['apps'] + ['raven.cofirentrib.django']
+    INSTALLED_APPS = DEBUG_SETTINGS['apps'] + ['raven.contrib.django']
     MIDDLEWARE_CLASSES = DEBUG_SETTINGS['middleware'] + [
-        'raven.firentrib.django.middleware.Sentry404CatchMiddleware',
+        'raven.contrib.django.middleware.Sentry404CatchMiddleware',
         ]
     DEBUG_SETTINGS['logging']['root'] = {
         'level': 'WARNING',
