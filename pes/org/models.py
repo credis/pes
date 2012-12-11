@@ -125,8 +125,11 @@ class Contact(djRdf, myRdfSubject):
 
     def contact_type(self):
         types = list(self.db.triples((self, settings.NS.rdf.type, None)))
-        types.remove((URIRef(self.uri), settings.NS.rdf.type, self.rdf_type))
-        return self.contact_mapping[types[0][2]]
+        if types == []:
+            return None
+        else:
+            types.remove((URIRef(self.uri), settings.NS.rdf.type, self.rdf_type))
+            return self.contact_mapping[types[0][2]]
 
 
 

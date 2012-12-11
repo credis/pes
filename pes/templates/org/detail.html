@@ -22,8 +22,10 @@
     <strong> Contacts </strong>
     <div>
          {% for contact in org.contacts %}
-             {% trans contact.contact_type %}: {{ contact.content}} {{ contact.detail}}
-             <br />
+            {% if contact.contact_type %}
+            {% trans contact.contact_type %}: {{ contact.content}} {{ contact.detail}}
+            {% endif %}
+            <br />
          {% endfor %}
     </div>
     {% endif %}

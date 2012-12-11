@@ -71,7 +71,8 @@ FEED_MODELS = [
     'contact', 
     'exchange', 
     'article', 
-    'location'
+    'location',
+    'person'
     ]
 # Later, it should be
 # FEED_MODELS=['organization', 'person', 'role', 'product', 'engagement', 'location', 
