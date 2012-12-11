@@ -1,8 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-
-
+<!DOCTYPE html>
+<html lang="fr">
 
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
@@ -10,10 +7,9 @@
     <link rel="shortcut icon" type="image/png" href="{{ STATIC_URL }}img/favicon.png"/>  
     <link rel="stylesheet" href="{{ STATIC_URL }}css/style.css" type="text/css" />
 
-    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4/leaflet.css" />
-	 <!--[if lte IE 8]>
-	     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4/leaflet.ie.css" />
-	 <![endif]-->
+    <link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/bootstrap.min.css" type="text/css" />
+    <link href='http://fonts.googleapis.com/css?family=Scada|Yanone+Kaffeesatz:400,700' rel='stylesheet' type='text/css'>
+
 
 
     {% block jquery_declaration %}
@@ -24,7 +20,7 @@
 
 
     {% block javascript %}
-       <script src="http://cdn.leafletjs.com/leaflet-0.4/leaflet.js"></script>
+       <!-- <script src="http://cdn.leafletjs.com/leaflet-0.4/leaflet.js"></script> -->
     {% endblock javascript %}
 
 
@@ -32,9 +28,22 @@
 </head>
 
 <body>
-	     <h2> {{ intro }}  </h2> 
+        <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="{{ STATIC_URL }}bootstrap/js/bootstrap.min.js"></script>
 
-        {% block content %}{% endblock %}
+<div class="container">
+    <div class="row">
+
+
+            <h2> Plate-formes d'Echanges Solidaires </h2> 
+            <hr>
+            {% block content %}{% endblock %}
+
+
+
+
+</div>
+</div>
 
 </body>
 </html>
