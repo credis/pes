@@ -2,8 +2,6 @@
 import datetime
 from haystack import indexes
 from pes.models import Word
-from pes_local.models import Organization, Person, Exchange
-from pes_local.models import Event, Article, Product, Location, Contact
 from django.contrib.gis.geos import Point
 from djrdf.import_rdf.models import SparqlQuery
 from django.conf import settings
@@ -113,11 +111,6 @@ class OrganizationIndex(PESIndex):
     exchange = indexes.MultiValueField()
     organization_label = indexes.EdgeNgramField(model_attr="label")
 
-
-    def get_model(self):
-        return Organization
-
-
     def prepare_category(self, obj):
         return [u"structure"]
 
@@ -148,9 +141,6 @@ class OrganizationIndex(PESIndex):
 
 class ExchangeIndex(PESIndex):
     method = indexes.MultiValueField()
-
-    def get_model(self):
-        return Exchange
 
     def prepare_location(self, obj):
         res = obj.geo_point
@@ -186,9 +176,6 @@ class ExchangeIndex(PESIndex):
 
 class EventIndex(PESIndex):
 
-    def get_model(self):
-        return Event
-
     def prepare_category(self, obj):
         return [u"event"]
 
@@ -207,9 +194,6 @@ class EventIndex(PESIndex):
 
 class ArticleIndex(PESIndex):
 
-    def get_model(self):
-        return Article
-
     def prepare_category(self, obj):
         return [u"article"]
 
@@ -219,9 +203,6 @@ class ArticleIndex(PESIndex):
 
 
 class ProductIndex(PESIndex):
-
-    def get_model(self):
-        return Product
 
     def prepare_category(self, obj):
         return [u"produit"]
@@ -266,9 +247,6 @@ class PersonIndex(PESIndex):
     # Define the additional field.
     # rendered = indexes.CharField(use_template=True, indexed=False)
 
-    def get_model(self):
-        return Person
-
     def prepare_location(self, obj):
         res = obj.geo_point
         if res == None:
@@ -301,9 +279,6 @@ class LocationIndex(PESIndex):
     def prepare_category(self, obj):
         return [u"location"]
 
-    def get_model(self):
-        return Location
-
 
 class ContactIndex(PESIndex):
     contact_label = indexes.EdgeNgramField(model_attr="content")
@@ -311,5 +286,3 @@ class ContactIndex(PESIndex):
     def prepare_category(self, obj):
         return [u"contact"]
 
-    def get_model(self):
-        return Contact
