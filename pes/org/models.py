@@ -104,6 +104,7 @@ class Contact(djRdf, myRdfSubject):
     details = rdfMultiple(settings.NS.rdfs.comment)
     content = rdfSingle(settings.NS.rdf.value)
 
+    # we should look for the rdf:label values....
     contact_mapping = {
         settings.NS.vcard.Cell: _(u'cell'),
         settings.NS.vcard.Fax: _(u'fax'),
