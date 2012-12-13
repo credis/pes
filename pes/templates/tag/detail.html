@@ -1,14 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h2>TAG: {{tag.label}}</h2>
-    <ul>
-
-    </ul>
-
+    <h2>TAG: {{tag.name}}</h2>
 
     {# <div> {{form.render|safe }} </div> #}
-
 
     {% if tag.org_tagged %}
         <div> Les organisations qui utilisent ce tag sont : 

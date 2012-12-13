@@ -14,54 +14,8 @@ import urllib
 from haystack.views import FacetedSearchView
 from djrdf.tools import uri_to_json
 from django.core.paginator import Paginator, InvalidPage
+from pes.utils import first_items, get_ordererd_list
 
-
-
-def _first(gen, size, cls):
-    res = []
-    if size == None:
-        try:
-            while True:
-                res.append(cls(gen.next()[0]))
-        except StopIteration:
-            pass
-    else:
-        try:
-            for i in range(size):
-                res.append(cls(gen.next()[0]))
-        except Exception:
-            pass
-    return res
-
-
-
-
-# Should use a template....
-# def index(request):
-#     context = {}
-#     context['intro'] = u"%s" % Site.objects.get_current().name
-#     sqom = SparqlQuery.objects.get(label='ordered by modified')
-#     sq = sqom.query % str(Exchange.rdf_type)
-#     res = Exchange.db.query(sq, initNs=settings.NS)
-#     # form = MyFacetedSearchForm()
-#     first10 = _first(res, 10, Exchange)
-#     context['last_annonces'] = first10
-#     sqoc = SparqlQuery.objects.get(label='ordered by created')
-#     context['last_articles'] = _first(Article.db.query(sqoc.query % str(Article.rdf_type), initNs=settings.NS), 10, Article)
-
-#     exchanges = []
-#     for e in first10:
-#         gj = e.to_geoJson()
-#         if gj:
-#             exchanges.append(gj)
-
-#     exchanges = {"type": "FeatureCollection", "features":  exchanges}
-#     context['geoJson'] = json.dumps(exchanges)
-
-#     # Un beau moyen de faire des variables globales....
-#     setattr(settings, 'PES_REMOTE_CLIENT', request.META.get('REMOTE_ADDR', None))
-
-#     return render_to_response('home.html', context, RequestContext(request))
 
 
 import logging
@@ -84,9 +38,9 @@ def geojson(request, model, num=None):
         sq = sq.query % str(cls.rdf_type)
         res = cls.db.query(sq,  initNs=settings.NS)
         if num:
-            first = _first(res, int(num), cls)
+            first = first_items(res, int(num), cls)
         else:
-            first = _first(res, None, cls)
+            first = first_items(res, None, cls)
 
         result = []
         for e in first:
@@ -219,19 +173,8 @@ class HomeSearchView(FacetedSearchView):
         context = super(HomeSearchView, self).extra_context()
         context['intro'] = u"%s" % Site.objects.get_current().name
 
-        sqom = SparqlQuery.objects.get(label='ordered by modified')
-        sq = sqom.query % str(Exchange.rdf_type)
-
-        res = Exchange.db.query(sq, initNs=settings.NS)
-        first10 = _first(res, 10, Exchange)
-        context['last_annonces'] = first10       
-
-        org_sq = sqom.query % str(Organization.rdf_type)
-        org_res = Organization.db.query(org_sq, initNs=settings.NS)
-        org_10 = _first(org_res, 10, Organization)
-        context['last_org'] = org_10
-
-        sqoc = SparqlQuery.objects.get(label='ordered by created')
-        context['last_articles'] = _first(Article.db.query(sqoc.query % str(Article.rdf_type), initNs=settings.NS), 10, Article)
+        context['last_annonces'] = get_ordererd_list(Exchange, 10)     
+        context['last_org'] = get_ordererd_list(Organization, 10) 
+        context['last_articles'] = get_ordererd_list(Article, 10) 
         return context
 

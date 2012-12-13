@@ -8,7 +8,34 @@ from django.conf import settings
 from django.contrib.gis.utils import GeoIP
 from django.contrib.gis.geos import Point
 import socket
+from djrdf.import_rdf.models import SparqlQuery
 
+
+def first_items(gen, size, cls):
+    res = []
+    if size == None:
+        try:
+            while True:
+                res.append(cls(gen.next()[0]))
+        except StopIteration:
+            pass
+    else:
+        try:
+            for i in range(size):
+                res.append(cls(gen.next()[0]))
+        except Exception:
+            pass
+    return res
+
+
+def get_ordererd_list(cls, number=None):
+    sqom = SparqlQuery.objects.get(label='ordered by modified')
+    sq = sqom.query % str(cls.rdf_type)
+    res = cls.db.query(sq, initNs=settings.NS)
+    if not number:
+        return res
+    else:
+        return first_items(res, number, cls)
 
 
 

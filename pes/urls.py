@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, include, url
 from pes.feeds import UpdateFeed, UpdateFeedObject
 from django.views.generic import ListView
-# from pes_local.models import  Tag, Exchange, Article, Product, Event, Person
+from pes_local.models import  Organization, Tag, Exchange, Article, Product, Event, Person
 from django.views.generic.base import TemplateView, RedirectView
 
 from django.contrib import admin
@@ -57,32 +57,31 @@ urlpatterns = patterns('',
 
     url(r'^suggestions/$', 'pes.views.suggestions'),
 
-    url(r'^org/$', ListView.as_view(model='pes_local.models.Organization', template_name="org/list.html", \
+    url(r'^org/$', ListView.as_view(model=Organization, template_name="org/list.html", \
         paginate_by=30)),
     url(r'^org/(\d+)/$', 'pes.org.views.detailOrg'),
 
-    url(r'^person/$', ListView.as_view(model='pes_local.models.Person', template_name="person/list.html", \
+    url(r'^person/$', ListView.as_view(model=Person, template_name="person/list.html", \
         paginate_by=30)),
     url(r'^person/(\d+)/$', 'pes.org.views.detailPerson'),
 
-    url(r'^exchange/$', ListView.as_view(model='pes_local.models.Exchange', template_name="exchange/list.html",\
+    url(r'^exchange/$', ListView.as_view(model=Exchange, template_name="exchange/list.html",\
         paginate_by=30)),
     url(r'^exchange/(\d+)/$', 'pes.exchange.views.detailExchange'),
 
-    url(r'^tag/$', ListView.as_view(model='pes_local.models.Tag', template_name="tag/list.html",\
+    url(r'^tag/$', ListView.as_view(model=Tag, template_name="tag/list.html",\
         paginate_by=30)),
     url(r'^tag/(\d+)/$', 'pes.tag.views.detailTag'),
 
-    url(r'^article/$', ListView.as_view(model='pes_local.models.Article', template_name="article/list.html",\
+    url(r'^article/$', ListView.as_view(model=Article, template_name="article/list.html",\
           paginate_by=30)),
     url(r'^article/(\d+)/$', 'pes.article.views.detailArticle'),
 
-    url(r'^product/$', ListView.as_view(model='pes_local.models.Product', template_name="product/list.html",\
+    url(r'^product/$', ListView.as_view(model=Product, template_name="product/list.html",\
           paginate_by=30)),
     url(r'^product/(\d+)/$', 'pes.exchange.views.detailProduct'),
-    
 
-    url(r'^event/$', ListView.as_view(model='pes_local.models.Event', template_name="event/list.html",\
+    url(r'^event/$', ListView.as_view(model=Event, template_name="event/list.html",\
           paginate_by=30)),
     url(r'^event/(\d+)/$', 'pes.agenda.views.detailEvent'),
 

@@ -20,8 +20,9 @@ class Event(djRdf, myRdfSubject):
     startdate = rdfSingle(settings.NS.vcal.dtstart)
     tags = rdfMultiple(settings.NS.dct.subject, range_type=settings.NS.skosxl.Label)
 
-    class Meta:
+    uri_data_name = 'event'
 
+    class Meta:
         abstract = True
         verbose_name = _(u'Event')
         verbose_name_plural = _(u'Events')

@@ -22,6 +22,7 @@ class Exchange(djRdf, myRdfSubject):
     method = rdfSingle(settings.NS.ess.hasMethod)
     location = rdfMultiple(settings.NS.locn.location, range_type=settings.NS.dct.Location)
     creator = rdfSingle(settings.NS.dct.creator, range_type=settings.NS.person.Person)
+    uri_data_name = 'exchange'
 
     class Meta:
         abstract = True
@@ -86,8 +87,9 @@ class Product(djRdf, myRdfSubject):    # rdf attributes
     organization = rdfSingle(settings.NS.schema.manufacturer)
     tags = rdfMultiple(settings.NS.dct.subject, range_type=settings.NS.skosxl.Label)
 
-    class Meta:
+    uri_data_name = 'product'
 
+    class Meta:
         abstract = True
         verbose_name = _(u'Product')
         verbose_name_plural = _(u'Products')

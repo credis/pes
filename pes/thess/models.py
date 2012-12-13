@@ -34,6 +34,8 @@ class Concept(djRdf, myRdfSubject):
     definition = rdfMultiple(settings.NS.skos.definition)
     example = rdfMultiple(settings.NS.skos.example)
 
+    uri_data_name = 'concept'
+
     @property
     def prefLabel(self):
         pref = self.prefLabels
@@ -66,6 +68,8 @@ class Scheme(myRdfSubject):
     # An attribute label is already added with the help of myRdfSubject class
     hasTopConcept = rdfMultiple(settings.NS.skos.hasTopConcept, range_type=settings.NS.skos.Concept)
     name = rdfSingle(settings.NS.rdfs.label)
+
+    uri_data_name = 'navtree'
 
 
     # I guess, we have no information about the context of the scheme subject....

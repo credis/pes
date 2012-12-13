@@ -18,9 +18,9 @@ class Article(djRdf, myRdfSubject):
     organization = rdfSingle(settings.NS.dct.publisher, range_type=settings.NS.org.Organization)
 
     tags = rdfMultiple(settings.NS.dct.subject, range_type=settings.NS.skosxl.Label)
+    uri_data_name = 'article'
 
     class Meta:
-
         abstract = True
         verbose_name = _(u'Article')
         verbose_name_plural = _(u'Articles')

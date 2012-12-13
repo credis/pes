@@ -14,6 +14,7 @@ class Tag(djRdf, myRdfSubject):
     # rdf_type = settings.NS.skosxl.Label   #  move to the pes_local class
     name = rdfSingle(settings.NS.skosxl.literalForm)
 
+    uri_data_name = 'tag'
 
     @property
     def label(self):

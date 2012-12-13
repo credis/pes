@@ -109,7 +109,7 @@ class PESIndex(Indexes):
 
 class OrganizationIndex(PESIndex):
     exchange = indexes.MultiValueField()
-    organization_label = indexes.EdgeNgramField(model_attr="label")
+    organization_label = indexes.EdgeNgramField(model_attr="index_label")
 
     def prepare_category(self, obj):
         return [u"structure"]
@@ -242,7 +242,7 @@ class WordIndex(Indexes):
 
 class PersonIndex(PESIndex):
     # text = indexes.CharField(document=True, use_template=True)
-    person_label = indexes.EdgeNgramField(model_attr="full_name")
+    person_label = indexes.EdgeNgramField(model_attr="index_label")
 
     # Define the additional field.
     # rendered = indexes.CharField(use_template=True, indexed=False)
@@ -281,7 +281,7 @@ class LocationIndex(PESIndex):
 
 
 class ContactIndex(PESIndex):
-    contact_label = indexes.EdgeNgramField(model_attr="content")
+    contact_label = indexes.EdgeNgramField(model_attr="index_label")
 
     def prepare_category(self, obj):
         return [u"contact"]

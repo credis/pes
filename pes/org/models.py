@@ -39,6 +39,9 @@ class Organization(djRdf, myRdfSubject):
     # django models attributes
     marks = IntegerField(blank=True, null=True)
 
+    uri_data_name = 'organization'
+
+
     class Meta:
         abstract = True
         verbose_name = _(u'Organization')
@@ -59,6 +62,12 @@ class Organization(djRdf, myRdfSubject):
         else: 
             return u""
 
+    @property
+    def index_label(self):
+        if not self.label:
+            return ''
+        else:
+            return self.label
 
     @property
     def roles(self):
@@ -104,6 +113,8 @@ class Contact(djRdf, myRdfSubject):
     details = rdfMultiple(settings.NS.rdfs.comment)
     content = rdfSingle(settings.NS.rdf.value)
 
+    uri_data_name = 'contact'
+
     # we should look for the rdf:label values....
     contact_mapping = {
         settings.NS.vcard.Cell: _(u'cell'),
@@ -123,6 +134,13 @@ class Contact(djRdf, myRdfSubject):
     @property
     def label(self):
         return self.content
+
+    @property
+    def index_label(self):
+        if not self.content:
+            return ''
+        else:
+            return self.content
 
     def contact_type(self):
         types = list(self.db.triples((self, settings.NS.rdf.type, None)))
@@ -157,7 +175,8 @@ class Person(djRdf, myRdfSubject):
     location = rdfMultiple(settings.NS.locn.location, range_type=settings.NS.dct.Location)
     notes = rdfSingle(settings.NS.skos.note)
     contacts = rdfMultiple(settings.NS.ess.hasContactMedium, range_type=settings.NS.ess.ContactMedium)
-
+    uri_data_name = 'person'
+    
     class Meta:
         abstract = True
 
@@ -168,6 +187,13 @@ class Person(djRdf, myRdfSubject):
     # @property
     # def label(self):
     #     return self.full_name
+
+    @property
+    def index_label(self):
+        if not self.full_name:
+            return ''
+        else:
+            return self.full_name
 
     @property
     def geo_point(self):
