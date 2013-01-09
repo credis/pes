@@ -11,7 +11,7 @@ from pes.thess.models import Concept as BaseConcept
 from pes.article.models import Article as BaseArticle
 from pes.exchange.models import Product as BaseProduct
 from pes.agenda.models import Event as BaseEvent
-
+from pes.thess.models import Scheme as BaseScheme
 from pes.geo.models import Address  # Mandatory to build the RDFAlchemy mapper
 from pes.geo.models import Location as BaseLocation
 
@@ -95,6 +95,10 @@ class Tag(BaseTag):
 
 class Concept(BaseConcept):
     rdf_type = settings.NS.skos.Concept
+
+
+class Scheme(BaseScheme):
+    rdf_type = settings.NS.skos.ConceptScheme
 
 
 # This MANDATORY to link attributes trought the rdfSubject instances

@@ -13,7 +13,7 @@ class TagForm(djRdfForm):
        # None rdfSubject fields have to be added
         fs.append(Field('count', type=types.Integer))
         # Same thing for field inheriting from a mother class
-        fs.append(Field('name'))
+        fs.append(Field('name').label(u'nom'))  # _() ne marche pas???
         # fs.configure(include=[fs.name, fs.count.validate(posint)])
         fs.configure(include=[fs.name])
         return fs

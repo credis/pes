@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, include, url
 from pes.feeds import UpdateFeed, UpdateFeedObject
 from django.views.generic import ListView
-from pes_local.models import  Organization, Tag, Exchange, Article, Product, Event, Person
+from pes_local.models import  Scheme, Concept, Organization, Tag, Exchange, Article, Product, Event, Person
 from django.views.generic.base import TemplateView, RedirectView
 
 from django.contrib import admin
@@ -9,6 +9,7 @@ admin.autodiscover()
 
 
 handler500 = 'coop.views.SentryHandler500'
+
 
 class TextPlainView(TemplateView):
     def render_to_response(self, context, **kwargs):
@@ -72,6 +73,15 @@ urlpatterns = patterns('',
     url(r'^tag/$', ListView.as_view(model=Tag, template_name="tag/list.html",\
         paginate_by=30)),
     url(r'^tag/(\d+)/$', 'pes.tag.views.detailTag'),
+
+    url(r'^concept/$', ListView.as_view(model=Concept, template_name="concept/list.html",\
+        paginate_by=30)),
+    url(r'^concept/(\d+)/$', 'pes.thess.views.detailConcept'),
+
+    url(r'^scheme/$', ListView.as_view(model=Scheme, template_name="scheme/list.html",\
+        paginate_by=30)),
+    url(r'^scheme/(\d+)/$', 'pes.thess.views.detailScheme'),
+
 
     url(r'^article/$', ListView.as_view(model=Article, template_name="article/list.html",\
           paginate_by=30)),

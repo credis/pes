@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-25 12:46+0100\n"
+"POT-Creation-Date: 2012-12-14 15:23+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,24 +32,24 @@ msgstr ""
 msgid " "
 msgstr ""
 
-#: forms.py:15
+#: forms.py:16
 msgid "Distance max"
 msgstr ""
 
-#: forms.py:22
+#: forms.py:25
 #, python-format
 msgid "Distance max de %s"
 msgstr ""
 
-#: models.py:9
+#: models.py:9 tag/forms.py:16
 msgid "name"
 msgstr "nom"
 
-#: agenda/models.py:26
+#: agenda/models.py:27
 msgid "Event"
 msgstr "Evénement"
 
-#: agenda/models.py:27
+#: agenda/models.py:28
 msgid "Events"
 msgstr "Evénements"
 
@@ -61,11 +61,11 @@ msgstr "Article"
 msgid "Articles"
 msgstr "Articles"
 
-#: exchange/models.py:92
+#: exchange/models.py:94
 msgid "Product"
 msgstr "Produit"
 
-#: exchange/models.py:93
+#: exchange/models.py:95
 msgid "Products"
 msgstr "Produits"
 
@@ -90,55 +90,59 @@ msgid ""
 "localhost:8000/"
 msgstr ""
 
-#: org/models.py:41
+#: org/models.py:47
 msgid "Organization"
 msgstr "Organisation"
 
-#: org/models.py:42
+#: org/models.py:48
 msgid "Organizations"
 msgstr "Organisations"
 
-#: org/models.py:94
+#: org/models.py:120
 msgid "cell"
 msgstr "portable"
 
-#: org/models.py:95
+#: org/models.py:121
 msgid "fax"
 msgstr ""
 
-#: org/models.py:96
+#: org/models.py:122
 msgid "skype"
 msgstr ""
 
-#: org/models.py:97
+#: org/models.py:123
 msgid "twitter"
 msgstr ""
 
-#: org/models.py:98
+#: org/models.py:124
 msgid "rss"
 msgstr ""
 
-#: org/models.py:99
+#: org/models.py:125
 msgid "ics"
 msgstr ""
 
-#: org/models.py:100
+#: org/models.py:126
 msgid "email"
 msgstr ""
 
-#: org/models.py:101
+#: org/models.py:127
 msgid "web"
 msgstr ""
 
-#: org/models.py:102
+#: org/models.py:128
 msgid "phone"
 msgstr "téléphone"
 
-#: tag/models.py:25
+#: tag/forms.py:14
+msgid "count"
+msgstr "nombre d'apparitions"
+
+#: tag/models.py:26
 msgid "Tag"
 msgstr ""
 
-#: tag/models.py:26
+#: tag/models.py:27
 msgid "Tags"
 msgstr ""
 
@@ -158,29 +162,29 @@ msgstr ""
 msgid "An error has occured"
 msgstr ""
 
-#: thess/models.py:57
+#: thess/models.py:59
 msgid "concept"
 msgstr "concept"
 
-#: thess/models.py:58
+#: thess/models.py:60
 msgid "concepts"
 msgstr ""
 
-#: thess/models.py:80
+#: thess/models.py:84
 msgid "get_context for scheme, no triples, invalid case"
 msgstr ""
 
-#: thess/models.py:90
+#: thess/models.py:94
 #, python-format
 msgid "context not found for scheme %s and contexts"
 msgstr ""
 
-#: thess/models.py:97
+#: thess/models.py:101
 #, python-format
 msgid "context not found for scheme %s"
 msgstr ""
 
-#: thess/models.py:101
+#: thess/models.py:105
 #, python-format
 msgid "Scheme %s defined in many conctexts, not handled yes"
 msgstr ""

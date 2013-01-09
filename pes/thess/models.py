@@ -109,4 +109,7 @@ class Scheme(myRdfSubject):
         return list(self.db.subjects(settings.NS.skos.inScheme, self))
 
 
+    @models.permalink
+    def get_absolute_url(self):
+        return ('pes.thess.views.detailScheme', [str(self.id)])
 
