@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}thess concept{% endblock %}
+
+{% block content %}
+
+
+<h2>La liste des concepts du thesaurus </h2>
+    <ul>
+        {% for concept in object_list %}
+            <li>
+            <a href="{{ concept.get_absolute_url }}">{{ concept.prefLabels.0.name }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+
+ {% include "pagination.html" with model="concept"  end_message="Plus d'autres concepts !" %}
+ 
+{% endblock %}
+

@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2> {{ concept.prefLabels.0.name }}</h2>
+
+    <h3> Défintions et commentaires </h3>
+
+    {% if concept.definition %}
+     	<div>
+    	{% for item in concept.definition %}
+    	<p> {{ item }} </p>
+    	{% endfor %}
+    	</div>
+    {% endif %}
+
+    {% if concept.note %}
+     	<div>
+    	{% for item in concept.note %}
+    	<p> {{ item }} </p>
+    	{% endfor %}
+ 	  	</div>
+    {% endif %}
+
+    {% if concept.notation %}
+     	<div>
+    	{% for item in concept.notation %}
+    	<p> {{ item }} </p>
+    	{% endfor %}
+ 	  	</div>
+    {% endif %}
+
+    {% if concept.example %}
+        <div>
+     	{% for item in concept.example %}
+    	<p> {{ item }} </p>
+    	{% endfor %}
+ 	  	</div>
+    {% endif %}
+
+    <h3> Les labels </h3>
+
+    {% if concept.prefLabels %}
+        <ol>
+        <h4> Labels préférés </h4>
+        {% for label in concept.prefLabels %}
+        <li><a href="{{ label.get_absolute_url }}">{{ label.name }}</a></li>
+        {% endfor %}
+        </ol>
+    {% endif %}
+
+    {% if concept.altLabels %}
+        <ol>
+        <h4> Labels alernatifs </h4>
+        {% for label in concept.altLabels %}
+        <li><a href="{{ label.get_absolute_url }}">{{ label.name }}</a></li>
+        {% endfor %}
+        </ol>
+    {% endif %}
+
+    {% if concept.hiddenLabels %}
+        <ol>
+        <h4> Labels cachés </h4>
+        {% for label in concept.hiddenLabels %}
+        <li><a href="{{ label.get_absolute_url }}">{{ label.name }}</a></li>
+        {% endfor %}
+        </ol>
+    {% endif %}
+
+
+    <h3> Les relations entre concepts  </h3>
+
+    {% if concept.broader %}
+        <h4> Concept plus général que {{concept.prefLabels.0.name }}</h4>
+        <ol>
+        {% for label in concept.broader %}
+        <li><a href="{{ label.get_absolute_url }}">{{ label.prefLabel.0.name }}</a></li>
+        {% endfor %}
+        </ol>
+    {% endif %}
+
+    {% if concept.narrower %}
+        <h4> Concept plus précis que {{concept.prefLabels.0.name }} </h4>
+        <ol>
+        {% for label in concept.narrower %}
+        <li><a href="{{ label.get_absolute_url }}">{{ label.prefLabel.0.name }}</a></li>
+        {% endfor %}
+        </ol>
+    {% endif %}
+
+    {% if concept.related %}
+        <h4> Concept relié à  {{concept.prefLabels.0.name }} </h4>
+        <ol>
+        {% for label in concept.related %}
+        <li><a href="{{ label.get_absolute_url }}">{{ label.prefLabel.0.name }}</a></li>
+        {% endfor %}
+        </ol>
+    {% endif %}
+
+
+
+    <h3> Les hierarchies  </h3>
+
+    {% if concept.topConceptOf %}
+        <ol>
+        <h4> Concept principal de : </h4>
+        {% for scheme in concept.topConceptOf %}
+        <li><a href="{{ scheme.get_absolute_url }}">{{ scheme.name }}</a></li>
+        {% endfor %}
+        </ol>
+    {% endif %}
+
+    {% if concept.inScheme %}
+        <ol>
+        <h4> Fait partie des hiérarchies : </h4>
+        {% for scheme in concept.inScheme %}
+        <li><a href="{{ scheme.get_absolute_url }}">{{ scheme.name }}</a></li>
+        {% endfor %}
+        </ol>
+    {% endif %}
+
+
+
+
+
+
+
+
+
+   
+  
+
+
+{% endblock %}
